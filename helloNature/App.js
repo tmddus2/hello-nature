@@ -7,9 +7,12 @@
  */
 
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 //import type {Node} from 'react';
 import {
+  Alert,
+  Button,
+  Linking,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -18,6 +21,7 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
+import { GoogleSigninButton } from 'react-native-google-signin';
 
 import {
   Colors,
@@ -43,9 +47,24 @@ const App = () => {
 
   }, [])
 
+  const googleLogin = ({ url }) => {
+    useCallback(async () => {
+      const supported = await Linking.canOpenURL(url)
+      if (supported) {
+        await Linking.openURL(url)
+      } else {
+        Alert.alert("can not open URL")
+      }
+    }, [url])
+
+    //Linking.openURL("http://localhost:8080/login/oauth2/code/google")
+  }
 
 
-  return (<Text>{message.data}</Text>)
+  return (<>
+    <Text>{message.data}</Text>
+    <Button title="google-login" onPress={googleLogin("http://localhost:8080/login/oauth2/code/google")}></Button>
+  </>)
 
 };
 
