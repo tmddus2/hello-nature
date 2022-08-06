@@ -1,18 +1,11 @@
-package helloNature.backend.config.jwt;
+package helloNature.backend.config;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import helloNature.backend.config.auth.PrincipalDetails;
-import helloNature.backend.domain.user.User;
-import helloNature.backend.domain.user.UserRepository;
+import helloNature.backend.Entity.User;
+import helloNature.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -24,27 +17,25 @@ import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
-public class JwtAuthorizationFilter extends OncePerRequestFilter {
-    private UserRepository userRepository;
+public class JwtCheckFilter extends OncePerRequestFilter {
+
+    private final UserRepository userRepository;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String bearer = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if(bearer == null || !bearer.startsWith("Bearer ")){
-            try{
-                chain.doFilter(request, response);
-                return;
-            }catch(Exception e){
+
+        if(bearer == null || !bearer.startsWith("Bearer ")) {
+            try {
+                filterChain.doFilter(request, response);
+            } catch (Exception e) {
                 System.out.println(e.getMessage());
                 response.setStatus(200);
                 response.setContentType("application/json;charset=UTF-8");
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.getWriter().println("{ \"success\" :" + false+"}" );
-
             }
-
-        }
-        else {
+        } else {
             String token = bearer.substring("Bearer ".length());
 
             try {
@@ -54,7 +45,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                         user.getUsername(), null, user.getAuthorities()
                 );
                 SecurityContextHolder.getContext().setAuthentication(userToken);
-                chain.doFilter(request, response);
+                filterChain.doFilter(request, response);
 
             } catch (Exception e) {
                 System.out.println(e.getMessage());
@@ -64,5 +55,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 response.getWriter().println("{ \"success\" :" + false + "}");
             }
         }
+
     }
 }

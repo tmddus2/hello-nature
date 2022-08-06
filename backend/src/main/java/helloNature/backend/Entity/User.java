@@ -1,4 +1,4 @@
-package helloNature.backend.domain.user;
+package helloNature.backend.Entity;
 
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,46 +9,31 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Entity
 @Builder
-public class User implements UserDetails {
+public class User implements UserDetails{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String name;
-    private String password;
     private String username;
-
-    @Column(nullable = false)
-    private String email;
-
-    @Column
-    private String picture;
-
-    @Column(nullable = false)
+    private String password;
     private String role;
-
+    private String email;
+    private String profile;
     private boolean enabled;
 
-
-    public User update(String name, String picture) {
-        this.name = name;
-        this.picture = picture;
-
-        return this;
-    }
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         ArrayList<GrantedAuthority> auth = new ArrayList<GrantedAuthority>();
         auth.add(new SimpleGrantedAuthority(role));
-        return auth;
+        return null;
     }
 
     @Override
