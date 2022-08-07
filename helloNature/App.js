@@ -6,6 +6,7 @@
  * @flow strict-local
  */
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
 //import type {Node} from 'react';
@@ -30,40 +31,52 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import Login from './src/Login';
 
 
 const App = () => {
-  const [message, setMessage] = useState("")
-
-
+  const [login, setLogin] = useState(false)
+  const [username, setUsername] = useState(false)
   useEffect(() => {
-    axios.get("http://10.0.2.2:8080/test")
-      .then((response) => {
-        setMessage(response)
-      })
-      .catch((error) => {
-        console.log("error: " + error)
-      })
+    //AsyncStorage.getItem('isLogin').then((value) => { console.log("isLogin: " + value) })
+    //console.log("here!! " + AsyncStorage.getItem('isLogin'))
+    /*
+    if (AsyncStorage.getItem('isLogin') == 'true') {
+      console.log("success login")
+      console.log("username" + AsyncStorage.getItem('username'))
+      axios.defaults.headers.common['Authorization'] = AsyncStorage.getItem('accessToken')
+
+    } else {
+      console.log("fail login")
+    }
+    */
+    AsyncStorage.getItem('isLogin', (err, result) => {
+      console.log("getItem isLogin return: " + result)
+      if (result) {
+        console.log("login success")
+        AsyncStorage.getItem('username', (err, result) => {
+          setUsername(result)
+        })
+        setLogin(true)
+      } else {
+        console.log("login fail")
+      }
+    })
+
+    AsyncStorage.getItem('isLogin', (err, result) => {
+      if (result) {
+        AsyncStorage.getItem('accessToken', (err, result) => {
+          axios.defaults.headers.common['Authorization'] = result
+        })
+      }
+    })
 
   }, [])
-
-  const googleLogin = ({ url }) => {
-    useCallback(async () => {
-      const supported = await Linking.canOpenURL(url)
-      if (supported) {
-        await Linking.openURL(url)
-      } else {
-        Alert.alert("can not open URL")
-      }
-    }, [url])
-
-    //Linking.openURL("http://localhost:8080/login/oauth2/code/google")
-  }
-
-
   return (<>
-    <Text>{message.data}</Text>
-    <Button title="google-login" onPress={googleLogin("http://localhost:8080/login/oauth2/code/google")}></Button>
+    {
+      login ? <Text>{username}</Text> : <Text>fail</Text>
+    }
+    <Login></Login>
   </>)
 
 };
