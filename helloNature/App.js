@@ -7,14 +7,10 @@
  */
 
 import axios from 'axios';
-<<<<<<< HEAD
 import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import RootNavigator from './src/Navigator';
-=======
-import React, { useCallback, useEffect, useState } from 'react';
->>>>>>> 156b8ec (signup)
 //import type {Node} from 'react';
 
 import {
