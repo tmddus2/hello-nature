@@ -7,6 +7,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from './Home';
 import ChattingScreen from './Chatting'
 import LoginScreen from './Login'
+//import UserProvider from './shared/UserContext';
+//import useUserState from './shared/UserContext';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -20,13 +22,23 @@ function BottomTabs() {
   );
 }
 
+const isLogin = false;
+
 function RootNavigator() {
+  //const { user } = useUserState();
+
   return (
-    <Stack.Navigator  initialRouteName="Root" screenOptions={{headerTitleAlign: 'center'}}>
-        <Stack.Screen name="Login" component={LoginScreen}/>
-        <Stack.Screen name="Root" component={BottomTabs} />
-    </Stack.Navigator>
+    //<UserProvider>
+        <Stack.Navigator>
+            { isLogin?(
+                <Stack.Screen name="Login" component={LoginScreen}/>
+            ):(
+                <Stack.Screen name="Root" component={BottomTabs} />
+            )}
+        </Stack.Navigator>
+    //</UserProvider>
   );
 }
 
+//screenOptions={{headerTitleAlign: 'center'}}
 export default RootNavigator;
