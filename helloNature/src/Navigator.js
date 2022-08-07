@@ -1,44 +1,36 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
+import React from 'react';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import RootNavigator from './src/Navigator';
-//import type {Node} from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import {
-  Alert,
-  Button,
-  Linking,
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
-import { GoogleSigninButton } from 'react-native-google-signin';
+import HomeScreen from './Home';
+import ChattingScreen from './Chatting'
+import LoginScreen from './Login'
+//import UserProvider from './shared/UserContext';
+//import useUserState from './shared/UserContext';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-import Login from './src/Login';
+const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
+
+function BottomTabs() {
 
 
-const App = () => {
+
+
+  return (
+    <Tab.Navigator initialRouteName="Home">
+      <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+      <Tab.Screen name="Chat" component={ChattingScreen} />
+    </Tab.Navigator>
+  );
+}
+
+const isLogin = false;
+
+function RootNavigator() {
+  //const { user } = useUserState();
+
   const [login, setLogin] = useState(false)
   const [username, setUsername] = useState(false)
   useEffect(() => {
@@ -76,23 +68,21 @@ const App = () => {
     })
 
   }, [])
-  return (<>
-    {
-      login ? <Text>{username}</Text> : <Text>fail</Text>
-    }
-    <Login></Login>
-  </>)
+
+
 
   return (
-    <NavigationContainer>
-      <RootNavigator />
-    </NavigationContainer>
-  )
-  /* // Stack 이 제공하는 기능
-   Using a render callback removes those optimizations. So if you use a render callback, you'll need to ensure that you use
-   React.memo or React.PureComponent for your screen components to avoid performance issues.*/
-};
+    //<UserProvider>
+    <Stack.Navigator>
+      {login ? (
+        <Stack.Screen name="Login" component={LoginScreen} />
+      ) : (
+        <Stack.Screen name="Root" component={BottomTabs} />
+      )}
+    </Stack.Navigator>
+    //</UserProvider>
+  );
+}
 
-
-
-export default App;
+//screenOptions={{headerTitleAlign: 'center'}}
+export default RootNavigator;

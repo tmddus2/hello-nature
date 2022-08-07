@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Button, TextInput } from 'react-native';
 
 
-const Login = () => {
+const LoginScreen = () => {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
 
@@ -55,4 +55,4 @@ const Login = () => {
     </>)
 }
 
-export default Login;
+export default LoginScreen;
