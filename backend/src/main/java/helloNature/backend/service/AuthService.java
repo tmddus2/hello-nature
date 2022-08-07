@@ -1,5 +1,11 @@
 package helloNature.backend.service;
 
+<<<<<<< HEAD
+import helloNature.backend.domain.user.User;
+import helloNature.backend.domain.user.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+=======
 import helloNature.backend.Entity.User;
 import helloNature.backend.repository.UserRepository;
 import helloNature.backend.dto.SigninDto;
@@ -7,11 +13,31 @@ import helloNature.backend.dto.SignupDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+>>>>>>> Structure
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
+<<<<<<< HEAD
+public class AuthService {
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Transactional
+    public User sign_in(User user) {
+        String rawPassword = user.getPassword();
+        String encPassword = bCryptPasswordEncoder.encode(rawPassword);
+        user.setPassword(encPassword);
+        user.setRole("ROLE_USER");
+        User userEntity = userRepository.save(user);
+
+        return userEntity;
+    }
+
+    public User getUser(String username) {
+        return userRepository.findByUsername(username).get();
+=======
 @Transactional
 public class AuthService {
     private final AuthenticationManagerBuilder managerBuilder;
@@ -47,5 +73,6 @@ public class AuthService {
         }
 
         return user;
+>>>>>>> Structure
     }
 }
