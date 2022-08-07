@@ -1,5 +1,7 @@
 package helloNature.backend.controller;
 
+
+
 import helloNature.backend.Entity.User;
 import helloNature.backend.config.JWTUtil;
 import helloNature.backend.dto.SigninDto;
@@ -8,11 +10,14 @@ import helloNature.backend.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+
+
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
+
 
 
 @RequiredArgsConstructor
@@ -36,8 +41,12 @@ public class AuthController {
             response.setHeader("refresh_token", JWTUtil.makeRefreshToken(user));
             response.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
 
+
             return user;
+
+
         } catch (IllegalArgumentException e) {
+
             return e.getMessage();
         }
     }
@@ -47,7 +56,5 @@ public class AuthController {
         System.out.println(principal.getName());
         return principal.toString();
     }
-
-
 
 }

@@ -2,6 +2,8 @@ package helloNature.backend.service;
 
 import helloNature.backend.Entity.User;
 import helloNature.backend.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+
 import helloNature.backend.dto.SigninDto;
 import helloNature.backend.dto.SignupDto;
 import lombok.RequiredArgsConstructor;
@@ -47,5 +49,6 @@ public class AuthService {
         }
 
         return user;
+
     }
 }
