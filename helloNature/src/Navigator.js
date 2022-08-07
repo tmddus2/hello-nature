@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -9,15 +9,13 @@ import ChattingScreen from './Chatting'
 import LoginScreen from './Login'
 //import UserProvider from './shared/UserContext';
 //import useUserState from './shared/UserContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function BottomTabs() {
-
-
-
-
   return (
     <Tab.Navigator initialRouteName="Home">
       <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
@@ -26,7 +24,6 @@ function BottomTabs() {
   );
 }
 
-const isLogin = false;
 
 function RootNavigator() {
   //const { user } = useUserState();
@@ -34,18 +31,7 @@ function RootNavigator() {
   const [login, setLogin] = useState(false)
   const [username, setUsername] = useState(false)
   useEffect(() => {
-    //AsyncStorage.getItem('isLogin').then((value) => { console.log("isLogin: " + value) })
-    //console.log("here!! " + AsyncStorage.getItem('isLogin'))
-    /*
-    if (AsyncStorage.getItem('isLogin') == 'true') {
-      console.log("success login")
-      console.log("username" + AsyncStorage.getItem('username'))
-      axios.defaults.headers.common['Authorization'] = AsyncStorage.getItem('accessToken')
 
-    } else {
-      console.log("fail login")
-    }
-    */
     AsyncStorage.getItem('isLogin', (err, result) => {
       console.log("getItem isLogin return: " + result)
       if (result) {
@@ -74,7 +60,7 @@ function RootNavigator() {
   return (
     //<UserProvider>
     <Stack.Navigator>
-      {login ? (
+      {!login ? (
         <Stack.Screen name="Login" component={LoginScreen} />
       ) : (
         <Stack.Screen name="Root" component={BottomTabs} />

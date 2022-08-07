@@ -6,8 +6,7 @@
  * @flow strict-local
  */
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
+
 import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -39,49 +38,6 @@ import Login from './src/Login';
 
 
 const App = () => {
-  const [login, setLogin] = useState(false)
-  const [username, setUsername] = useState(false)
-  useEffect(() => {
-    //AsyncStorage.getItem('isLogin').then((value) => { console.log("isLogin: " + value) })
-    //console.log("here!! " + AsyncStorage.getItem('isLogin'))
-    /*
-    if (AsyncStorage.getItem('isLogin') == 'true') {
-      console.log("success login")
-      console.log("username" + AsyncStorage.getItem('username'))
-      axios.defaults.headers.common['Authorization'] = AsyncStorage.getItem('accessToken')
-
-    } else {
-      console.log("fail login")
-    }
-    */
-    AsyncStorage.getItem('isLogin', (err, result) => {
-      console.log("getItem isLogin return: " + result)
-      if (result) {
-        console.log("login success")
-        AsyncStorage.getItem('username', (err, result) => {
-          setUsername(result)
-        })
-        setLogin(true)
-      } else {
-        console.log("login fail")
-      }
-    })
-
-    AsyncStorage.getItem('isLogin', (err, result) => {
-      if (result) {
-        AsyncStorage.getItem('accessToken', (err, result) => {
-          axios.defaults.headers.common['Authorization'] = result
-        })
-      }
-    })
-
-  }, [])
-  return (<>
-    {
-      login ? <Text>{username}</Text> : <Text>fail</Text>
-    }
-    <Login></Login>
-  </>)
 
   return (
     <NavigationContainer>
