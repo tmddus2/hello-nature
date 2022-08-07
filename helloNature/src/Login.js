@@ -5,7 +5,7 @@ import { Button, TextInput } from 'react-native';
 
 
 const LoginScreen = () => {
-    const [username, setUsername] = useState("")
+   const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
 
     const login = () => {
@@ -16,16 +16,16 @@ const LoginScreen = () => {
         }
         console.log("->", requestBody)
 
-        axios.post("http://10.0.2.2:8080/api/signin", requestBody)
+        axios.post("http://192.168.0.14:8080/api/signin", requestBody)
             .then(res => {
-                console.log("->",res.data, requestBody)
+                console.log("->",res.data)
                 if (res.data) {
                     AsyncStorage.multiSet([
                         ['isLogin', 'true'],
                         ['accessToken', `Bearer ${res.headers.auth_token}`],
                         ['username', `${res.data.username}`]
-
                     ])
+                    navigation.goBack();
                 } else {
                     console.log("fail " + res.data.message)
                 }
