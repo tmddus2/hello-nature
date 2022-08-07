@@ -30,12 +30,13 @@ public class AuthController {
     @PostMapping("/signin")
     public Object signin(@RequestBody SigninDto signinDto, HttpServletRequest request, HttpServletResponse response) {
         try {
+            System.out.println(signinDto);
             User user = authService.getValidUser(signinDto);
             response.setHeader("auth_token", JWTUtil.makeAuthToken(user));
             response.setHeader("refresh_token", JWTUtil.makeRefreshToken(user));
             response.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
 
-            return "success";
+            return user;
         } catch (IllegalArgumentException e) {
             return e.getMessage();
         }
