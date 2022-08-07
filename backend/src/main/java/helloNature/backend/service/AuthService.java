@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 
 import helloNature.backend.dto.SigninDto;
 import helloNature.backend.dto.SignupDto;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -50,4 +49,5 @@ public class AuthService {
 
         return user;
     }
+
 }

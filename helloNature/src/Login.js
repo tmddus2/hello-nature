@@ -9,15 +9,16 @@ const LoginScreen = () => {
     const [password, setPassword] = useState("")
 
     const login = () => {
-
+        console.log("PRESSS!!");
         var requestBody = {
             username: username,
             password: password
         }
+        console.log("->", requestBody)
 
         axios.post("http://10.0.2.2:8080/api/signin", requestBody)
             .then(res => {
-                //console.log(res.data)
+                console.log("->",res.data, requestBody)
                 if (res.data) {
                     AsyncStorage.multiSet([
                         ['isLogin', 'true'],
@@ -28,7 +29,8 @@ const LoginScreen = () => {
                 } else {
                     console.log("fail " + res.data.message)
                 }
-            })
+            }).catch(error => console.log(error));
+
     }
 
     const usernameChanege = e => {
