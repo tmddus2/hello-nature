@@ -14,6 +14,9 @@ import RootNavigator from './src/Navigator';
 //import type {Node} from 'react';
 
 import {
+  Alert,
+  Button,
+  Linking,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -22,6 +25,7 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
+import { GoogleSigninButton } from 'react-native-google-signin';
 
 import {
   Colors,
@@ -45,7 +49,30 @@ function App() {
         console.log("error: " + error)
       })
 
+<<<<<<< HEAD
   }, [])*/
+=======
+  }, [])
+
+  const googleLogin = ({ url }) => {
+    useCallback(async () => {
+      const supported = await Linking.canOpenURL(url)
+      if (supported) {
+        await Linking.openURL(url)
+      } else {
+        Alert.alert("can not open URL")
+      }
+    }, [url])
+
+    //Linking.openURL("http://localhost:8080/login/oauth2/code/google")
+  }
+
+
+  return (<>
+    <Text>{message.data}</Text>
+    <Button title="google-login" onPress={googleLogin("http://localhost:8080/login/oauth2/code/google")}></Button>
+  </>)
+>>>>>>> 594db0636d4964b07b9a4c8ae9047b51c5f21fbc
 
   return (
    <NavigationContainer>
