@@ -5979,7 +5979,6 @@
   "resolved" "https://registry.npmjs.org/react-native-gradle-plugin/-/react-native-gradle-plugin-0.0.7.tgz"
   "version" "0.0.7"
 
-<<<<<<< HEAD
 "react-native-pager-view@*", "react-native-pager-view@^5.4.25", "react-native-pager-view@>= 4.0.0":
   "integrity" "sha512-3drrYwaLat2fYszymZe3nHMPASJ4aJMaxiejfA1V5SK3OygYmdtmV2u5prX7TnjueJzGSyyaCYEr2JlrRt4YPg=="
   "resolved" "https://registry.npmjs.org/react-native-pager-view/-/react-native-pager-view-5.4.25.tgz"
@@ -6009,9 +6008,6 @@
   "version" "3.1.1"
 
 "react-native@*", "react-native@>=0.44.1", "react-native@0.69.3":
-=======
-"react-native@*", "react-native@>=0.40", "react-native@0.69.3":
->>>>>>> 156b8ec (signup)
   "integrity" "sha512-SyGkcoEUa/BkO+wKVnv4OsnLSNfUM5zLNXS3iT/3eXjKX91/FKBH/nfR9BE1c60X5LQe/P5QYqr6WPX3TRSQkA=="
   "resolved" "https://registry.npmjs.org/react-native/-/react-native-0.69.3.tgz"
   "version" "0.69.3"
