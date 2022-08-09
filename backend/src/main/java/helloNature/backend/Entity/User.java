@@ -8,11 +8,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+
 
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
 @Entity
 @Builder
 public class User implements UserDetails{
@@ -26,6 +28,10 @@ public class User implements UserDetails{
     private String email;
     private String profile;
     private boolean enabled;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private List<Plant> plantList;
 
 
 
