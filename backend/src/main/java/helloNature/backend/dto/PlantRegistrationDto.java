@@ -1,10 +1,11 @@
 package helloNature.backend.dto;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class PlantRegistrationDto {
-    private String picture;
+    private MultipartFile picture;
     private String type;
     private String name;
     private String start_date;
