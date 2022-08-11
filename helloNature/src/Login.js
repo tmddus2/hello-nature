@@ -1,14 +1,16 @@
+import React, { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import React, { useState } from 'react';
 import { Button, TextInput } from 'react-native';
 
 
-const LoginScreen = () => {
-   const [username, setUsername] = useState("")
+const LoginScreen = ({navigation}) => {
+    const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
 
+
     const login = () => {
+
         console.log("PRESSS!!");
         var requestBody = {
             username: username,
@@ -16,7 +18,7 @@ const LoginScreen = () => {
         }
         console.log("->", requestBody)
 
-        axios.post("http://192.168.0.14:8080/api/signin", requestBody)
+        axios.post("http://192.168.0.15:8080/api/signin", requestBody)
             .then(res => {
                 console.log("->",res.data)
                 if (res.data) {
@@ -25,7 +27,7 @@ const LoginScreen = () => {
                         ['accessToken', `Bearer ${res.headers.auth_token}`],
                         ['username', `${res.data.username}`]
                     ])
-                    navigation.goBack();
+                    navigation.replace('Root');
                 } else {
                     console.log("fail " + res.data.message)
                 }
