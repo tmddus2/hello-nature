@@ -5,4 +5,8 @@ export const globalStyles = StyleSheet.create({
     container:{
         flex:1,
     },
+    activityIndicator: {
+        alignItems: 'center',
+        height: 80,
+      },
 });

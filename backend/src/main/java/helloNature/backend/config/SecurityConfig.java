@@ -1,10 +1,5 @@
 package helloNature.backend.config;
 
-<<<<<<< HEAD
-import helloNature.backend.config.jwt.JwtAuthorizationFilter;
-=======
-
->>>>>>> Structure
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,23 +7,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-<<<<<<< HEAD
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-
-@RequiredArgsConstructor
-@EnableWebSecurity
-@Configuration
-public class SecurityConfig {
-    private final JwtAuthorizationFilter checkFilter;
-
-    @Bean
-    public BCryptPasswordEncoder encode() {
-=======
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-
 
 
 @EnableWebSecurity // 기본적인 web 보안을 활성화 하겠다
@@ -41,7 +22,7 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
->>>>>>> Structure
+
         return new BCryptPasswordEncoder();
     }
 
@@ -51,16 +32,6 @@ public class SecurityConfig {
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-<<<<<<< HEAD
-                .addFilterAt(checkFilter, BasicAuthenticationFilter.class)
-                .authorizeRequests()
-                .antMatchers("/").permitAll()
-                .antMatchers("/user/**")
-                .hasRole("USER");
-
-
-
-=======
                 //토큰을 검증
                 .addFilterAt(checkFilter, BasicAuthenticationFilter.class)
                 .authorizeRequests()
@@ -68,7 +39,6 @@ public class SecurityConfig {
                 .antMatchers("/api/**").permitAll()
                 .antMatchers("/api/user/**").hasRole("USER");
                 //.anyRequest().authenticated();
->>>>>>> Structure
 
         return http.build();
     }
