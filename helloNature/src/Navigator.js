@@ -4,15 +4,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import HomeScreen from './Home';
-import ChattingScreen from './Chatting'
-import LoginScreen from './Login'
-//import UserProvider from './shared/UserContext';
-//import useUserState from './shared/UserContext';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
-import {globalStyles} from '../styles/global';
-
 import {
   SafeAreaView,
   ScrollView,
@@ -24,6 +15,13 @@ import {
   Image,
   ActivityIndicator,
 } from 'react-native';
+
+import HomeScreen from './Home';
+import ChattingScreen from './Chatting'
+import LoginScreen from './Login'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import {globalStyles} from '../styles/global';
 
 
 const Stack = createNativeStackNavigator();
@@ -44,34 +42,37 @@ function SplashScreen({navigation}){
   const [login, setLogin] = useState(false)
   const [username, setUsername] = useState(false)
   useEffect(() => {
+    setTimeout(() => {
 
-    AsyncStorage.getItem('isLogin', (err, result) => {
+        AsyncStorage.getItem('isLogin', (err, result) => {
 
-      console.log("getItem isLogin return: " + result)
-      if (result) {
-        console.log("login success")
-        AsyncStorage.getItem('username', (err, result) => {
-          setUsername(result)
-          console.log("login success", result)
+          console.log("getItem isLogin return: " + result)
+          if (result) {
+            console.log("login success")
+            AsyncStorage.getItem('username', (err, result) => {
+              setUsername(result)
+              console.log("login success", result)
+            })
+            setLogin(true)
+            setAnimating(false);
+
+            navigation.replace(result === true ? 'Login' : 'Root');
+
+          } else {
+            console.log("login fail")
+            navigation.replace('Login');
+
+          }
         })
-        setLogin(true)
-        setAnimating(false);
 
-        navigation.replace(result === null ? 'Login' : 'Root');
-
-      } else {
-        console.log("login fail")
-      }
-    })
-
-    AsyncStorage.getItem('isLogin', (err, result) => {
-      if (result) {
-        AsyncStorage.getItem('accessToken', (err, result) => {
-          axios.defaults.headers.common['Authorization'] = result
+        AsyncStorage.getItem('isLogin', (err, result) => {
+          if (result) {
+            AsyncStorage.getItem('accessToken', (err, result) => {
+              axios.defaults.headers.common['Authorization'] = result
+            })
+          }
         })
-      }
-    })
-
+     }, 1000);
   }, []);
 
    return (
@@ -98,14 +99,10 @@ function RootNavigator() {
 
   return (
     //<UserProvider>
-    <Stack.Navigator>
-
-          <Stack.Screen name="Splash" component={SplashScreen} />
-
+    <Stack.Navigator initialRouteName="SplashScreen">
+        <Stack.Screen name="Splash" component={SplashScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
-
-            <Stack.Screen name="Root" component={BottomTabs} />
-
+        <Stack.Screen name="Root" component={BottomTabs} />
     </Stack.Navigator>
     //</UserProvider>
   );
