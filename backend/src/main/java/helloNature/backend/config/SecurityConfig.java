@@ -1,6 +1,5 @@
 package helloNature.backend.config;
 
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,7 +39,6 @@ public class SecurityConfig {
                 .antMatchers("/api/**").permitAll()
                 .antMatchers("/api/user/**").hasRole("USER");
                 //.anyRequest().authenticated();
-
 
         return http.build();
     }
