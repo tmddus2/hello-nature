@@ -20,6 +20,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final S3Service s3Service;
 
+
     public User getUserByName(String username) {
         return userRepository.findByUsername(username).get();
     }
@@ -46,4 +47,6 @@ public class UserService {
             return userRepository.save(user);
         }
     }
+
+
 }
