@@ -15,6 +15,10 @@ public class Schedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String year;
+
+    private String month;
+
     private String date;
 
     private String memo;

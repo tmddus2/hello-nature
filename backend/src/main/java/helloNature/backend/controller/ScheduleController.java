@@ -18,6 +18,11 @@ public class ScheduleController {
         return scheduleService.getSchedule(id);
     }
 
+    @GetMapping("/user/schedule/month")
+    public List<ScheduleDto> getScheduleListByMonth(@RequestParam Long id, @RequestParam String month) {
+        return scheduleService.getScheduleByMonth(id, month);
+    }
+
     @PostMapping("/user/schedule")
     public ScheduleDto addSchedule(@RequestBody ScheduleDto scheduleDto) {
         return scheduleService.addSchedule(scheduleDto);
