@@ -38,8 +38,8 @@ public class ScheduleService {
 
     }
 
-    public List<ScheduleDto> getScheduleByMonth(Long id, String month) {
-        List<Schedule> scheduleList = scheduleRepository.findScheduleByPlantIdAndMonth(id, month);
+    public List<ScheduleDto> getScheduleByMonth(Long id, String year, String month) {
+        List<Schedule> scheduleList = scheduleRepository.findScheduleByPlantIdAndYearAndMonth(id, year, month);
         List<ScheduleDto> scheduleDtoList = new ArrayList<>();
 
         for(Schedule schedule: scheduleList) {

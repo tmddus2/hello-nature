@@ -19,8 +19,8 @@ public class ScheduleController {
     }
 
     @GetMapping("/user/schedule/month")
-    public List<ScheduleDto> getScheduleListByMonth(@RequestParam Long id, @RequestParam String month) {
-        return scheduleService.getScheduleByMonth(id, month);
+    public List<ScheduleDto> getScheduleListByMonth(@RequestParam Long id, @RequestParam String year, @RequestParam String month) {
+        return scheduleService.getScheduleByMonth(id, year, month);
     }
 
     @PostMapping("/user/schedule")
