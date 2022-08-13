@@ -16,11 +16,7 @@ import java.security.Principal;
 public class UserController {
     private final UserService userService;
 
-    @PostMapping("/user/registration") // http://localhost:8080/api/user/**
-    public Object registerPlant(Principal principal, PlantRegistrationDto plantRegistrationDto) {
-        return userService.saveMyPlant(principal.getName(), plantRegistrationDto);
 
-    }
 
 
 }

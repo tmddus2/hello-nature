@@ -25,28 +25,5 @@ public class UserService {
         return userRepository.findByUsername(username).get();
     }
 
-    public Object saveMyPlant(String username, PlantRegistrationDto plantRegistrationDto) {
-
-        String image = s3Service.saveImage(plantRegistrationDto.getPicture());
-        System.out.println("image = " + image);
-
-        Plant plant = Plant.builder()
-                .picture(image)
-                .type(plantRegistrationDto.getType())
-                .name(plantRegistrationDto.getName())
-                .start_date(plantRegistrationDto.getStart_date())
-                .scientific_name(plantRegistrationDto.getScientific_name())
-                .memo(plantRegistrationDto.getMemo())
-                .build();
-
-        User user = userRepository.findByUsername(username).get();
-        if (user == null) {
-            return null;
-        } else {
-            user.getPlantList().add(plant);
-            return userRepository.save(user);
-        }
-    }
-
 
 }
