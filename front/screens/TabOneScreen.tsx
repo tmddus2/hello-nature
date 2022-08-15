@@ -29,8 +29,8 @@ export default function TabOneScreen() {
 const styles = StyleSheet.create({
   rootContainer:{
     width:'100%',
-    height:10,
-    backgroundColor: 'rightgrey',
+    height:50,
+    backgroundColor: 'red',
   },
   rightContainer:{
     flex:1,
