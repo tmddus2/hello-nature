@@ -23,7 +23,7 @@ export default function Login({ navigation }) {
       username: username,
       password: password
     }
-    axios.post("http://172.30.1.28:8081/api/signin", requestBody)
+    axios.post("http://10.0.2.2:8080/api/signin", requestBody)
       .then(res => {
         console.log("->", res.data)
         if (res.data) {
