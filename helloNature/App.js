@@ -1,62 +1,32 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
+import {StatusBar} from 'expo-status-bar';
+import React from 'react';
+import {StyleSheet, Text, View} from 'react-native'
+import {createStackNavigator} from '@react-navigation/stack'
+import {NavigationContainer} from '@react-navigation/native'
 
-import React, { useEffect, useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
+import Home from './screens/Home'
+import Login from './screens/Login'
 
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import RootNavigator from './src/Navigator';
-//import type {Node} from 'react';
+const Stack = createStackNavigator();
 
-//global.Buffer = global.Buffer || require('buffer').Buffer; // Buffer 추가
-
-
-const App = () => {
-  /*
-  const [login, setLogin] = useState(false)
-  const [username, setUsername] = useState(false)
-
-  useEffect(() => {
-    AsyncStorage.getItem('isLogin', (err, result) => {
-      console.log("getItem isLogin return: " + result)
-      if (result) {
-        console.log("login success")
-        AsyncStorage.getItem('username', (err, result) => {
-          setUsername(result)
-        })
-        setLogin(true)
-      } else {
-        console.log("login fail")
-      }
-    })
-
-    AsyncStorage.getItem('isLogin', (err, result) => {
-      if (result) {
-        AsyncStorage.getItem('accessToken', (err, result) => {
-          axios.defaults.headers.common['Authorization'] = result
-
-        })
-      }
-    })
-
-  }, [])
-
-  */
+export default function App(){
   return (
     <NavigationContainer>
-      <RootNavigator />
+      <Stack.Navigator initialRouteName = "Login" screenOptions = {{
+        headerShown:false
+      }}>
+      <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name ="Login" component={Login}/>
+      </Stack.Navigator>
     </NavigationContainer>
-  )
+  );
+} 
 
-};
-
-
-
-export default App;
+const styles = StyleSheet.create({
+  container:{
+    flex : 1,
+    backgroundColor:'#fff',
+    alignItems:'center',
+    justifyContent:'center',
+  }
+})
