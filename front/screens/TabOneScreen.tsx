@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   rootContainer:{
     width:'100%',
     height:50,
-    backgroundColor: 'red',
+    backgroundColor: 'rightgray',
   },
   rightContainer:{
     flex:1,

@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import {StyleSheet, Text, View, Button, TextInput} from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function Login( { navigation } ) {
+export default function Login({navigation}: {navigation: any}) {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [token, setToken] = useState(null)
