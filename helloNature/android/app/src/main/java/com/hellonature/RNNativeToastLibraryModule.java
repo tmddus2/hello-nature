@@ -12,8 +12,11 @@ import com.facebook.react.bridge.Callback;
 import android.util.Log;
 import android.content.Context;
 import android.widget.Toast;
-
-// native module을 reactPackage에 추가하는 코드
+import android.content.Intent;
+import androidx.appcompat.app.AppCompatActivity;
+import android.net.Uri;
+import android.app.Activity;
+import com.hellonature.HelloArActivity;
 
 public class RNNativeToastLibraryModule extends ReactContextBaseJavaModule {
 
@@ -32,10 +35,27 @@ public class RNNativeToastLibraryModule extends ReactContextBaseJavaModule {
   @ReactMethod
   public void show(String text) {
     //callback.invoke("Call Me!!!!");
+/*
 
     Context context = getReactApplicationContext();
     Toast.makeText(context, text, Toast.LENGTH_LONG).show();
-    Log.d("CalendarModule", "Create event called with name: " + text);
+    Log.d("CalendarModule1", "Create event called with name: " + text);
+
+    Intent intent = new Intent(getActivity(MainActivity), HelloArActivity.class);
+    Log.d("12321312312321312", "Create event called with name: " + text);
+
+    context.startActivity(intent);
+*/
+    Log.d("CalendarModule1", "Create event called with name: " + text);
+
+    // Context from reactContext
+    Context context = reactContext;
+    Activity activity = getCurrentActivity();
+
+    // Intent set from packageName
+    Intent intent = new Intent(context, HelloArActivity.class);
+
+    activity.startActivity(intent);
 
   }
 }

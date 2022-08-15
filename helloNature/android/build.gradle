@@ -45,7 +45,7 @@ allprojects {
                 excludeGroup "com.facebook.react"
             }
         }
-        google()
+        google() // Google의 Maven 저장소
         maven { url 'https://www.jitpack.io' }
     }
 }
