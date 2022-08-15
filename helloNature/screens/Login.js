@@ -1,5 +1,5 @@
 //import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Button, TextInput } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -11,32 +11,34 @@ export default function Login({ navigation }) {
 
   const onSubmit = async () => {
     await AsyncStorage.setItem('token', username)
-    /*
-    if (username === 'parkheesoo' && password === '123456') {
-      console.log('Nice')
-      navigation.navigate('Home')
-    } else {
-      console.log('pas tes nice')
-    }
-    */
+
+
     var requestBody = {
       username: username,
       password: password
     }
     axios.post("http://10.0.2.2:8080/api/signin", requestBody)
       .then(res => {
-        console.log("->", res.data)
+        //console.log("->", res.data)
         if (res.data) {
           AsyncStorage.multiSet([
             ['isLogin', 'true'],
             ['accessToken', `Bearer ${res.headers.auth_token}`],
             ['username', `${res.data.username}`]
           ])
-          navigation.navigate('Home')
+
+
         } else {
           console.log("fail " + res.data.message)
         }
       }).catch(error => console.log(error));
+
+    await AsyncStorage.getItem('accessToken', (err, result) => {
+      axios.defaults.headers.common['Authorization'] = result
+    })
+
+    navigation.navigate('Home')
+
 
   }
 
