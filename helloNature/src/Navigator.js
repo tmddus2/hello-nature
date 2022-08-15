@@ -23,6 +23,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import {globalStyles} from '../styles/global';
 
+import PlantInfoScreen from './PlantInfo';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -96,17 +97,20 @@ function SplashScreen({navigation}){
 function RootNavigator() {
   //const { user } = useUserState();
 
-
   return (
     //<UserProvider>
-    <Stack.Navigator initialRouteName="SplashScreen">
-        <Stack.Screen name="Splash" component={SplashScreen} />
-        <Stack.Screen name="Login" component={LoginScreen} />
+    <Stack.Navigator initialRouteName="Root">
         <Stack.Screen name="Root" component={BottomTabs} />
     </Stack.Navigator>
+
     //</UserProvider>
   );
 }
 
+/* <Stack.Navigator initialRouteName="Root">
+          <Stack.Screen name="Root" component={BottomTabs} />
+      </Stack.Navigator>*/
+// <Stack.Screen name="Splash" component={SplashScreen} />
+//        <Stack.Screen name="Login" component={LoginScreen} />
 //screenOptions={{headerTitleAlign: 'center'}}
 export default RootNavigator;
