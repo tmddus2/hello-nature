@@ -13,7 +13,7 @@ function DiaryScreen({navigation}) {
         selectedDayBackgroundColor: 'red',
         arrowColor: '#6E8B3D',
         dotColor: 'green',
-        todayTextColor: '#6E8B3D',
+        todayTextColor: 'blue',
       }}/>
     </View>
   );
