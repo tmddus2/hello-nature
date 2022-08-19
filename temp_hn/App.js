@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { NavigationContainer } from '@react-navigation/native'
 import 'react-native-gesture-handler'
 
+import PlantProfile from './screens/PlantProfile'
 import Register from './screens/Register'
 import FirstScreen from './screens/FirstScreen'
 import Home from './screens/Home'
@@ -18,6 +19,7 @@ export default function App() {
       <Stack.Navigator initialRouteName="FirstScreen" screenOptions={{
         headerShown: false
       }}>
+        <Stack.Screen name ="PlantProfile" component ={PlantProfile}/>
         <Stack.Screen name ="RegisterPlant" component={RegisterPlant}/>
         <Stack.Screen name ="Register" component={Register}/>
         <Stack.Screen name = "FirstScreen" component={FirstScreen}/>
