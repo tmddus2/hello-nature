@@ -79,11 +79,13 @@ export default function Home({ navigation }) {
       <View style={styles.container}>
         <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/892/892926.png' }} style={styles.image} />
         <View style={styles.rightContainer}>
-          <View style={styles.row}>
-            {/* <Text style={styles.name}>   {plant.name}</Text> */}
-            <Text style={styles.name}>   Fejka</Text>
-            <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/427/427112.png' }} style={styles.waterImage} />
-          </View>
+          <TouchableOpacity onPress={() => navigation.navigate('PlantProfile')}>
+            <View style={styles.row}>
+              {/* <Text style={styles.name}>   {plant.name}</Text> */}
+              <Text style={styles.name}>   Fejka</Text>
+              <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/427/427112.png' }} style={styles.waterImage} />
+            </View>
+          </TouchableOpacity>   
         </View>
       </View>
       {/* {
