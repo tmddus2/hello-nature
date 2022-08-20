@@ -2,15 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Button, Image, TouchableOpacity } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-/*
-export default function Home({ navigation }) {
 
+export default function Home({ navigation }) {
   const logout = async () => {
     await AsyncStorage.removeItem('token')
     navigation.navigate('Login')
   }
-*/
-export default function Home({ navigation }) {
   const [username, setUsername] = useState('')
   const [plantList, setPlantList] = useState('')
   const [plants, setPlants] = useState('')
@@ -41,7 +38,7 @@ export default function Home({ navigation }) {
 
       } else {
         console.log("login fail")
-        // navigation.replace('Login');
+        navigation.replace('Login');
       }
     })
 
