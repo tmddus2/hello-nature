@@ -19,8 +19,6 @@ function DiaryScreen({navigation}) {
 
   const [value, onChange] = useState(new Date());
 
-
-
   const posts = [
     {
       id: 1,
@@ -37,45 +35,39 @@ function DiaryScreen({navigation}) {
   ];
 
 
-
   const markedDates = posts.reduce((acc, current) => {
     const formattedDate = format(new Date(current.date), 'yyyy-MM-dd');
     acc[formattedDate] = {marked: true};
     return acc;
   }, {});
-
-
+  
 
   const [selectedDate, setSelectedDate] = useState(
     format(new Date(), "yyyy-MM-dd"),
   );
-
-
   const markedSelectedDates = {
-    markedDates,
+    ...markedDates,
     [selectedDate]: {
       selected: true,
       marked: markedDates[selectedDate]?.marked,
     }
   }
 
-  
+
   return (
     <View>
-      <Calendar style={styles.calendar}
-        theme={{
-          selectedDayBackgroundColor: '#009688',
-          arrowColor: '#009688',
-          todayTextColor: '#009688',
-        }} 
-        onChange={onChange} value={value}
-        //markingType={'multi-dot'} 
-        markedDates={markedSelectedDates}
-        onDayPress={day => {
-          setSelectedDate(day.dateString)
-          console.log('selected day', day);
-        }}
-      />
+      <Calendar style={styles.calendar} 
+      markedDates={markedSelectedDates}
+      theme={{
+        selectedDayBackgroundColor: '#009688',
+        arrowColor: '#009688',
+        dotColor: '#009688',
+        todayTextColor: '#009688',
+      }} 
+      onDayPress={(day) => {
+        setSelectedDate(day.dateString)
+      }} />
+
       <View style={{position:'absolute' , alignItems :'center',marginTop:500, width:'100%'}}>
         <TouchableOpacity style = {styles.buttonStyle}>
           <Text style={styles.buttonTextStyle}> +  오늘 기록 하기</Text>
