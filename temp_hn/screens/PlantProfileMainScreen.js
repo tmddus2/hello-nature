@@ -2,18 +2,16 @@ import React, { useContext, useState } from "react";
 import { Calendar } from "react-native-calendars";
 import { format } from "date-fns";
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import {Text, View, StyleSheet,  TouchableOpacity, ScrollView, Image, TextInput} from 'react-native';
+import {Text, View, StyleSheet,Dimensions,Animated, TouchableOpacity, ScrollView, Image, TextInput} from 'react-native';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 
-
-
+const window = Dimensions.get("window");
 // 머티리얼 상단 탭 내비게이터
 const Tab = createMaterialTopTabNavigator();
 
 
 
 function DiaryScreen({navigation}) {
-
-
   const water = {key: 'water', color: 'blue', selectedDotColor: 'blue'};
   const nutrients = {key: 'nutrients', color: 'green', selectedDotColor: 'blue'};
 
@@ -53,10 +51,50 @@ function DiaryScreen({navigation}) {
     }
   }
 
+  const LeftActionV = (progress, dragX) => {
+    console.log(dragX);
+    const trans = dragX.interpolate({
+      inputRange: [0, window.width],   //화면의 왼쪽 끝, 화면의 맨 오른쪽
+      outputRange: [window.width,0],   //transitin 0, transition 100% 
+    });
+
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', zIndex: 10,}}>
+        <Animated.Text 
+          style={{
+            fontSize: 60, 
+            color: 'black',  
+            fontWeight: '500',
+            transform: [{ translateX: trans }], 
+            }}
+          >
+            The Thinker
+            Bronze 1900-01 (1880)
+          </Animated.Text>
+        <Animated.Text 
+          style={{
+            fontSize: 22, 
+            color: 'black', 
+            fontWeight: '200',
+            transform: [{ translateX: trans }], 
+          }
+        }>
+          Auguste Rodin (French, 1840-1917)
+        </Animated.Text>
+      </View>
+    );
+  }
 
   return (
     <View>
-      <Calendar style={styles.calendar} 
+      <Swipeable
+            containerStyle={{
+              width: '100%',
+              height: '100%',
+            }}
+            renderLeftActions={LeftActionV}
+          >
+            <Calendar style={styles.calendar} 
       markedDates={markedSelectedDates}
       theme={{
         selectedDayBackgroundColor: '#009688',
@@ -73,8 +111,12 @@ function DiaryScreen({navigation}) {
           <Text style={styles.buttonTextStyle}> +  오늘 기록 하기</Text>
         </TouchableOpacity>
       </View>
+      </Swipeable>
+      
+      
       
     </View>
+    
   );
 }
 
@@ -112,6 +154,7 @@ function PlantInfoScreen() {
               얼른 더 많이 자라서 우리 집의 공기를 맑게 해줬으면 하는게 나의 바램이다.</Text>           
             </View>
         </ScrollView>
+        
     </View>
   );
 }
