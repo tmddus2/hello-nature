@@ -7,6 +7,7 @@ import 'react-native-gesture-handler'
 import PlantProfile from './screens/PlantProfile'
 import Register from './screens/Register'
 import FirstScreen from './screens/FirstScreen'
+import ArScreen from './screens/ArScreen';
 import Home from './screens/Home'
 import Login from './screens/Login'
 import RegisterPlant from './screens/RegisterPlant';
@@ -20,6 +21,7 @@ export default function App() {
       <Stack.Navigator initialRouteName="FirstScreen" screenOptions={{
         headerShown: false
       }}>
+        <Stack.Screen name="ArScreen" component={ArScreen} />
         <Stack.Screen name="PlantProfile" component={PlantProfile} />
         <Stack.Screen name="RegisterPlant" component={RegisterPlant} />
         <Stack.Screen name="Register" component={Register} />
