@@ -30,6 +30,9 @@
         <activity
             android:name=".HelloArActivity"
         ></activity>
+        <activity
+            android:name=".google.ar.core.examples.java.ml.MainMLActivity"
+            ></activity>
         <!-- Indicates whether "Google Play Services for AR" (ARCore) is "required" or "optional". -->
         <meta-data android:name="com.google.ar.core" android:value="required" />
     </application>

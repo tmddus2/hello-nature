@@ -221,8 +221,8 @@ public class BackgroundRenderer {
 
   /**
    * Draws the AR background image. The image will be drawn such that virtual content rendered with
-   * the matrices provided by {@link com.google.ar.core.Camera#getViewMatrix(float[], int)} and
-   * {@link com.google.ar.core.Camera#getProjectionMatrix(float[], int, float, float)} will
+   * the matrices provided by {@link com.hellonature.google.ar.core.Camera#getViewMatrix(float[], int)} and
+   * {@link com.hellonature.google.ar.core.Camera#getProjectionMatrix(float[], int, float, float)} will
    * accurately follow static physical objects.
    */
   public void drawBackground(SampleRender render) {
@@ -234,8 +234,8 @@ public class BackgroundRenderer {
    * given the previously specified {@link OcclusionMode}.
    *
    * <p>Virtual content should be rendered using the matrices provided by {@link
-   * com.google.ar.core.Camera#getViewMatrix(float[], int)} and {@link
-   * com.google.ar.core.Camera#getProjectionMatrix(float[], int, float, float)}.
+   * com.hellonature.google.ar.core.Camera#getViewMatrix(float[], int)} and {@link
+   * com.hellonature.google.ar.core.Camera#getProjectionMatrix(float[], int, float, float)}.
    */
   public void drawVirtualScene(
       SampleRender render, Framebuffer virtualSceneFramebuffer, float zNear, float zFar) {
