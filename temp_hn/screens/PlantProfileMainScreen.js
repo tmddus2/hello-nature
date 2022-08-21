@@ -9,8 +9,6 @@ const window = Dimensions.get("window");
 // 머티리얼 상단 탭 내비게이터
 const Tab = createMaterialTopTabNavigator();
 
-
-
 function DiaryScreen({navigation}) {
   const water = {key: 'water', color: 'blue', selectedDotColor: 'blue'};
   const nutrients = {key: 'nutrients', color: 'green', selectedDotColor: 'blue'};
@@ -51,70 +49,62 @@ function DiaryScreen({navigation}) {
     }
   }
 
-  const LeftActionV = (progress, dragX) => {
-    console.log(dragX);
-    const trans = dragX.interpolate({
-      inputRange: [0, window.width],   //화면의 왼쪽 끝, 화면의 맨 오른쪽
-      outputRange: [window.width,0],   //transitin 0, transition 100% 
-    });
+  // const LeftActionV = (progress, dragX) => {
+  //   console.log(dragX);
+  //   const trans = dragX.interpolate({
+  //     inputRange: [0, 200],   //화면의 왼쪽 끝, 화면의 맨 오른쪽
+  //     outputRange: [window.width, 0],   //transitin 0, transition 100% 
+  //   });
 
-    return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', zIndex: 10,}}>
-        <Animated.Text 
-          style={{
-            fontSize: 60, 
-            color: 'black',  
-            fontWeight: '500',
-            transform: [{ translateX: trans }], 
-            }}
-          >
-            The Thinker
-            Bronze 1900-01 (1880)
-          </Animated.Text>
-        <Animated.Text 
-          style={{
-            fontSize: 22, 
-            color: 'black', 
-            fontWeight: '200',
-            transform: [{ translateX: trans }], 
-          }
-        }>
-          Auguste Rodin (French, 1840-1917)
-        </Animated.Text>
-      </View>
-    );
-  }
-
+  //   return (
+  //     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', zIndex: 10,}}>
+        
+  //       <Animated.Text 
+  //         style={{
+  //           fontSize: 60, 
+  //           color: 'black',  
+  //           fontWeight: '500',
+  //           transform: [{ translateX: trans }], 
+  //           }}
+  //         >
+  //           The Thinker
+  //           Bronze 1900-01 (1880)
+  //         </Animated.Text>
+  //       <Animated.Text 
+  //         style={{
+  //           fontSize: 22, 
+  //           color: 'black', 
+  //           fontWeight: '200',
+  //           transform: [{ translateX: trans }], 
+  //         }
+  //       }>
+  //         Auguste Rodin (French, 1840-1917)
+  //       </Animated.Text>
+  //     </View>
+  //   );
+  // }
   return (
     <View>
-      <Swipeable
-            containerStyle={{
-              width: '100%',
-              height: '100%',
-            }}
-            renderLeftActions={LeftActionV}
-          >
-            <Calendar style={styles.calendar} 
-      markedDates={markedSelectedDates}
-      theme={{
-        selectedDayBackgroundColor: '#009688',
-        arrowColor: '#009688',
-        dotColor: '#009688',
-        todayTextColor: '#009688',
-      }} 
-      onDayPress={(day) => {
-        setSelectedDate(day.dateString)
-      }} />
+      <Calendar style={styles.calendar} 
+            markedDates={markedSelectedDates}
+            theme={{
+              selectedDayBackgroundColor: '#009688',
+              arrowColor: '#009688',
+              dotColor: '#009688',
+              todayTextColor: '#009688',
+            }} 
+            onDayPress={(day) => {
+              setSelectedDate(day.dateString)
+            }} />
 
-      <View style={{position:'absolute' , alignItems :'center',marginTop:500, width:'100%'}}>
-        <TouchableOpacity style = {styles.buttonStyle}>
-          <Text style={styles.buttonTextStyle}> +  오늘 기록 하기</Text>
-        </TouchableOpacity>
-      </View>
-      </Swipeable>
-      
-      
-      
+        <View style={{position:'absolute' , alignItems :'center',marginTop:500, width:'100%'}}>
+          <TouchableOpacity style = {styles.buttonStyle}>
+            <Text style={styles.buttonTextStyle}> +  오늘 기록 하기</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style = {styles.buttonStyle}>
+            <Text style={styles.buttonTextStyle} onPress={() => navigation.navigate('ArScreen')}>Fejka와 AR로 대화</Text>
+          </TouchableOpacity>
+        </View>
     </View>
     
   );
@@ -161,6 +151,7 @@ function PlantInfoScreen() {
 
 export default function PlantProfileMainScreen() {
   
+  
   return (
     <Tab.Navigator
       initialRouteName="Diary"
@@ -175,12 +166,11 @@ export default function PlantProfileMainScreen() {
         }
       }}>
       <Tab.Screen
-        name="Diary"
-        component={DiaryScreen}
-        options={{
-          tabBarLabel: '관리 일지',
-        }}
-      />
+          name="Diary"
+          component={DiaryScreen}
+          options={{
+            tabBarLabel: '관리 일지',
+      }}/>
       <Tab.Screen
         name="PlantInfo"
         component={PlantInfoScreen}
@@ -219,7 +209,6 @@ const styles = StyleSheet.create({
     marginBottom:10,
   },
   buttonTextStyle:{
-    color:'gray',
     fontWeight:'bold',
     fontSize:15,
   },
