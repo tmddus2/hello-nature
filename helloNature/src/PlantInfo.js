@@ -8,14 +8,28 @@ import {
   Text,
   useColorScheme,
   View,
+  requireNativeComponent,
+  NativeModules,
+  Button,
+  ToastAndroid,
 } from 'react-native';
 
+const { RNNativeToastLibrary } = NativeModules;
 
-function PlantInfoScreen() { // 추후 다른 페이지로 이동
+
+
+function PlantInfoScreen() {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text style={{color:'black'}}>PlantInfo Screen</Text>
+      <Button
+          title="RNNativeToastLibrary"
+          onPress={()=>{
+            console.log("HEI");
+            RNNativeToastLibrary.show('HELLO');
+            }}/>
     </View>
+
   );
 }
+
 export default PlantInfoScreen;
