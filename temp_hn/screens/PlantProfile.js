@@ -15,48 +15,10 @@ export default function PlantProfile({ navigation }) {
   const Stack = createNativeStackNavigator();
 
   const onSubmit = async () => {
-    // await AsyncStorage.setItem('token', username)
-    // var requestBody = {
-    //   username: username,
-    //   password: password
-    // }
-
-    // axios.post("http://10.0.2.2:8080/api/signin", requestBody)
-    //   .then(res => {
-    //     //console.log("->", res.data)
-    //     if (res.data) {
-    //       AsyncStorage.multiSet([
-    //         ['isLogin', 'true'],
-    //         ['accessToken', `Bearer ${res.headers.auth_token}`],
-    //         ['username', `${res.data.username}`]
-            
-    //       ])
-    //     } else {
-    //       console.log("fail " + res.data.message)
-    //     }
-    //   }).catch(error => console.log(error));
-
-    // await AsyncStorage.getItem('accessToken', (err, result) => {
-    //   axios.defaults.headers.common['Authorization'] = result
-    // })
-    // navigation.navigate('Home')
+    
   }
 
   return (
-    // <View style>
-    //     <Animated.View>
-    //         <View style={styles.topContainer}>
-    //             <View style={{flexDirection:'row', alignItems:'center'}}>
-    //                 <Image source = {{uri:'https://cdn-icons-png.flaticon.com/512/892/892926.png'}} style={styles.PlantProfileimage}></Image>
-    //                 <Text style={styles.topText}>    Fejka</Text>
-    //             </View>
-    //             <TouchableOpacity>
-    //                 <Image source = {{uri: 'https://cdn-icons-png.flaticon.com/512/1828/1828778.png'}} style = {styles.image}/>
-    //             </TouchableOpacity>
-    //         </View>  
-    //         <View component={MainScreen}></View>
-    //     </Animated.View> 
-    // </View>
     <Stack.Navigator>
         <Stack.Screen style={styles.topText}
           name="Fejka"
