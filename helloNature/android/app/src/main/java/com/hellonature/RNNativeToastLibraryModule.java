@@ -1,6 +1,7 @@
 
 package com.hellonature;
 
+
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
@@ -16,7 +17,8 @@ import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
 import android.net.Uri;
 import android.app.Activity;
-import com.hellonature.HelloArActivity;
+// import com.hellonature.HelloArActivity;
+import com.hellonature.google.ar.core.examples.java.ml.MainMLActivity;
 
 public class RNNativeToastLibraryModule extends ReactContextBaseJavaModule {
 
@@ -53,7 +55,7 @@ public class RNNativeToastLibraryModule extends ReactContextBaseJavaModule {
     Activity activity = getCurrentActivity();
 
     // Intent set from packageName
-    Intent intent = new Intent(context, HelloArActivity.class);
+    Intent intent = new Intent(context, MainMLActivity.class); // HelloArActivity
 
     activity.startActivity(intent);
 

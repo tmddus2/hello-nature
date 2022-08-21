@@ -61,3 +61,7 @@ buck-out/
 # Ruby / CocoaPods
 /ios/Pods/
 /vendor/bundle/
+
+# credential keys
+/src/main/resources/application.yml
+/android/app/src/main/res/raw/credentials.json
