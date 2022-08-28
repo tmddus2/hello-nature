@@ -3,6 +3,7 @@ package helloNature.backend.controller;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import helloNature.backend.service.ChatbotService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +20,8 @@ import com.google.gson.Gson;
 @RestController
 @RequestMapping("/api")
 public class ChatbotController {
+
+    private final ChatbotService chatbotService;
 
     @PostMapping("/user/chatbot")
     public Object dialogFlowWebHook(Principal principal, HttpServletRequest request, HttpServletResponse response) throws IOException { // HttpServletRequest request, , HttpServletResponse response
@@ -79,5 +82,11 @@ public class ChatbotController {
         }
 
     }
+
+    @GetMapping("/user/water-condition")
+    public Object getWaterCondition(@RequestParam Long id) {
+        return chatbotService.getWaterCondition(id);
+    }
+
 
 }
