@@ -3,7 +3,10 @@ package helloNature.backend.controller;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import helloNature.backend.dto.PlantDto;
+import helloNature.backend.dto.WaterDto;
 import helloNature.backend.service.ChatbotService;
+import helloNature.backend.service.MyPlantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,9 +25,10 @@ import com.google.gson.Gson;
 public class ChatbotController {
 
     private final ChatbotService chatbotService;
+    private final MyPlantService myPlantService;
 
-    @PostMapping("/user/chatbot")
-    public Object dialogFlowWebHook(Principal principal, HttpServletRequest request, HttpServletResponse response) throws IOException { // HttpServletRequest request, , HttpServletResponse response
+    @PostMapping("/user/chatbot/water")
+    public Object dialogFlowWebHook(Principal principal, HttpServletRequest request, HttpServletResponse response, @RequestParam Long id) throws IOException {
         try {
 
             // https://cloud.google.com/dialogflow/es/docs/fulfillment-webhook#webhook-java
@@ -43,11 +47,26 @@ public class ChatbotController {
 
 
             if (str.equals('"'+"PLANT_INFO"+'"')) {
-                responseText = '"' + "이건 제 정보입니다!" + '"';
+                PlantDto plantDto = myPlantService.getMyPlantInfo(id);
+
+                responseText = '"'
+                        + "이건 제 정보입니다!\n"
+                        + "이름은 " + plantDto.getName() + "입니다.\n"
+                        + "처음 만난 날은 " + plantDto.getBring_date() + "입니다.\n"
+                        + "학종은 " + plantDto.getScientific_name() + "입니다.\n"
+                        + '"';
             } else if (str.equals('"'+"PLANT_WATER"+'"')) {
-                responseText = '"' + "이건 제 수분 정보입니다!" + '"';
+                WaterDto waterDto = chatbotService.getWaterCondition(id);
+                PlantDto plantDto = myPlantService.getMyPlantInfo(id);
+
+                responseText = '"'
+                        + plantDto.getName() + "(이)의 수분 정보가 궁금하신가요?\n"
+                        + "마지막으로 물 준 날은 " + waterDto.getLasted_date() + "입니다.\n"
+                        + "다음으로 물 줄 날은 " + waterDto.getExpected_date() + "입니다.\n"
+                        + "수분 상태는 전체적으로 " + waterDto.getCondition() + "입니다."
+                        + '"';
             } else {
-                responseText = '"' + principal.getName() + " HELLO!"+ '"';
+                responseText = '"' + "챗봇에 무슨 문제가 있나봐요. 나중에 말 걸어주세요 :( " + '"';
             }
 
 

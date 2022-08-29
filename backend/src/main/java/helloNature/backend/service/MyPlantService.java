@@ -26,6 +26,22 @@ public class MyPlantService {
     private final S3Service s3Service;
     private final WaterRepository waterRepository;
 
+    public PlantDto getMyPlantInfo(Long id) {
+        Plant plant = plantRepository.findPlantById(id);
+
+        PlantDto plantDto = PlantDto.builder()
+                .id(plant.getId())
+                .name(plant.getName())
+                .memo(plant.getMemo())
+                .picture(plant.getPicture())
+                .scientific_name(plant.getScientific_name())
+                .bring_date(plant.getBring_date())
+                .type(plant.getType())
+                .build();
+
+        return  plantDto;
+    }
+
     public List<PlantDto> getMyPlantList(String username) {
         User user = userRepository.findByUsername(username).get();
         List<PlantDto> plantDtoList = new ArrayList<>();

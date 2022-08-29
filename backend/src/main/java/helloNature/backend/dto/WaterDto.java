@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 //@NoArgsConstructor
-//@Builder
+@Builder
 public class WaterDto {
 
     private Long id; // plant_id
