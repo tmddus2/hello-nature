@@ -137,8 +137,7 @@ export default function RegisterPlant({ navigation }) {
         .then(data => data)
         .then(value => {
             console.log("yourKey Value:  " + value)
-            axios.post("http://10.0.2.2:8080/api/user/plant", requestBody,{headers : {Authorization:value}})
-            // {withCredentials :true, crossDomain: true, 
+            axios.post("http://10.0.2.2:8080/api/user/plant", {requestBody})            // {withCredentials :true, crossDomain: true, 
             //     credentials: "include",}
                     .then(res => {
                         if (res.data) {
