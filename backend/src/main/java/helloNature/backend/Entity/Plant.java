@@ -2,10 +2,7 @@ package helloNature.backend.Entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -24,13 +21,15 @@ public class Plant {
 
     private String type;
 
-    private String start_date;
+    private String bring_date;
 
     private String picture;
 
     private String scientific_name;
 
     private String memo;
+
+    private Long water_cycle;
 
     @JsonManagedReference
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -41,5 +40,13 @@ public class Plant {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+
+
+    /*
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "plant")//(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "plant")
+    private Water water;
+     */
+
 
 }
