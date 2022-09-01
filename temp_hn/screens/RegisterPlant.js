@@ -34,8 +34,36 @@ Number.prototype.zf = function(len){return this.toString().zf(len);};
 export default function RegisterPlant({ navigation }) {
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
-    const placeholder = "  입양한 날짜를 입력해주세요";
+    const placeholderForA = "  입양한 날짜를 입력해주세요";
+    const [bring_date, setBring_Date] = useState('')
+    const [water_cycle, setWater_Cycle] = useState('')
+    const [type, setType] = useState('')
+    const [name, setName] = useState('')
+    const [scientific_name, setScientific_Name] = useState('')
+    const [memo, setMemo] = useState('')
+    
     const [text, onChangeText] = useState("");
+
+    const onSubmit = async () => {
+        var requestBody = {
+          bring_date : '2018-08-01',
+          memo : memo,
+          picture: 'https://cdn-icons-png.flaticon.com/512/747/747545.png',
+          scientific_name :scientific_name,
+          type: type,
+          water_cycle : water_cycle,
+          name: name,        
+        }
+    
+        axios.post("http://10.0.2.2:8080/api/user/plant", requestBody)
+          .then(res => {
+            if (res.data) {
+              navigation.navigate('/Home')
+            } else {
+              console.log("fail " + res.data.message)
+            }
+          }).catch(error => console.log(error+requestBody.memo));
+    }
 
     const showDatePicker = () => {
         setDatePickerVisibility(true);
@@ -45,15 +73,12 @@ export default function RegisterPlant({ navigation }) {
         setDatePickerVisibility(false);
     };
 
-    const handleConfirm = (date) => {
+    const handleConfirm= (date) => {
         console.warn("dateFormat: ", date.format("yyyy/MM/dd"));
         hideDatePicker();
         onChangeText(date.format("yyyy/MM/dd"))
     };
 
-    state = {
-        avatar: ''
-    }
 
   return (
     <View>
@@ -76,21 +101,22 @@ export default function RegisterPlant({ navigation }) {
                     </TouchableOpacity>
                     <Text>사진을 눌러 변경</Text>
                 </View>
-                <TextInput placeholder="  식물의 종을 입력하세요" style={styles.inputText}/>
-                <TextInput placeholder="  내가 부르는 이름" style={styles.inputText}/>
+                <TextInput onChangeText={(value) => setType(value)} placeholder="  식물의 종을 입력하세요" style={styles.inputText}/>
+                <TextInput onChangeText={(value) => setScientific_Name(value)} placeholder="  식물의 학명을 입력하세요" style={styles.inputText}/>
+                <TextInput onChangeText={(value) => setName(value)} placeholder="  내가 부르는 이름" style={styles.inputText}/>
+                <TextInput onChangeText={(value) => setWater_Cycle(value)} placeholder="  물 주는 주기" style={styles.inputText}/>
                 <TouchableOpacity style = {{width:'100%', marginLeft:35}} onPress={showDatePicker}>
-                    <TextInput placeholder={placeholder} editable={false} value={text} style={styles.inputText}/>
+                    <TextInput onChange={(value) => setBring_Date(value)} placeholder={placeholderForA} editable={false} value={text} style={styles.inputText}/>
                     <DateTimePickerModal
-                        headerTextIOS={placeholder}
+                        headerTextIOS={placeholderForA}
                         isVisible={isDatePickerVisible}
                         mode="date"
                         onConfirm={handleConfirm}
                         onCancel={hideDatePicker}
                     />
                 </TouchableOpacity>
-                
-                <TextInput placeholder="  특이사항" style={styles.inputTextS}/>  
-                <TouchableOpacity style = {styles.buttonStyle}>
+                <TextInput onChangeText={(value) => setMemo(value)}placeholder="  특이사항" style={styles.inputTextS}/>  
+                <TouchableOpacity style = {styles.buttonStyle} onPress={onSubmit}>
                     <Text style={styles.buttonTextStyle}>식물 등록</Text>
                 </TouchableOpacity>
             </View>                  

@@ -11,6 +11,7 @@ import ArScreen from './screens/ArScreen';
 import Home from './screens/Home'
 import Login from './screens/Login'
 import RegisterPlant from './screens/RegisterPlant';
+import TodayMemo from './screens/TodayMemo';
 
 const Stack = createStackNavigator();
 
@@ -27,6 +28,7 @@ export default function App() {
         <Stack.Screen name = "FirstScreen" component={FirstScreen}/>
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="TodayMemo" component={TodayMemo}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
