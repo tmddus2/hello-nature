@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, TextInput, TouchableOpacity , Image} from 'react-native'
+import { StyleSheet, Text, View, ScrollView,Alert, TextInput, TouchableOpacity , Image, PermissionsAndroid} from 'react-native'
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -44,6 +45,84 @@ export default function RegisterPlant({ navigation }) {
     
     const [text, onChangeText] = useState("");
 
+    const showPicker = async ()=>{
+        const grantedcamera = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.CAMERA,
+            {
+                title: "App Camera Permission",
+                message:"App needs access to your camera",
+                buttonNeutral:"Ask Me Later",
+                buttonNegative:"Cancel",
+                buttonPositive:"Ok"
+            }
+        );
+        const grantedstorage = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+            {
+                title: "App Camera Permission",
+                message:"App needs access to your camera",
+                buttonNeutral :"Ask Me Later",
+                buttonNegative:"Cancel",
+                buttonPositive:"Ok"
+            }
+        );
+        if(grantedcamera === PermissionsAndroid.RESULTS.GRANTED || grantedstorage === PermissionsAndroid.RESULTS.GRANTED){
+            console.log("Camera & storage permission given");
+            Alert.alert(
+                "뭘로 올릴래?",
+                "선택해",
+                [
+                  {
+                    text: "카메라로 찍기",
+                    onPress: async() =>{
+                      const result = await launchCamera({
+                        mediaType : 'photo', 
+                        cameraType : 'back', 
+                      });
+                        if (result.didCancel){ 
+                          return null;
+                        }
+                        const localUri = result.assets[0].uri;
+                        const uriPath = localUri.split("//").pop();
+                        const imageName = localUri.split("/").pop();
+                        setPhoto("file://"+uriPath);
+                    }
+                  },
+                  {
+                    text: "앨범에서 선택",
+                    onPress: async() =>{
+                      const result = await launchImageLibrary();
+                      if (result.didCancel){
+                        return null;
+                      } 
+                      const localUri = result.assets[0].uri;
+                      const uriPath = localUri.split("//").pop();
+                      const imageName = localUri.split("/").pop();
+                      setPhoto("file://"+uriPath);
+                    }
+                  },
+                ],
+                {cancelable: false}
+              );
+        }
+        else{
+            console.log("Camera permission denied")
+        }
+    };
+
+    const getData = async (key) => {
+        // get Data from Storage
+        try {
+          const data = await AsyncStorage.getItem('accessToken');
+          if (data !== null) {
+            console.log(data);
+            return data;
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      };
+
     const onSubmit = async () => {
         var requestBody = {
           bring_date : '2018-08-01',
@@ -54,16 +133,25 @@ export default function RegisterPlant({ navigation }) {
           water_cycle : water_cycle,
           name: name,        
         }
-    
-        axios.post("http://10.0.2.2:8080/api/user/plant", requestBody)
-          .then(res => {
-            if (res.data) {
-              navigation.navigate('/Home')
-            } else {
-              console.log("fail " + res.data.message)
-            }
-          }).catch(error => console.log(error+requestBody.memo));
-    }
+        await getData("yourKey")
+        .then(data => data)
+        .then(value => {
+            console.log("yourKey Value:  " + value)
+            axios.post("http://10.0.2.2:8080/api/user/plant", requestBody,{headers : {Authorization:value}})
+            // {withCredentials :true, crossDomain: true, 
+            //     credentials: "include",}
+                    .then(res => {
+                        if (res.data) {
+                        navigation.navigate('/Home')
+                        } else {
+                        console.log("fail " + res.data.message)
+                        }
+                    }).catch(error => console.log(error));
+        })
+        .catch(err => console.log(err))
+        
+        
+    };
 
     const showDatePicker = () => {
         setDatePickerVisibility(true);
@@ -96,7 +184,7 @@ export default function RegisterPlant({ navigation }) {
             </View>
             <View style={{alignItems:'center'}}>
                 <View style={styles.imageBox}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={showPicker}>
                         <Image source = {{uri: 'https://cdn-icons-png.flaticon.com/512/685/685686.png'}} style = {styles.inputImage}/>
                     </TouchableOpacity>
                     <Text>사진을 눌러 변경</Text>
