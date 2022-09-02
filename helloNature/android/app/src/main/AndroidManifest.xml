@@ -2,12 +2,16 @@
   package="com.hellonature">
 
     <uses-permission android:name="android.permission.INTERNET" />
+<<<<<<< HEAD
 
     <uses-permission android:name="android.permission.CAMERA" />
     <!-- Limits app visibility in the Google Play Store to ARCore supported devices
      (https://developers.google.com/ar/devices). -->
     <uses-feature android:name="android.hardware.camera.ar" />
 
+=======
+  
+>>>>>>> 1af7ce4ab58360eca3ac68a4daf85d971fdb67d5
     <application
       android:name=".MainApplication"
       android:label="@string/app_name"

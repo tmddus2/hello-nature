@@ -26,7 +26,7 @@ public class AuthController {
     private final AuthService authService;
 
 
-    @PostMapping("/signup")
+    @PostMapping("/signup") // http://localhost:8080/api/signup
     public User signup(@RequestBody SignupDto signupDto) {
         return authService.signup(signupDto);
     }
