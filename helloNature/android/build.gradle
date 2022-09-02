@@ -3,23 +3,12 @@
 buildscript {
     ext {
         buildToolsVersion = "31.0.0"
-<<<<<<< HEAD
-        minSdkVersion = 24
-        compileSdkVersion = 31
-        targetSdkVersion = 31
-        ext.kotlin_version = '1.6.10'
-=======
-        // minSdkVersion = 21
-        // compileSdkVersion = 31
-        // targetSdkVersion = 31
-        //buildToolsVersion = "29.0.3"
         minSdkVersion = 23
         compileSdkVersion = 31
         targetSdkVersion = 31
         ndkVersion = "20.1.5948944"
         kotlin_version = "1.5.0"
         androidXCore = "1.5.0"
->>>>>>> 1af7ce4ab58360eca3ac68a4daf85d971fdb67d5
 
         if (System.properties['os.arch'] == "aarch64") {
             // For M1 Users we need to use the NDK 24 which added support for aarch64

@@ -15,11 +15,7 @@ export default function Login({ navigation }) {
       password: password
     }
 
-<<<<<<< Updated upstream
     await axios.post("http://10.0.2.2:8080/api/signin", requestBody, {"withCredentials" : true})
-=======
-    await axios.post("http://172.30.1.33:8080/api/signin", requestBody)
->>>>>>> Stashed changes
             .then(res => {
                 console.log("->",res.data)
                 if (res.data) {

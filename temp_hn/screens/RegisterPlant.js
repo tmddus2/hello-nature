@@ -133,38 +133,39 @@ export default function RegisterPlant({ navigation }) {
           water_cycle : water_cycle,
           name: name,        
         }
-<<<<<<< Updated upstream
-        await getData("yourKey")
+    
+    const onSubmit = async () => {
+        var requestBody = {
+            "picture": 'https://cdn-icons-png.flaticon.com/512/747/747545.png',
+
+          "type": type,
+          //water_cycle : water_cycle,
+          "name": name,    
+          "bring_date" : '2018-08-01',
+          "scientific_name" :scientific_name,  
+          "memo" : memo,  
+        }
+
+        
+        await getData('accessToken')
         .then(data => data)
         .then(value => {
             console.log("yourKey Value:  " + value)
-            axios.post("http://10.0.2.2:8080/api/user/plant", requestBody,{headers : {Authorization:value}})
-            // {withCredentials :true, crossDomain: true, 
-            //     credentials: "include",}
+            axios.post("http://10.0.2.2:8080/api/user/plant", requestBody, {headers: {
+                Authorization: value
+              }})     
                     .then(res => {
+                        
                         if (res.data) {
-                        navigation.navigate('/Home')
+                        navigation.navigate('Home')
                         } else {
                         console.log("fail " + res.data.message)
                         }
                     }).catch(error => console.log(error));
         })
         .catch(err => console.log(err))
-        
-        
     };
-=======
-    
-        axios.post("http://172.30.1.33:8080/api/user/plant", requestBody)
-          .then(res => {
-            if (res.data) {
-              navigation.navigate('/Home')
-            } else {
-              console.log("fail " + res.data.message)
-            }
-          }).catch(error => console.log(error+requestBody.memo));
-    }
->>>>>>> Stashed changes
+       
 
     const showDatePicker = () => {
         setDatePickerVisibility(true);
