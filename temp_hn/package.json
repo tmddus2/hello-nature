@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "name": "temp_hn",
   "version": "0.0.1",
   "private": true,
@@ -46,5 +47,9 @@
   },
   "jest": {
     "preset": "react-native"
+=======
+  "dependencies": {
+    "react-native-splash-screen": "3.3.0"
+>>>>>>> 1977f05e93ac9e2a8461d4dce28faee771bcc36c
   }
 }
