@@ -110,10 +110,11 @@ export default function RegisterPlant({ navigation }) {
         }
     };
 
+
     const getData = async (key) => {
         // get Data from Storage
         try {
-          const data = await AsyncStorage.getItem('accessToken');
+          const data = await AsyncStorage.getItem(key);
           if (data !== null) {
             console.log(data);
             return data;
@@ -122,32 +123,37 @@ export default function RegisterPlant({ navigation }) {
           console.log(error);
         }
       };
-
+    
     const onSubmit = async () => {
         var requestBody = {
-          bring_date : '2018-08-01',
-          memo : memo,
-          picture: 'https://cdn-icons-png.flaticon.com/512/747/747545.png',
-          scientific_name :scientific_name,
-          type: type,
-          water_cycle : water_cycle,
-          name: name,        
+            "picture": 'https://cdn-icons-png.flaticon.com/512/747/747545.png',
+
+          "type": type,
+          //water_cycle : water_cycle,
+          "name": name,    
+          "bring_date" : '2018-08-01',
+          "scientific_name" :scientific_name,  
+          "memo" : memo,  
         }
-        await getData("yourKey")
+
+        
+        await getData('accessToken')
         .then(data => data)
         .then(value => {
             console.log("yourKey Value:  " + value)
-            axios.post("http://10.0.2.2:8080/api/user/plant", {requestBody})            // {withCredentials :true, crossDomain: true, 
-            //     credentials: "include",}
+            axios.post("http://10.0.2.2:8080/api/user/plant", requestBody, {headers: {
+                Authorization: value
+              }})     
                     .then(res => {
+                        
                         if (res.data) {
-                        navigation.navigate('/Home')
+                        navigation.navigate('Home')
                         } else {
                         console.log("fail " + res.data.message)
                         }
                     }).catch(error => console.log(error));
         })
-        .catch(err => console.log(err))
+        .catch(err => console.log(value))
         
         
     };

@@ -15,20 +15,20 @@ export default function Login({ navigation }) {
       password: password
     }
 
-    await axios.post("http://10.0.2.2:8080/api/signin", requestBody, {"withCredentials" : true})
+    await axios.post("http://10.0.2.2:8080/api/signin", requestBody)
             .then(res => {
                 console.log("->",res.data)
                 if (res.data) {
                     AsyncStorage.multiSet([
                         ['isLogin', 'true'],
                         ['accessToken', `Bearer ${res.headers.auth_token}`],
-                        ['username', `${res.data.username}`] 
+                        ['username', `${res.data.username}`]
                     ])
                     navigation.navigate('Home');
                 } else {
                     console.log("fail " + res.data.message)
                 }
-            }).catch(error => console.log(error));
+            }).catch(error => console.log(error+requestBody.username));
   }
 
   return (

@@ -3,7 +3,6 @@ import { Calendar } from "react-native-calendars";
 import { format } from "date-fns";
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {Text, View, StyleSheet,Dimensions,Animated, TouchableOpacity, ScrollView, Image, TextInput} from 'react-native';
-import Swipeable from 'react-native-gesture-handler/Swipeable';
 
 const window = Dimensions.get("window");
 // 머티리얼 상단 탭 내비게이터
@@ -13,43 +12,18 @@ function DiaryScreen({navigation}) {
   const water = {key: 'water', color: 'blue', selectedDotColor: 'blue'};
   const nutrients = {key: 'nutrients', color: 'green', selectedDotColor: 'blue'};
 
-  const [value, onChange] = useState(new Date());
+  const [selectedDates, setMarkedDates] = React.useState(null);
+  function addDates() {    
+    let obj = dates.reduce(      
+      (c, v) =>        
+      Object.assign(c, {          
+        [v]: { selectedDates: true},        
+      }),      {},    );    
+      console.log(obj);    
+      setMarkedDates(obj);  
 
+    }
 
-  // const LeftActionV = (progress, dragX) => {
-  //   console.log(dragX);
-  //   const trans = dragX.interpolate({
-  //     inputRange: [0, 200],   //화면의 왼쪽 끝, 화면의 맨 오른쪽
-  //     outputRange: [window.width, 0],   //transitin 0, transition 100% 
-  //   });
-
-  //   return (
-  //     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', zIndex: 10,}}>
-        
-  //       <Animated.Text 
-  //         style={{
-  //           fontSize: 60, 
-  //           color: 'black',  
-  //           fontWeight: '500',
-  //           transform: [{ translateX: trans }], 
-  //           }}
-  //         >
-  //           The Thinker
-  //           Bronze 1900-01 (1880)
-  //         </Animated.Text>
-  //       <Animated.Text 
-  //         style={{
-  //           fontSize: 22, 
-  //           color: 'black', 
-  //           fontWeight: '200',
-  //           transform: [{ translateX: trans }], 
-  //         }
-  //       }>
-  //         Auguste Rodin (French, 1840-1917)
-  //       </Animated.Text>
-  //     </View>
-  //   );
-  // }
   return (
     <View>
       <Calendar style={styles.calendar} 
@@ -57,7 +31,8 @@ function DiaryScreen({navigation}) {
             markedDates={{
               '2022-09-25': {dots: [water,nutrients]},
               '2022-09-01': {dots: [water], disabled: true}
-            }}   
+            }}
+            selectedDates={{selectedDates}}
             theme={{
               selectedDayBackgroundColor: '#009688',
               arrowColor: '#009688',
@@ -65,7 +40,7 @@ function DiaryScreen({navigation}) {
               todayTextColor: '#009688',
             }} 
             onDayPress={(day) => {
-              setSelectedDate(day.dateString)
+              addDates(day.dateString)
             }} />
 
         <View style={{position:'absolute' , alignItems :'center',marginTop:500, width:'100%'}}>
