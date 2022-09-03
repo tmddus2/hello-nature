@@ -3,7 +3,6 @@ import { Calendar } from "react-native-calendars";
 import { format } from "date-fns";
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {Text, View, StyleSheet,Dimensions,Animated, TouchableOpacity, ScrollView, Image, TextInput} from 'react-native';
-import Swipeable from 'react-native-gesture-handler/Swipeable';
 
 const window = Dimensions.get("window");
 // 머티리얼 상단 탭 내비게이터

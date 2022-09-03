@@ -26,7 +26,7 @@ public class PlantController {
     }
 
     @PostMapping("/user/plant")
-    public PlantDto registerPlant(Principal principal, PlantRegistrationDto plantRegistrationDto) {
+    public PlantDto registerPlant(Principal principal, @RequestBody PlantRegistrationDto plantRegistrationDto) {
         return myPlantService.saveMyPlant(principal.getName(), plantRegistrationDto);
 
     }

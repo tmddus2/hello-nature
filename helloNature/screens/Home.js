@@ -68,7 +68,7 @@ export default function Home({ navigation }) {
         <Image source={{ uri: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/elon.png' }} style={styles.topImage} />
         <View style={styles.rightContainer}>
           {/* <Text style={styles.topName}>{username}</Text> */}
-          <Text style={styles.topName}>Park HeeSoo</Text>
+          <Text style={styles.topName}>{username} 농부님</Text>
         </View>
       </View>
       <View style={styles.rootContainer}/>
