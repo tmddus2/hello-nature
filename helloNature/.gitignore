@@ -65,3 +65,4 @@ buck-out/
 # credential keys
 /src/main/resources/application.yml
 /android/app/src/main/res/raw/credentials.json
+/android/app/build
