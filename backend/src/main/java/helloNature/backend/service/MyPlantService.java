@@ -67,7 +67,9 @@ public class MyPlantService {
     public PlantDto saveMyPlant(String username, PlantRegistrationDto plantRegistrationDto) {
         //String image = s3Service.saveImage(plantRegistrationDto.getPicture());
         String image =  plantRegistrationDto.getPicture();
+        System.out.println("image = " + image);
         User user = userRepository.findByUsername(username).get();
+        System.out.println("user = " + user);
 
 
         if (user == null) {
@@ -85,7 +87,7 @@ public class MyPlantService {
                             //.water(null)
                             .build()
             );
-
+            System.out.println("plant = " + plant);
             return PlantDto.builder()
                     .id(plant.getId())
                     .name(plant.getName())
