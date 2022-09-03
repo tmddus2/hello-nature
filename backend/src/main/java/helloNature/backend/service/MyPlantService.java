@@ -65,11 +65,9 @@ public class MyPlantService {
 
 
     public PlantDto saveMyPlant(String username, PlantRegistrationDto plantRegistrationDto) {
-        //String image = s3Service.saveImage(plantRegistrationDto.getPicture());
         String image =  plantRegistrationDto.getPicture();
-        System.out.println("image = " + image);
         User user = userRepository.findByUsername(username).get();
-        System.out.println("user = " + user);
+
 
 
         if (user == null) {
@@ -84,6 +82,7 @@ public class MyPlantService {
                             .scientific_name(plantRegistrationDto.getScientific_name())
                             .memo(plantRegistrationDto.getMemo())
                             .user(user)
+                            .water_cycle(plantRegistrationDto.getWater_cycle())
                             //.water(null)
                             .build()
             );

@@ -129,7 +129,7 @@ export default function RegisterPlant({ navigation }) {
         var requestBody = {
             "picture": 'https://cdn-icons-png.flaticon.com/512/747/747545.png',
             "type": type,
-            //water_cycle : water_cycle,
+            "water_cycle": water_cycle,
             "name": name,
             "bring_date": '2018-08-01',
             "scientific_name": scientific_name,

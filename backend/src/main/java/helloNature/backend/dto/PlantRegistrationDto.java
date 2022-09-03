@@ -11,4 +11,5 @@ public class PlantRegistrationDto {
     private String bring_date;
     private String scientific_name;
     private String memo;
+    private Long water_cycle;
 }
