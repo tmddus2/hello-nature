@@ -18,7 +18,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
   <android.opengl.GLSurfaceView
       android:id="@+id/surfaceview"
@@ -48,6 +49,41 @@
         android:text="@string/clear" />
 
   </LinearLayout>
+  
+  <TextView
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_margin="10dp"
+        android:text="안녕하세요 fejka에요"
+        tools:layout_editor_absoluteX="19dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="200dp"
+        android:layout_height="150dp"
+        android:layout_weight="1"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        android:layout_margin="10dp"
+        tools:layout_editor_absoluteX="-16dp">
+
+        <EditText
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/Button_send"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:backgroundTint="#6E8B3D"
+            android:text="SEND"/>
+    </LinearLayout>
 
   <androidx.appcompat.widget.SwitchCompat
       android:id="@+id/useCloudMlSwitch"
