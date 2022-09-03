@@ -1,17 +1,10 @@
 {
     "logs": [
         {
-<<<<<<< HEAD
             "outputFile": "/Users/mjjwa/ESG/hello-nature/temp_hn/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v24/values-v24.xml",
             "map": [
                 {
-                    "source": "/Users/mjjwa/.gradle/caches/transforms-3/a5da391e889210c4d2ba1ae6744f6033/transformed/appcompat-1.4.1/res/values-v24/values-v24.xml",
-=======
-            "outputFile": "C:\\Users\\qkrgm\\esg_helloNature\\hello-nature\\temp_hn\\android\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v24\\values-v24.xml",
-            "map": [
-                {
-                    "source": "C:\\Users\\qkrgm\\.gradle\\caches\\transforms-3\\a5da391e889210c4d2ba1ae6744f6033\\transformed\\appcompat-1.4.1\\res\\values-v24\\values-v24.xml",
->>>>>>> 1977f05e93ac9e2a8461d4dce28faee771bcc36c
+                    "source": "/Users/mjjwa/.gradle/caches/transforms-3/b4fd030643e8fcd05fe35d22fdd67d33/transformed/appcompat-1.4.1/res/values-v24/values-v24.xml",
                     "from": {
                         "startLines": "2,3",
                         "startColumns": "4,4",

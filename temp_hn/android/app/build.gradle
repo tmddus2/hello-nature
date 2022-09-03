@@ -1,6 +1,10 @@
-apply plugin: "com.android.application"
-
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+}
 import com.android.build.OutputFile
+
+//apply plugin: "com.android.application"
 
 /**
  * The react.gradle file registers a task for each build variant (e.g. bundleDebugJsAndAssets
@@ -134,7 +138,7 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
-        applicationId "com.temp_hn"
+        applicationId "com.hellonature"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -157,7 +161,7 @@ android {
                     cppFlags "-std=c++17"
                     // Make sure this target name is the same you specify inside the
                     // src/main/jni/Android.mk file for the `LOCAL_MODULE` variable.
-                    targets "temp_hn_appmodules"
+                    targets "hellonature_appmodules"
                 }
             }
             if (!enableSeparateBuildPerCPUArchitecture) {
@@ -237,6 +241,16 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/INDEX.LIST'
+    }
+    viewBinding {
+        enabled = true
+    }
 
     // applicationVariants are e.g. debug, release
     applicationVariants.all { variant ->
@@ -257,6 +271,33 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.4.2'
+
+    // Google Cloud Vision APIs
+    implementation platform('com.google.cloud:libraries-bom:19.2.1')
+    implementation 'com.google.cloud:google-cloud-vision:1.102.0'
+    implementation 'io.grpc:grpc-okhttp:1.36.0'
+
+    // ARCore (Google Play Services for AR) library.
+    implementation 'com.google.ar:core:1.32.0'
+
+    // Obj - a simple Wavefront OBJ file loader
+    // https://github.com/javagl/Obj
+    implementation 'de.javagl:obj:0.2.1'
+
+    // ML kit
+    implementation 'com.google.mlkit:object-detection:17.0.0'
+    implementation 'com.google.mlkit:object-detection-custom:16.3.1'
+
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'com.google.android.material:material:1.1.0'
+
+    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
+    implementation 'androidx.lifecycle:lifecycle-common-java8:2.3.1'
 
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
