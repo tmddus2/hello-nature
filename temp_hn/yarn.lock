@@ -6335,6 +6335,11 @@
     "react-shallow-renderer" "^16.13.1"
     "scheduler" "^0.21.0"
 
+"react-xml-parser@^1.1.8":
+  "integrity" "sha512-yX9k9LNCRzzNnFWoyo9cWEjtor6n6VD0Uh7z1ww5rIP6h5vdhJKEmowsm9RumEJMRdr7akcT4mMBScpsz573qQ=="
+  "resolved" "https://registry.npmjs.org/react-xml-parser/-/react-xml-parser-1.1.8.tgz"
+  "version" "1.1.8"
+
 "react@*", "react@^16.0.0 || ^17.0.0 || ^18.0.0", "react@^16.8.0 || ^17.0.0 || ^18.0.0", "react@^18.0.0", "react@>= 15.2.1", "react@>=16.0", "react@>=16.3.0", "react@>=17.0.0", "react@18.0.0":
   "integrity" "sha512-x+VL6wbT4JRVPm7EGxXhZ8w8LTROaxPXOqhlGyVSrv0sB1jkyFGgXxJ8LVoPRLvPR6/CIZGFmfzqUa2NYeMr2A=="
   "resolved" "https://registry.npmjs.org/react/-/react-18.0.0.tgz"
