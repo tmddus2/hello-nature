@@ -198,11 +198,14 @@ class AppRenderer(val activity: MainMLActivity) : DefaultLifecycleObserver, Samp
         }
       }
     }
-
+    var count = 0;
     // Draw labels at their anchor position.
     for (arDetectedObject in arLabeledAnchors) {
       val anchor = arDetectedObject.anchor
       if (anchor.trackingState != TrackingState.TRACKING) continue
+      if (arDetectedObject.label!="Flowerpot" && arDetectedObject.label!="Houseplant") continue
+      Log.d("-->", arDetectedObject.label)
+      count++
       labelRenderer.draw(
         render,
         viewProjectionMatrix,
@@ -211,6 +214,8 @@ class AppRenderer(val activity: MainMLActivity) : DefaultLifecycleObserver, Samp
         arDetectedObject.label
       )
     }
+    //if(count==0) showSnackbar("반려식물을 찾지 못했어요. AR이 식물을 더 잘 찾을 수 있게 움직여보세요.")
+
   }
 
   /**

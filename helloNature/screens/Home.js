@@ -2,15 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Button, Image, TouchableOpacity } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-/*
-export default function Home({ navigation }) {
 
+export default function Home({ navigation }) {
   const logout = async () => {
     await AsyncStorage.removeItem('token')
     navigation.navigate('Login')
   }
-*/
-export default function Home({ navigation }) {
   const [username, setUsername] = useState('')
   const [plantList, setPlantList] = useState('')
   const [plants, setPlants] = useState('')
@@ -41,7 +38,7 @@ export default function Home({ navigation }) {
 
       } else {
         console.log("login fail")
-        // navigation.replace('Login');
+        navigation.replace('Login');
       }
     })
 
@@ -79,11 +76,13 @@ export default function Home({ navigation }) {
       <View style={styles.container}>
         <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/892/892926.png' }} style={styles.image} />
         <View style={styles.rightContainer}>
-          <View style={styles.row}>
-            {/* <Text style={styles.name}>   {plant.name}</Text> */}
-            <Text style={styles.name}>   Fejka</Text>
-            <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/427/427112.png' }} style={styles.waterImage} />
-          </View>
+          <TouchableOpacity onPress={() => navigation.navigate('PlantProfile')}>
+            <View style={styles.row}>
+              {/* <Text style={styles.name}>   {plant.name}</Text> */}
+              <Text style={styles.name}>   Fejka</Text>
+              <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/427/427112.png' }} style={styles.waterImage} />
+            </View>
+          </TouchableOpacity>   
         </View>
       </View>
       {/* {

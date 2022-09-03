@@ -10,40 +10,23 @@ export default function Register({ navigation }) {
   const [email, setEmail] = useState('')
   const [token, setToken] = useState(null)
 
+  
   const onSubmit = async () => {
-    await AsyncStorage.setItem('token', username)
-        if(username === 'parkheesoo' && password === '123456'){
-            console.log('Nice')
-            navigation.navigate('Home')
-        }else{
-            console.log('pas tes nice')
+    var requestBody = {
+      username: username,
+      password: password,
+      email: email,
+      profile : 'https://cdn-icons-png.flaticon.com/512/747/747545.png',
+    }
+
+    axios.post("http://10.0.2.2:8080/api/signup", requestBody)
+      .then(res => {
+        if (res.data) {
+          navigation.navigate('FirstScreen')
+        } else {
+          console.log("fail " + res.data.message)
         }
-
-    // await AsyncStorage.setItem('token', username)
-    // var requestBody = {
-    //   username: username,
-    //   password: password
-    // }
-
-    // axios.post("http://10.0.2.2:8080/api/signin", requestBody)
-    //   .then(res => {
-    //     //console.log("->", res.data)
-    //     if (res.data) {
-    //       AsyncStorage.multiSet([
-    //         ['isLogin', 'true'],
-    //         ['accessToken', `Bearer ${res.headers.auth_token}`],
-    //         ['username', `${res.data.username}`]
-            
-    //       ])
-    //     } else {
-    //       console.log("fail " + res.data.message)
-    //     }
-    //   }).catch(error => console.log(error));
-
-    // await AsyncStorage.getItem('accessToken', (err, result) => {
-    //   axios.defaults.headers.common['Authorization'] = result
-    // })
-    // navigation.navigate('Home')
+      }).catch(error => console.log(error));
   }
 
   return (
