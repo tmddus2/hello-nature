@@ -11,7 +11,7 @@ import ArScreen from './screens/ArScreen';
 import Home from './screens/Home'
 import Login from './screens/Login'
 import RegisterPlant from './screens/RegisterPlant';
-import ChattingRoomScreen from './chatbot/ChattingRoomScreen';
+import TodayMemo from './screens/TodayMemo';
 
 const Stack = createStackNavigator();
 
@@ -28,7 +28,7 @@ export default function App() {
         <Stack.Screen name="FirstScreen" component={FirstScreen} />
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="ChattingRoomScreen" component={ChattingRoomScreen}></Stack.Screen>
+        <Stack.Screen name="TodayMemo" component={TodayMemo} />
       </Stack.Navigator>
     </NavigationContainer>
   );

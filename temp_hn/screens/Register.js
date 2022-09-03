@@ -10,6 +10,7 @@ export default function Register({ navigation }) {
   const [email, setEmail] = useState('')
   const [token, setToken] = useState(null)
 
+  
   const onSubmit = async () => {
     var requestBody = {
       username: username,

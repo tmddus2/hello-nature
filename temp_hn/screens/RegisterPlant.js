@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, TextInput, TouchableOpacity , Image} from 'react-native'
+import { StyleSheet, Text, View, ScrollView,Alert, TextInput, TouchableOpacity , Image, PermissionsAndroid} from 'react-native'
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -34,8 +35,128 @@ Number.prototype.zf = function(len){return this.toString().zf(len);};
 export default function RegisterPlant({ navigation }) {
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
-    const placeholder = "  입양한 날짜를 입력해주세요";
+    const placeholderForA = "  입양한 날짜를 입력해주세요";
+    const [bring_date, setBring_Date] = useState('')
+    const [water_cycle, setWater_Cycle] = useState('')
+    const [type, setType] = useState('')
+    const [name, setName] = useState('')
+    const [scientific_name, setScientific_Name] = useState('')
+    const [memo, setMemo] = useState('')
+    
     const [text, onChangeText] = useState("");
+
+    const showPicker = async ()=>{
+        const grantedcamera = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.CAMERA,
+            {
+                title: "App Camera Permission",
+                message:"App needs access to your camera",
+                buttonNeutral:"Ask Me Later",
+                buttonNegative:"Cancel",
+                buttonPositive:"Ok"
+            }
+        );
+        const grantedstorage = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+            {
+                title: "App Camera Permission",
+                message:"App needs access to your camera",
+                buttonNeutral :"Ask Me Later",
+                buttonNegative:"Cancel",
+                buttonPositive:"Ok"
+            }
+        );
+        if(grantedcamera === PermissionsAndroid.RESULTS.GRANTED || grantedstorage === PermissionsAndroid.RESULTS.GRANTED){
+            console.log("Camera & storage permission given");
+            Alert.alert(
+                "뭘로 올릴래?",
+                "선택해",
+                [
+                  {
+                    text: "카메라로 찍기",
+                    onPress: async() =>{
+                      const result = await launchCamera({
+                        mediaType : 'photo', 
+                        cameraType : 'back', 
+                      });
+                        if (result.didCancel){ 
+                          return null;
+                        }
+                        const localUri = result.assets[0].uri;
+                        const uriPath = localUri.split("//").pop();
+                        const imageName = localUri.split("/").pop();
+                        setPhoto("file://"+uriPath);
+                    }
+                  },
+                  {
+                    text: "앨범에서 선택",
+                    onPress: async() =>{
+                      const result = await launchImageLibrary();
+                      if (result.didCancel){
+                        return null;
+                      } 
+                      const localUri = result.assets[0].uri;
+                      const uriPath = localUri.split("//").pop();
+                      const imageName = localUri.split("/").pop();
+                      setPhoto("file://"+uriPath);
+                    }
+                  },
+                ],
+                {cancelable: false}
+              );
+        }
+        else{
+            console.log("Camera permission denied")
+        }
+    };
+
+
+    const getData = async (key) => {
+        // get Data from Storage
+        try {
+          const data = await AsyncStorage.getItem(key);
+          if (data !== null) {
+            console.log(data);
+            return data;
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    
+    const onSubmit = async () => {
+        var requestBody = {
+            "picture": 'https://cdn-icons-png.flaticon.com/512/747/747545.png',
+
+          "type": type,
+          //water_cycle : water_cycle,
+          "name": name,    
+          "bring_date" : '2018-08-01',
+          "scientific_name" :scientific_name,  
+          "memo" : memo,  
+        }
+
+        
+        await getData('accessToken')
+        .then(data => data)
+        .then(value => {
+            console.log("yourKey Value:  " + value)
+            axios.post("http://10.0.2.2:8080/api/user/plant", requestBody, {headers: {
+                Authorization: value
+              }})     
+                    .then(res => {
+                        
+                        if (res.data) {
+                        navigation.navigate('Home')
+                        } else {
+                        console.log("fail " + res.data.message)
+                        }
+                    }).catch(error => console.log(error));
+        })
+        .catch(err => console.log(value))
+        
+        
+    };
 
     const showDatePicker = () => {
         setDatePickerVisibility(true);
@@ -45,15 +166,12 @@ export default function RegisterPlant({ navigation }) {
         setDatePickerVisibility(false);
     };
 
-    const handleConfirm = (date) => {
+    const handleConfirm= (date) => {
         console.warn("dateFormat: ", date.format("yyyy/MM/dd"));
         hideDatePicker();
         onChangeText(date.format("yyyy/MM/dd"))
     };
 
-    state = {
-        avatar: ''
-    }
 
   return (
     <View>
@@ -71,26 +189,27 @@ export default function RegisterPlant({ navigation }) {
             </View>
             <View style={{alignItems:'center'}}>
                 <View style={styles.imageBox}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={showPicker}>
                         <Image source = {{uri: 'https://cdn-icons-png.flaticon.com/512/685/685686.png'}} style = {styles.inputImage}/>
                     </TouchableOpacity>
                     <Text>사진을 눌러 변경</Text>
                 </View>
-                <TextInput placeholder="  식물의 종을 입력하세요" style={styles.inputText}/>
-                <TextInput placeholder="  내가 부르는 이름" style={styles.inputText}/>
+                <TextInput onChangeText={(value) => setType(value)} placeholder="  식물의 종을 입력하세요" style={styles.inputText}/>
+                <TextInput onChangeText={(value) => setScientific_Name(value)} placeholder="  식물의 학명을 입력하세요" style={styles.inputText}/>
+                <TextInput onChangeText={(value) => setName(value)} placeholder="  내가 부르는 이름" style={styles.inputText}/>
+                <TextInput onChangeText={(value) => setWater_Cycle(value)} placeholder="  물 주는 주기" style={styles.inputText}/>
                 <TouchableOpacity style = {{width:'100%', marginLeft:35}} onPress={showDatePicker}>
-                    <TextInput placeholder={placeholder} editable={false} value={text} style={styles.inputText}/>
+                    <TextInput onChange={(value) => setBring_Date(value)} placeholder={placeholderForA} editable={false} value={text} style={styles.inputText}/>
                     <DateTimePickerModal
-                        headerTextIOS={placeholder}
+                        headerTextIOS={placeholderForA}
                         isVisible={isDatePickerVisible}
                         mode="date"
                         onConfirm={handleConfirm}
                         onCancel={hideDatePicker}
                     />
                 </TouchableOpacity>
-                
-                <TextInput placeholder="  특이사항" style={styles.inputTextS}/>  
-                <TouchableOpacity style = {styles.buttonStyle}>
+                <TextInput onChangeText={(value) => setMemo(value)}placeholder="  특이사항" style={styles.inputTextS}/>  
+                <TouchableOpacity style = {styles.buttonStyle} onPress={onSubmit}>
                     <Text style={styles.buttonTextStyle}>식물 등록</Text>
                 </TouchableOpacity>
             </View>                  

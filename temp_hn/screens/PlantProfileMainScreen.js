@@ -3,7 +3,6 @@ import { Calendar } from "react-native-calendars";
 import { format } from "date-fns";
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {Text, View, StyleSheet,Dimensions,Animated, TouchableOpacity, ScrollView, Image, TextInput} from 'react-native';
-import Swipeable from 'react-native-gesture-handler/Swipeable';
 
 const window = Dimensions.get("window");
 // 머티리얼 상단 탭 내비게이터
@@ -13,80 +12,27 @@ function DiaryScreen({navigation}) {
   const water = {key: 'water', color: 'blue', selectedDotColor: 'blue'};
   const nutrients = {key: 'nutrients', color: 'green', selectedDotColor: 'blue'};
 
-  const [value, onChange] = useState(new Date());
+  const [selectedDates, setMarkedDates] = React.useState(null);
+  function addDates() {    
+    let obj = dates.reduce(      
+      (c, v) =>        
+      Object.assign(c, {          
+        [v]: { selectedDates: true},        
+      }),      {},    );    
+      console.log(obj);    
+      setMarkedDates(obj);  
 
-  const posts = [
-    {
-      id: 1,
-      title: "제목입니다.",
-      contents: "내용입니다.",
-      date: "2022-08-26",
-    },
-    {
-      id: 2,
-      title: "제목입니다.",
-      contents: "내용입니다.",
-      date: "2022-08-27",
     }
-  ];
 
-
-  const markedDates = posts.reduce((acc, current) => {
-    const formattedDate = format(new Date(current.date), 'yyyy-MM-dd');
-    acc[formattedDate] = {marked: true};
-    return acc;
-  }, {});
-  
-
-  const [selectedDate, setSelectedDate] = useState(
-    format(new Date(), "yyyy-MM-dd"),
-  );
-  const markedSelectedDates = {
-    ...markedDates,
-    [selectedDate]: {
-      selected: true,
-      marked: markedDates[selectedDate]?.marked,
-    }
-  }
-
-  // const LeftActionV = (progress, dragX) => {
-  //   console.log(dragX);
-  //   const trans = dragX.interpolate({
-  //     inputRange: [0, 200],   //화면의 왼쪽 끝, 화면의 맨 오른쪽
-  //     outputRange: [window.width, 0],   //transitin 0, transition 100% 
-  //   });
-
-  //   return (
-  //     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', zIndex: 10,}}>
-        
-  //       <Animated.Text 
-  //         style={{
-  //           fontSize: 60, 
-  //           color: 'black',  
-  //           fontWeight: '500',
-  //           transform: [{ translateX: trans }], 
-  //           }}
-  //         >
-  //           The Thinker
-  //           Bronze 1900-01 (1880)
-  //         </Animated.Text>
-  //       <Animated.Text 
-  //         style={{
-  //           fontSize: 22, 
-  //           color: 'black', 
-  //           fontWeight: '200',
-  //           transform: [{ translateX: trans }], 
-  //         }
-  //       }>
-  //         Auguste Rodin (French, 1840-1917)
-  //       </Animated.Text>
-  //     </View>
-  //   );
-  // }
   return (
     <View>
       <Calendar style={styles.calendar} 
-            markedDates={markedSelectedDates}
+            markingType={'multi-dot'}
+            markedDates={{
+              '2022-09-25': {dots: [water,nutrients]},
+              '2022-09-01': {dots: [water], disabled: true}
+            }}
+            selectedDates={{selectedDates}}
             theme={{
               selectedDayBackgroundColor: '#009688',
               arrowColor: '#009688',
@@ -94,12 +40,12 @@ function DiaryScreen({navigation}) {
               todayTextColor: '#009688',
             }} 
             onDayPress={(day) => {
-              setSelectedDate(day.dateString)
+              addDates(day.dateString)
             }} />
 
         <View style={{position:'absolute' , alignItems :'center',marginTop:500, width:'100%'}}>
           <TouchableOpacity style = {styles.buttonStyle}>
-            <Text style={styles.buttonTextStyle}> +  오늘 기록 하기</Text>
+            <Text style={styles.buttonTextStyle} onPress={() => navigation.navigate('TodayMemo')}> 글쓰기 </Text>
           </TouchableOpacity>
           <TouchableOpacity style = {styles.buttonStyle}>
             <Text style={styles.buttonTextStyle} onPress={() => navigation.navigate('ArScreen')}>Fejka와 AR로 대화</Text>
@@ -185,7 +131,7 @@ export default function PlantProfileMainScreen() {
 const styles = StyleSheet.create({
   titleText:{
     color: '#6E8B3D',
-
+    fontWeight :'bold',
     fontSize:20,
   },
   scrollView: {
@@ -200,8 +146,8 @@ const styles = StyleSheet.create({
   buttonStyle:{
     borderWidth:2,
     borderColor:'#6E8B3D',
-    width:150,
-    height:60,
+    width:160,
+    height:50,
     borderRadius:30,
     backgroundColor: '#6E8B3D',
     alignItems: "center",
@@ -209,8 +155,9 @@ const styles = StyleSheet.create({
     marginBottom:10,
   },
   buttonTextStyle:{
-    fontWeight:'bold',
-    fontSize:15,
+    color :'#ffffff',
+    fontWeight :'bold',
+    fontSize:13,
   },
   image:{
     height:330,
@@ -218,8 +165,9 @@ const styles = StyleSheet.create({
   },
   inputText:{
     width:'90%',
+    marginLeft :10,
     marginTop:'5%',
-    fontSize:25,
+    fontSize:20,
   },
   inputTextS:{
     width:'90%',

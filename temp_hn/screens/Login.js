@@ -8,11 +8,13 @@ export default function Login({ navigation }) {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
+
   const onSubmit = async() => {
     var requestBody = {
       username: username,
       password: password
     }
+
     await axios.post("http://10.0.2.2:8080/api/signin", requestBody)
             .then(res => {
                 console.log("->",res.data)
@@ -26,7 +28,7 @@ export default function Login({ navigation }) {
                 } else {
                     console.log("fail " + res.data.message)
                 }
-            }).catch(error => console.log(error));
+            }).catch(error => console.log(error+requestBody.username));
   }
 
   return (
