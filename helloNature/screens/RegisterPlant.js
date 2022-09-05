@@ -36,6 +36,7 @@ export default function RegisterPlant({ navigation }) {
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
     const placeholderForA = "  입양한 날짜를 입력해주세요";
+    const [picture, setPicture] = useState('https://ifh.cc/g/jzaHC6.png')
     const [bring_date, setBring_Date] = useState('')
     const [water_cycle, setWater_Cycle] = useState('')
     const [type, setType] = useState('')
@@ -44,6 +45,26 @@ export default function RegisterPlant({ navigation }) {
     const [memo, setMemo] = useState('')
 
     const [text, onChangeText] = useState("");
+
+    // const setPhoto = (picture) => {
+    //     if(picture == 'https://cdn-icons-png.flaticon.com/512/685/685686.png' || picture == null){
+    //         return(
+    //             <View style={styles.imageBox}>
+    //                 <TouchableOpacity onPress={showPicker}>
+    //                     <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/685/685686.png' }} style={styles.inputImage} />
+    //                 </TouchableOpacity>
+    //                 <Text>사진을 눌러 변경</Text>
+    //             </View>
+    //         )
+    //     }
+    //     else{
+    //         <View style={styles.imageBox}>
+    //             <TouchableOpacity onPress={showPicker}>
+    //                 <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/685/685686.png' }}  style={styles.inputImage} />
+    //             </TouchableOpacity>
+    //         </View>
+    //     }
+    // }
 
     const showPicker = async () => {
         const grantedcamera = await PermissionsAndroid.request(
@@ -85,6 +106,8 @@ export default function RegisterPlant({ navigation }) {
                             const localUri = result.assets[0].uri;
                             const uriPath = localUri.split("//").pop();
                             const imageName = localUri.split("/").pop();
+                            setPicture("file://" + uriPath)
+                            console.log("picture :" + picture)
                             setPhoto("file://" + uriPath);
                         }
                     },
@@ -98,6 +121,7 @@ export default function RegisterPlant({ navigation }) {
                             const localUri = result.assets[0].uri;
                             const uriPath = localUri.split("//").pop();
                             const imageName = localUri.split("/").pop();
+                            setPicture("file://" + uriPath)
                             setPhoto("file://" + uriPath);
                         }
                     },
@@ -127,11 +151,11 @@ export default function RegisterPlant({ navigation }) {
     const onSubmit = async () => {
 
         var requestBody = {
-            "picture": 'https://cdn-icons-png.flaticon.com/512/747/747545.png',
+            "picture": picture,
             "type": type,
             "water_cycle": water_cycle,
             "name": name,
-            "bring_date": '2018-08-01',
+            "bring_date": bring_date,
             "scientific_name": scientific_name,
             "memo": memo,
         }
@@ -171,6 +195,7 @@ export default function RegisterPlant({ navigation }) {
     const handleConfirm = (date) => {
         console.warn("dateFormat: ", date.format("yyyy/MM/dd"));
         hideDatePicker();
+        setBring_Date(date.format("yyyy/MM/dd"))
         onChangeText(date.format("yyyy/MM/dd"))
     };
 
@@ -192,9 +217,8 @@ export default function RegisterPlant({ navigation }) {
                 <View style={{ alignItems: 'center' }}>
                     <View style={styles.imageBox}>
                         <TouchableOpacity onPress={showPicker}>
-                            <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/685/685686.png' }} style={styles.inputImage} />
+                            <Image source={{ uri: picture }} style={styles.inputImage} />
                         </TouchableOpacity>
-                        <Text>사진을 눌러 변경</Text>
                     </View>
                     <TextInput onChangeText={(value) => setType(value)} placeholder="  식물의 종을 입력하세요" style={styles.inputText} />
                     <TextInput onChangeText={(value) => setScientific_Name(value)} placeholder="  식물의 학명을 입력하세요" style={styles.inputText} />
@@ -242,8 +266,8 @@ const styles = StyleSheet.create({
         width: 20,
     },
     inputImage: {
-        height: 50,
-        width: 50,
+        height: 330,
+        width: 330,
     },
     topContainer: {
         flexDirection: 'row',

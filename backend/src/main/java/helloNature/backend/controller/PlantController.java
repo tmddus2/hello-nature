@@ -21,7 +21,9 @@ public class PlantController {
 
     @GetMapping("/user/plant")
     public List<PlantDto> getMyPlant(Principal principal) {
+
         List<PlantDto> plantList = myPlantService.getMyPlantList(principal.getName());
+        System.out.println(plantList);
         return plantList;
     }
 
