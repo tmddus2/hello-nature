@@ -38,7 +38,7 @@ class MLKitObjectDetector(context: Activity) : ObjectDetector(context) {
   val builder = ObjectDetectorOptions.Builder()
 
   private val options = builder
-    .setDetectorMode(CustomObjectDetectorOptions.SINGLE_IMAGE_MODE)
+    .setDetectorMode(CustomObjectDetectorOptions.SINGLE_IMAGE_MODE) //  ObjectDetectorOptions.STREAM_MODE
     .enableClassification()
     .enableMultipleObjects()
     .build()
