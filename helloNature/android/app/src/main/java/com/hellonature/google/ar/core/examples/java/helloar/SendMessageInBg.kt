@@ -12,7 +12,7 @@ import com.google.cloud.dialogflow.v2.SessionsClient
 
 
 class SendMessageInBg(botReply: BotReply, session: SessionName, sessionsClient: SessionsClient,
-                      queryInput: QueryInput) : AsyncTask<Void?, Void?, DetectIntentResponse?>() {
+                      queryInput: QueryInput) : AsyncTask<Void, Void, DetectIntentResponse>() {
     val session: SessionName
     val sessionsClient: SessionsClient
     val queryInput: QueryInput
@@ -24,9 +24,10 @@ class SendMessageInBg(botReply: BotReply, session: SessionName, sessionsClient: 
                     .setSession(session.toString())
                     .setQueryInput(queryInput)
                     .build()
+            Log.d(TAG, "야호~!$detectIntentRequest")
+
             return sessionsClient.detectIntent(detectIntentRequest)
         } catch (e: java.lang.Exception) {
-            Log.d(TAG, "doInBackground: " + e.message)
             e.printStackTrace()
         }
         return null
@@ -34,7 +35,10 @@ class SendMessageInBg(botReply: BotReply, session: SessionName, sessionsClient: 
 
     override fun onPostExecute(response: DetectIntentResponse?) {
         //handle return response here
+        Log.d(TAG, "야호!$response")
         botReply.callback(response)
+        Log.d(TAG, "야호!!$response")
+
     }
 
     init {

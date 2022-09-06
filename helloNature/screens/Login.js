@@ -15,7 +15,7 @@ export default function Login({ navigation }) {
       password: password
     }
 
-    await axios.post("http://172.30.1.53:8080/api/signin", requestBody)
+    await axios.post("http://192.168.0.15:8080/api/signin", requestBody)
             .then(res => {
                 console.log("->",res.data)
                 if (res.data) {

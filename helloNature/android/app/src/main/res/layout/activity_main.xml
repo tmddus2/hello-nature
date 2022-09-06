@@ -40,7 +40,6 @@
         android:id="@+id/textView"
         android:layout_width="170dp"
         android:layout_height="60dp"
-        android:text="안녕하세요 fejka에요"
         app:layout_constraintBottom_toBottomOf="@+id/surfaceview"
         app:layout_constraintTop_toTopOf="@+id/surfaceview"
         app:layout_constraintVertical_bias="0.0"
@@ -96,6 +95,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1" />

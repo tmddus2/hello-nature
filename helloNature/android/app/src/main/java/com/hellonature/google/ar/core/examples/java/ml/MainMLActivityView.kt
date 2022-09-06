@@ -16,49 +16,32 @@
 
 package com.hellonature.google.ar.core.examples.java.ml
 
+import android.annotation.SuppressLint
 import android.opengl.GLSurfaceView
+import android.os.AsyncTask
+import android.util.Log
 import android.view.View
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.SwitchCompat
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.recyclerview.widget.RecyclerView
+import com.google.api.gax.core.FixedCredentialsProvider
+import com.google.auth.oauth2.GoogleCredentials
+import com.google.auth.oauth2.ServiceAccountCredentials
+import com.google.cloud.dialogflow.v2.*
+import com.google.common.collect.Lists
+import com.hellonature.R
 import com.hellonature.google.ar.core.examples.java.common.helpers.SnackbarHelper
 import com.hellonature.google.ar.core.examples.java.common.samplerender.SampleRender
-import com.hellonature.R
-import java.util.ArrayList
-import java.util.UUID
-import androidx.recyclerview.widget.RecyclerView;
-import java.util.Objects
-import sun.jvm.hotspot.debugger.win32.coff.DebugVC50X86RegisterEnums.TAG
-import com.google.cloud.dialogflow.v2.DetectIntentResponse;
-import com.google.cloud.dialogflow.v2.QueryInput;
-import com.google.cloud.dialogflow.v2.SessionName;
-import com.google.cloud.dialogflow.v2.SessionsClient;
-import com.google.cloud.dialogflow.v2.SessionsSettings;
-import com.google.cloud.dialogflow.v2.TextInput;
-import com.hellonature.google.ar.core.examples.java.helloar.BotReply;
-import com.hellonature.google.ar.core.examples.java.helloar.Message;
-import com.hellonature.google.ar.core.examples.java.helloar.SendMessageInBg;
-import com.google.auth.oauth2.GoogleCredentials;
-import com.google.auth.oauth2.ServiceAccountCredentials;
-import android.widget.Toast;
-import android.util.Log;
-import java.util.List;
-import com.google.common.collect.Lists;
-import com.google.api.gax.core.FixedCredentialsProvider;
-import android.widget.EditText;
-import android.widget.ImageButton;
-
-import java.io.InputStream
-import jdk.internal.joptsimple.internal.Messages.message
-
-
-
-
-
-
-
-
+import com.hellonature.google.ar.core.examples.java.helloar.BotReply
+import com.hellonature.google.ar.core.examples.java.helloar.SendMessageInBg
+import com.hellonature.google.ar.core.examples.java.helloar.ChatAdapter
+import java.util.*
 
 
 /**
@@ -79,41 +62,25 @@ class MainMLActivityView(val activity: MainMLActivity, renderer: AppRenderer) : 
   //val closeButton = root.findViewById<View>(R.id.closeButton)
   var TAG = "MainMLActivityView"
 
-  var chatView = findViewById(R.id.linearLayout3) // 보낸 메시지
-  var messageList: List<String> = java.util.List<String>()
-  var btnSend: ImageButton? = null
-  var editMessage: EditText? = null
-  var chatView: LinearLayout? = null
-  var resMessage:TextView? = null
+  val chatView = root.findViewById<RecyclerView>(R.id.recyclerView) // 보낸 메시지
+  val messageList: ArrayList<String> = ArrayList()
+  val btnSend = root.findViewById<Button>(R.id.Button_send)
 
-  chatView = findViewById(R.id.linearLayout3) // 보낸 메시지
-  resMessage = findViewById(R.id.textView)  // 받은 메시지
-  editMessage = findViewById(R.id.editMessage) // 메시지 작성
-  btnSend = findViewById(R.id.Button_send)  // 보내기 버튼
+  val editMessage = root.findViewById<EditText>(R.id.editMessage)
+  //private lateinit var chatView = findViewById<>(R.id.linearLayout3)
+  var resMessage = root.findViewById<TextView>(R.id.textView)
+  var chatAdapter: ChatAdapter? = null
+
+
+  //chatView = findViewById(R.id.linearLayout3) // 보낸 메시지
+//  resMessage = findViewById(R.id.textView)  // 받은 메시지
+//  editMessage = findViewById(R.id.editMessage) // 메시지 작성
+//  btnSend = findViewById(R.id.Button_send)  // 보내기 버튼
 
   //dialogFlow
-  var sessionsClient: SessionsClient? =null
-  var sessionName: SessionName? =null
+  lateinit var sessionsClient: SessionsClient
+  lateinit var sessionName: SessionName
   val uuid: String = UUID.randomUUID().toString()
-
-  // 보낸 메시지 리스트
-  btnSend.setOnClickListener(new View.OnClickListener() {
-    override void onClick(View view) {
-      var message = editMessage.getText().toString();
-      if (!message.isEmpty()) {
-        messageList.add(message);
-        editMessage.setText("");
-        sendMessageToBot(message);
-        Objects.requireNonNull(chatView.getAdapter()).notifyDataSetChanged(); // 새로고침
-        Objects.requireNonNull(chatView.getLayoutManager())
-                .scrollToPosition(messageList.size - 1);
-      } else {
-        //Toast.makeText(TAG, "메시지를 입력해주세요!", Toast.LENGTH_SHORT).show();
-      }
-    }
-  });
-
-  setUpBot();
 
   override fun onResume(owner: LifecycleOwner) {
     surfaceView.onResume()
@@ -139,7 +106,24 @@ class MainMLActivityView(val activity: MainMLActivity, renderer: AppRenderer) : 
     }
   }
 
-  private fun setUpBot() {
+  private fun hideSnackbar() = activity.view.snackbarHelper.hide(activity)
+
+  @SuppressLint("NotifyDataSetChanged")
+  fun setSendingActive(){
+      var message:String = editMessage.getText().toString();
+      if (message.isNotEmpty()) {
+        messageList.add(message);
+        editMessage.setText("");
+        sendMessageToBot(message);
+        Objects.requireNonNull(chatView.adapter).notifyDataSetChanged(); // 새로고침
+        Objects.requireNonNull(chatView.layoutManager)?.scrollToPosition(messageList.size - 1);
+        Log.d(TAG, "잘 보내짐")
+      } else {
+        activity.view.snackbarHelper.showMessage(activity, "메시지를 입력해주세요")
+      }
+  }
+
+  fun setUpBot() {
     try {
       //val context:Context
       val stream: java.io.InputStream = activity.getResources().openRawResource(R.raw.plantchatbot_credentials)
@@ -160,21 +144,29 @@ class MainMLActivityView(val activity: MainMLActivity, renderer: AppRenderer) : 
   fun sendMessageToBot(message: String) {
     val input: QueryInput = QueryInput.newBuilder()
             .setText(TextInput.newBuilder().setText(message).setLanguageCode("ko")).build()
-    SendMessageInBg(this, sessionName, sessionsClient, input).execute()
+    SendMessageInBg(this, sessionName, sessionsClient, input).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR).get();
   }
 
+  @SuppressLint("NotifyDataSetChanged")
   override fun callback(returnResponse: DetectIntentResponse?) {
+    Log.d(TAG, "야호???$returnResponse")
+
     if (returnResponse != null) {
       val botReply: String = returnResponse.getQueryResult().getFulfillmentText()
       if (!botReply.isEmpty()) {
-        resMessage = botReply
-        //chatAdapter.notifyDataSetChanged()
-        //Objects.requireNonNull(chatView.getLayoutManager()).scrollToPosition(messageList.size - 1)
+        Log.d(TAG, "야홍야ㅑㅑ향ㅎ ++ ???$botReply")
+        resMessage.text = botReply
+        chatAdapter?.notifyDataSetChanged()
+        Objects.requireNonNull(chatView.getLayoutManager())?.scrollToPosition(messageList.size - 1)
       } else {
-        //Toast.makeText(this, "something went wrong", Toast.LENGTH_SHORT).show()
+        Log.d(TAG, "뀨뀨")
+
+        Toast.makeText(activity, "something went wrong", Toast.LENGTH_SHORT).show()
       }
     } else {
-      //Toast.makeText(this, "failed to connect!", Toast.LENGTH_SHORT).show()
+      Log.d(TAG, "뀨뀨2")
+
+      Toast.makeText(activity, "failed to connect!", Toast.LENGTH_SHORT).show()
     }
   }
 }

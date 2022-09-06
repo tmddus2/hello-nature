@@ -23,22 +23,24 @@ import com.google.ar.core.Anchor
 import com.google.ar.core.Coordinates2d
 import com.google.ar.core.Frame
 import com.google.ar.core.TrackingState
+import com.google.ar.core.exceptions.CameraNotAvailableException
+import com.google.ar.core.exceptions.NotYetAvailableException
 import com.hellonature.google.ar.core.examples.java.common.helpers.DisplayRotationHelper
 import com.hellonature.google.ar.core.examples.java.common.samplerender.SampleRender
 import com.hellonature.google.ar.core.examples.java.common.samplerender.arcore.BackgroundRenderer
+import com.hellonature.google.ar.core.examples.java.helloar.ChatAdapter
 import com.hellonature.google.ar.core.examples.java.ml.classification.DetectedObjectResult
 import com.hellonature.google.ar.core.examples.java.ml.classification.GoogleCloudVisionDetector
 import com.hellonature.google.ar.core.examples.java.ml.classification.MLKitObjectDetector
 import com.hellonature.google.ar.core.examples.java.ml.classification.ObjectDetector
 import com.hellonature.google.ar.core.examples.java.ml.render.LabelRender
 import com.hellonature.google.ar.core.examples.java.ml.render.PointCloudRender
-import com.google.ar.core.exceptions.CameraNotAvailableException
-import com.google.ar.core.exceptions.NotYetAvailableException
-import java.util.Collections
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import java.util.*
+
 
 /**
  * Renders the HelloAR application into using our example Renderer.
@@ -77,6 +79,17 @@ class AppRenderer(val activity: MainMLActivity) : DefaultLifecycleObserver, Samp
 
   fun bindView(view: MainMLActivityView) {
     this.view = view
+
+    view.setUpBot() //
+
+    // 보낸 메시지 리스트
+    view.chatAdapter = ChatAdapter(view.messageList, activity)
+    view.chatView.setAdapter(view.chatAdapter)
+
+    view.btnSend.setOnClickListener{
+      view.setSendingActive()
+    }
+
 
     view.scanButton.setOnClickListener {
       // frame.acquireCameraImage is dependent on an ARCore Frame, which is only available in onDrawFrame.
