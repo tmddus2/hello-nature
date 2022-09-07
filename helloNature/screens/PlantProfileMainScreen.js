@@ -1,17 +1,19 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Calendar } from "react-native-calendars";
 import { format } from "date-fns";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import axios from 'axios';
 import {Text, View, StyleSheet,Dimensions,Animated, TouchableOpacity, ScrollView, Image, TextInput} from 'react-native';
 
 const window = Dimensions.get("window");
 // 머티리얼 상단 탭 내비게이터
 const Tab = createMaterialTopTabNavigator();
 
-function DiaryScreen({navigation}) {
+function DiaryScreen({route, navigation }) {
   const water = {key: 'water', color: 'blue', selectedDotColor: 'blue'};
   const nutrients = {key: 'nutrients', color: 'green', selectedDotColor: 'blue'};
-
+  const pnId = route?.params?.nowPlantId
   const [selectedDates, setMarkedDates] = React.useState(null);
   function addDates() {    
     let obj = dates.reduce(      
@@ -48,7 +50,7 @@ function DiaryScreen({navigation}) {
             <Text style={styles.buttonTextStyle} onPress={() => navigation.navigate('TodayMemo')}> 글쓰기 </Text>
           </TouchableOpacity>
           <TouchableOpacity style = {styles.buttonStyle}>
-            <Text style={styles.buttonTextStyle} onPress={() => navigation.navigate('ArScreen')}>Fejka와 AR로 대화</Text>
+            <Text style={styles.buttonTextStyle} onPress={() => navigation.navigate('ArScreen')}>{pnId}와 AR로 대화</Text>
           </TouchableOpacity>
         </View>
     </View>
@@ -56,7 +58,50 @@ function DiaryScreen({navigation}) {
   );
 }
 
-function PlantInfoScreen() {
+function PlantInfoScreen({route, navigation }) {
+  const pnId = route?.params?.nowPlantId
+  const [plants, setPlants] = useState([])
+  const getData = async (key) => {
+    try {
+        const data = await AsyncStorage.getItem(key);
+        if (data !== null) {
+            console.log(data);
+            return data;
+        }
+    } catch (error) {
+        console.log(error);
+    }
+  };
+
+  const getPlant = async () => {
+    let list = await getData('accessToken')
+        .then(data => data)
+        .then(value => {
+            console.log("yourKey Value:  " + value)
+            axios.get("http://10.0.2.2:8080/api/user/plant?" +id + '='+  pnId , {
+      headers: {
+          Authorization: value
+      }
+  }).then(
+      res => {
+        //setPlants([JSON.stringify(res?.data), ...plants])
+        setPlants(res.data)
+
+          //console.log(plants)
+          console.log("왕ㄴ마러;어베ㅐㄷ"+ (JSON.stringify(res.data)))
+          return JSON.stringify(res?.data)
+      }
+    )
+
+  });}
+  
+
+  useEffect(() => {
+    
+    getPlant();
+    
+  }, [])
+
   return (
     <View>
         <ScrollView style = {styles.scrollView}>
@@ -95,9 +140,10 @@ function PlantInfoScreen() {
   );
 }
 
-export default function PlantProfileMainScreen() {
-  
-  
+export default function PlantProfileMainScreen({route, navigation }) {
+  console.log(route?.params?.nowPlantId)
+  const pNId = route?.params?.nowPlantId
+
   return (
     <Tab.Navigator
       initialRouteName="Diary"
@@ -114,12 +160,14 @@ export default function PlantProfileMainScreen() {
       <Tab.Screen
           name="Diary"
           component={DiaryScreen}
+          initialParams ={{nowPlantId:pNId}}
           options={{
             tabBarLabel: '관리 일지',
       }}/>
       <Tab.Screen
         name="PlantInfo"
         component={PlantInfoScreen}
+        initialParams ={{nowPlantId:pNId}}
         options={{
           tabBarLabel: '식물 정보',
         }}

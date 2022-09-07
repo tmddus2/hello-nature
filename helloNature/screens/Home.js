@@ -5,24 +5,27 @@ import axios from 'axios';
 import { FlatList } from 'react-native-gesture-handler';
 import { TestScheduler } from 'jest';
 
-const renderItem = ({item}) => {
-  //console.log('==>'+item.id)
-  return (
-    <View style={styles.container}>
-        <Image source={{uri : item.picture}} style={styles.image} />
-        <View style={styles.rightContainer}>
-          <TouchableOpacity onPress={() => navigation.navigate('PlantProfile')}>
-            <View style={styles.row}>
-              <Text style={styles.name}>   {item.name}</Text>
-              <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/427/427112.png' }} style={styles.waterImage} />
-            </View>
-          </TouchableOpacity>   
-        </View>
-      </View>
-  )
-}
+
 
 export default function Home({ navigation }) {
+  
+  const renderItem = ({item}) => {
+    //console.log('==>'+item.id)
+    return (
+      <View style={styles.container}>
+          <Image source={{uri : item.picture}} style={styles.image} />
+          <View style={styles.rightContainer}>
+            <TouchableOpacity onPress={() => navigation.navigate('PlantProfile', {nowPlant: item.name, nowPlantId : item.id})}>
+          
+              <View style={styles.row}>
+                <Text style={styles.name}>   {item.name}</Text>
+                <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/427/427112.png' }} style={styles.waterImage} />
+              </View>
+            </TouchableOpacity>   
+          </View>
+        </View>
+    )
+  }
   const logout = async () => {
     await AsyncStorage.removeItem('token')
     navigation.navigate('Login')
