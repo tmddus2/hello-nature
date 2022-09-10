@@ -28,6 +28,8 @@ public class ScheduleService {
             ScheduleDto scheduleDto = new ScheduleDto();
             scheduleDto.setId(schedule.getId());
             scheduleDto.setDate(schedule.getDate());
+            scheduleDto.setWater(schedule.getWater());
+            scheduleDto.setNutrient(schedule.getNutrient());
             scheduleDto.setMemo(schedule.getMemo());
             scheduleDto.setTheme(schedule.getTheme());
 
@@ -46,6 +48,8 @@ public class ScheduleService {
             ScheduleDto scheduleDto = new ScheduleDto();
             scheduleDto.setId(schedule.getId());
             scheduleDto.setDate(schedule.getDate());
+            scheduleDto.setWater(schedule.getWater());
+            scheduleDto.setNutrient(schedule.getNutrient());
             scheduleDto.setMemo(schedule.getMemo());
             scheduleDto.setTheme(schedule.getTheme());
 
@@ -65,7 +69,8 @@ public class ScheduleService {
 
             Schedule schedule = scheduleRepository.save(
                     Schedule.builder()
-                            .memo(scheduleDto.getMemo())
+                            .water(scheduleDto.getWater())
+                            .nutrient(scheduleDto.getNutrient())
                             .year(date[0])
                             .month(date[1])
                             .date(date[2])
@@ -76,7 +81,8 @@ public class ScheduleService {
 
             ScheduleDto returnDto = new ScheduleDto();
             returnDto.setId(schedule.getId());
-            returnDto.setMemo(schedule.getMemo());
+            returnDto.setWater(schedule.getWater());
+            returnDto.setNutrient(schedule.getNutrient());
             returnDto.setDate(schedule.getDate());
             returnDto.setTheme(schedule.getTheme());
 
