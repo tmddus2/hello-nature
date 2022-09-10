@@ -80,7 +80,11 @@ class AppRenderer(val activity: MainMLActivity) : DefaultLifecycleObserver, Samp
   fun bindView(view: MainMLActivityView) {
     this.view = view
 
-    view.setUpBot() //
+    view.setUpBot()
+
+    // initial message (for making the scroll starts from bottom)
+    view.messageList.add("  ");
+    view.messageList.add("  ");
 
     // 보낸 메시지 리스트
     view.chatAdapter = ChatAdapter(view.messageList, activity)

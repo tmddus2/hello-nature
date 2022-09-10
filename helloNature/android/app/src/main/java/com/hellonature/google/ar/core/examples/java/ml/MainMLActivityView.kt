@@ -67,20 +67,14 @@ class MainMLActivityView(val activity: MainMLActivity, renderer: AppRenderer) : 
   val btnSend = root.findViewById<Button>(R.id.Button_send)
 
   val editMessage = root.findViewById<EditText>(R.id.editMessage)
-  //private lateinit var chatView = findViewById<>(R.id.linearLayout3)
   var resMessage = root.findViewById<TextView>(R.id.textView)
   var chatAdapter: ChatAdapter? = null
-
-
-  //chatView = findViewById(R.id.linearLayout3) // 보낸 메시지
-//  resMessage = findViewById(R.id.textView)  // 받은 메시지
-//  editMessage = findViewById(R.id.editMessage) // 메시지 작성
-//  btnSend = findViewById(R.id.Button_send)  // 보내기 버튼
 
   //dialogFlow
   lateinit var sessionsClient: SessionsClient
   lateinit var sessionName: SessionName
   val uuid: String = UUID.randomUUID().toString()
+
 
   override fun onResume(owner: LifecycleOwner) {
     surfaceView.onResume()
@@ -126,16 +120,17 @@ class MainMLActivityView(val activity: MainMLActivity, renderer: AppRenderer) : 
   fun setUpBot() {
     try {
       //val context:Context
-      val stream: java.io.InputStream = activity.getResources().openRawResource(R.raw.plantchatbot_credentials)
+      val stream: java.io.InputStream = activity.resources.openRawResource(R.raw.plantchatbot1)
       val credentials: GoogleCredentials = GoogleCredentials.fromStream(stream)
               .createScoped(Lists.newArrayList("https://www.googleapis.com/auth/cloud-platform"))
-      val projectId: String = (credentials as ServiceAccountCredentials).getProjectId()
+      val projectId: String = (credentials as ServiceAccountCredentials).projectId
       val settingsBuilder: SessionsSettings.Builder = SessionsSettings.newBuilder()
       val sessionsSettings: SessionsSettings = settingsBuilder.setCredentialsProvider(
               FixedCredentialsProvider.create(credentials)).build()
       sessionsClient = SessionsClient.create(sessionsSettings)
       sessionName = SessionName.of(projectId, uuid)
       Log.d(TAG, "projectId : $projectId")
+
     } catch (e: java.lang.Exception) {
       Log.d(TAG, "setUpBot: " + e.message)
     }
@@ -144,7 +139,7 @@ class MainMLActivityView(val activity: MainMLActivity, renderer: AppRenderer) : 
   fun sendMessageToBot(message: String) {
     val input: QueryInput = QueryInput.newBuilder()
             .setText(TextInput.newBuilder().setText(message).setLanguageCode("ko")).build()
-    SendMessageInBg(this, sessionName, sessionsClient, input).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR).get();
+    SendMessageInBg(this, sessionName, sessionsClient, input).execute()
   }
 
   @SuppressLint("NotifyDataSetChanged")

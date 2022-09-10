@@ -29,225 +29,159 @@
   <LinearLayout
       android:id="@+id/linearLayout"
       android:layout_width="match_parent"
-      android:layout_height="100dp"
+      android:layout_height="40dp"
       android:orientation="horizontal"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintTop_toTopOf="@+id/surfaceview"
       app:layout_constraintVertical_bias="0.0"
-      tools:layout_editor_absoluteX="16dp">
+      tools:layout_editor_absoluteX="0dp">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="170dp"
-        android:layout_height="60dp"
-        app:layout_constraintBottom_toBottomOf="@+id/surfaceview"
-        app:layout_constraintTop_toTopOf="@+id/surfaceview"
-        app:layout_constraintVertical_bias="0.0"
-        tools:layout_editor_absoluteX="19dp" />
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/scanButton"
+        android:layout_width="wrap_content"
+        android:layout_height="34dp"
+        android:padding="5dp"
+        android:text="@string/scan_available"
+        android:backgroundTint="@color/app_color_green" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/clearButton"
+        android:layout_width="wrap_content"
+        android:layout_height="34dp"
+        android:padding="5dp"
+        android:text="@string/clear"
+        android:backgroundTint="@color/pink_100" />
+
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/useCloudMlSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="top|end"
         android:background="#55FFFFFF"
-        android:padding="16dp"
+        android:padding="5dp"
         android:text="@string/use_cloud_ml" />
   </LinearLayout>
 
   <LinearLayout
       android:id="@+id/linearLayout2"
-      android:layout_width="wrap_content"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_gravity="bottom|center_horizontal"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-      app:layout_constraintVertical_bias="0.07"
+      app:layout_constraintVertical_bias="0.02"
       app:layout_dodgeInsetEdges="bottom">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/scanButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="60dp"
-        android:text="@string/scan_available" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/clearButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="60dp"
-        android:text="@string/clear" />
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="@+id/surfaceview"
+        app:layout_constraintTop_toTopOf="@+id/surfaceview"
+        app:layout_constraintVertical_bias="0.0"
+        android:textSize="20sp"
+        android:text="식물과 대화해보세요."
+        android:textColor="#FFFFFF"
+        android:gravity="center"
+        tools:layout_editor_absoluteX="19dp" />
 
   </LinearLayout>
 
   <LinearLayout
       android:id="@+id/linearLayout3"
-      android:layout_width="200dp"
+      android:layout_width="match_parent"
       android:layout_height="200dp"
       android:orientation="vertical"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-      app:layout_constraintVertical_bias="0.059">
+      app:layout_constraintVertical_bias="1">
 
-
-    <androidx.recyclerview.widget.RecyclerView
+    <com.hellonature.google.ar.core.examples.java.common.CustomRecyclerView
         android:id="@+id/recyclerView"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="left"
+        android:fadingEdge="horizontal"
+        android:fadingEdgeLength="50dp"
+        android:requiresFadingEdge="vertical"
         android:layout_weight="1" />
-  </LinearLayout>
-
-
-  <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="60dp"
-      android:layout_margin="10dp"
-      android:orientation="horizontal"
-      android:weightSum="1"
-      app:layout_constraintBottom_toBottomOf="@+id/surfaceview"
-      app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
-      tools:layout_editor_absoluteX="-16dp">
-
-    <EditText
-        android:id="@+id/editMessage"
-        android:layout_width="80dp"
-        android:layout_height="match_parent"
-        android:layout_marginRight="10dp"
-        android:layout_weight="1" />
-
-    <Button
-        android:id="@+id/Button_send"
-        android:layout_width="80dp"
-        android:layout_height="match_parent"
-        android:backgroundTint="#6E8B3D"
-        android:text="SEND" />
-  </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!--
-
-    <ImageButton
-    android:id="@+id/settings_button"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_alignParentEnd="true"
-    android:layout_alignParentTop="true"
-    android:layout_margin="25dp"
-    android:src="@drawable/ic_settings"
-    android:background="@android:color/transparent"/>-->
-
-<!--
-<?xml version="1.0" encoding="utf-8"?>&lt;!&ndash;
- Copyright 2021 Google LLC
-
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-
-      http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
-&ndash;&gt;
-
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/coordinatorLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
-
-  <android.opengl.GLSurfaceView
-      android:id="@+id/surfaceview"
-      android:layout_width="fill_parent"
-      android:layout_height="fill_parent" />
-
-
-  <LinearLayout
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginBottom="80dp"
-      android:layout_gravity="bottom|center_horizontal"
-      app:layout_dodgeInsetEdges="bottom">
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/scanButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="60dp"
-        android:text="@string/scan_available" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/clearButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="60dp"
-        android:text="@string/clear" />
-
-  </LinearLayout>
-  
-  <TextView
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_margin="10dp"
-        android:text="안녕하세요 fejka에요"
-        tools:layout_editor_absoluteX="19dp"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="200dp"
-        android:layout_height="150dp"
-        android:layout_weight="1"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:layout_margin="10dp"
         android:orientation="horizontal"
         android:weightSum="1"
-        android:layout_margin="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/surfaceview"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
         tools:layout_editor_absoluteX="-16dp">
 
-        <EditText
-            android:layout_width="80dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"/>
+      <EditText
+          android:id="@+id/editMessage"
+          android:layout_width="80dp"
+          android:layout_height="match_parent"
+          android:layout_marginRight="10dp"
+          android:hint="식물에게 메세지를 보내보세요."
+          android:textColorHint="@color/white"
+          android:textColor="@color/white"
+          android:textSize="15sp"
+          android:paddingBottom="5dp"
+          android:layout_weight="1" />
 
-        <Button
-            android:id="@+id/Button_send"
-            android:layout_width="80dp"
-            android:layout_height="match_parent"
-            android:backgroundTint="#6E8B3D"
-            android:text="SEND"/>
+      <Button
+          android:id="@+id/Button_send"
+          android:layout_width="80dp"
+          android:layout_height="match_parent"
+          android:backgroundTint="#6E8B3D"
+          android:text="SEND" />
+
     </LinearLayout>
 
-  <androidx.appcompat.widget.SwitchCompat
-      android:id="@+id/useCloudMlSwitch"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="top|end"
-      android:padding="16dp"
-      android:background="#55FFFFFF"
-      android:text="@string/use_cloud_ml" />
+<!--    <LinearLayout 추천 메시지 목록-->
+<!--        android:id="@+id/recommmendMessage"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="40dp"-->
+<!--        android:orientation="horizontal"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/surfaceview"-->
+<!--        app:layout_constraintVertical_bias="0.0"-->
+<!--        tools:layout_editor_absoluteX="0dp">-->
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+<!--      <androidx.recyclerview.widget.RecyclerView-->
+<!--          android:id="@+id/Messages"-->
+<!--          app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
+<!--          android:layout_width="match_parent"-->
+<!--          android:layout_height="match_parent"-->
+<!--          android:layout_weight="1" />-->
+<!--      -->
+<!--      <androidx.appcompat.widget.AppCompatButton-->
+<!--          android:id="@+id/recommendMessage1"-->
+<!--          android:layout_width="wrap_content"-->
+<!--          android:layout_height="34dp"-->
+<!--          android:padding="5dp"-->
+<!--          android:text="@string/clear"-->
+<!--          android:textColor="@color/white"-->
+<!--          android:backgroundTint="#55FFFFFF" />-->
 
-&lt;!&ndash;
+<!--      <androidx.appcompat.widget.AppCompatButton-->
+<!--          android:id="@+id/recommendMessage2"-->
+<!--          android:layout_width="wrap_content"-->
+<!--          android:layout_height="34dp"-->
+<!--          android:padding="5dp"-->
+<!--          android:text="@string/clear"-->
+<!--          android:textColor="@color/white"-->
+<!--          android:backgroundTint="#55FFFFFF" />-->
 
-<ImageButton
-android:id="@+id/settings_button"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"
-android:layout_alignParentEnd="true"
-android:layout_alignParentTop="true"
-android:layout_margin="25dp"
-android:src="@drawable/ic_settings"
-android:background="@android:color/transparent"/>&ndash;&gt;
--->
+<!--    </LinearLayout>-->
+  </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
