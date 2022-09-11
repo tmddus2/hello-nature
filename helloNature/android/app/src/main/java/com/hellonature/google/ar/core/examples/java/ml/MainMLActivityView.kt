@@ -18,15 +18,12 @@ package com.hellonature.google.ar.core.examples.java.ml
 
 import android.annotation.SuppressLint
 import android.opengl.GLSurfaceView
-import android.os.AsyncTask
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.SwitchCompat
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
@@ -39,16 +36,21 @@ import com.hellonature.R
 import com.hellonature.google.ar.core.examples.java.common.helpers.SnackbarHelper
 import com.hellonature.google.ar.core.examples.java.common.samplerender.SampleRender
 import com.hellonature.google.ar.core.examples.java.helloar.BotReply
-import com.hellonature.google.ar.core.examples.java.helloar.SendMessageInBg
 import com.hellonature.google.ar.core.examples.java.helloar.ChatAdapter
+import com.hellonature.google.ar.core.examples.java.helloar.SendMessageInBg
 import java.util.*
-
+import java.io.InputStream
+import java.lang.Exception
+import com.tomergoldst.tooltips.ToolTip;
+import com.tomergoldst.tooltips.ToolTipsManager;
 
 /**
  * Wraps [R.layout.activity_main] and controls lifecycle operations for [GLSurfaceView].
  */
 class MainMLActivityView(val activity: MainMLActivity, renderer: AppRenderer) : DefaultLifecycleObserver, BotReply {
   val root = View.inflate(activity, R.layout.activity_main, null)
+  val linearlayout = root.findViewById<ConstraintLayout>(R.id.coordinatorLayout)
+
   val surfaceView = root.findViewById<GLSurfaceView>(R.id.surfaceview).apply {
     SampleRender(this, renderer, activity.assets)
   }
@@ -65,6 +67,7 @@ class MainMLActivityView(val activity: MainMLActivity, renderer: AppRenderer) : 
   val chatView = root.findViewById<RecyclerView>(R.id.recyclerView) // 보낸 메시지
   val messageList: ArrayList<String> = ArrayList()
   val btnSend = root.findViewById<Button>(R.id.Button_send)
+  val btnHeart = root.findViewById<Button>(R.id.Button_heart)
 
   val editMessage = root.findViewById<EditText>(R.id.editMessage)
   var resMessage = root.findViewById<TextView>(R.id.textView)
@@ -74,6 +77,9 @@ class MainMLActivityView(val activity: MainMLActivity, renderer: AppRenderer) : 
   lateinit var sessionsClient: SessionsClient
   lateinit var sessionName: SessionName
   val uuid: String = UUID.randomUUID().toString()
+
+  var toolTipsManager: ToolTipsManager? = null
+  var count = 0
 
 
   override fun onResume(owner: LifecycleOwner) {
@@ -117,10 +123,15 @@ class MainMLActivityView(val activity: MainMLActivity, renderer: AppRenderer) : 
       }
   }
 
+  fun setHeartActive(){ // plant heart reaction for a seconds
+    count++
+    Log.d(TAG, "pressed count: $count")
+  }
+
   fun setUpBot() {
     try {
       //val context:Context
-      val stream: java.io.InputStream = activity.resources.openRawResource(R.raw.plantchatbot1)
+      val stream: InputStream = activity.resources.openRawResource(R.raw.plantchatbot1)
       val credentials: GoogleCredentials = GoogleCredentials.fromStream(stream)
               .createScoped(Lists.newArrayList("https://www.googleapis.com/auth/cloud-platform"))
       val projectId: String = (credentials as ServiceAccountCredentials).projectId
@@ -131,7 +142,7 @@ class MainMLActivityView(val activity: MainMLActivity, renderer: AppRenderer) : 
       sessionName = SessionName.of(projectId, uuid)
       Log.d(TAG, "projectId : $projectId")
 
-    } catch (e: java.lang.Exception) {
+    } catch (e: Exception) {
       Log.d(TAG, "setUpBot: " + e.message)
     }
   }

@@ -15,7 +15,9 @@
  */
 package com.hellonature.google.ar.core.examples.java.ml
 
+import android.graphics.Color.parseColor
 import android.opengl.Matrix
+import android.util.DisplayMetrics
 import android.util.Log
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
@@ -35,6 +37,8 @@ import com.hellonature.google.ar.core.examples.java.ml.classification.MLKitObjec
 import com.hellonature.google.ar.core.examples.java.ml.classification.ObjectDetector
 import com.hellonature.google.ar.core.examples.java.ml.render.LabelRender
 import com.hellonature.google.ar.core.examples.java.ml.render.PointCloudRender
+import com.tomergoldst.tooltips.ToolTip
+import com.tomergoldst.tooltips.ToolTipsManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
@@ -94,6 +98,29 @@ class AppRenderer(val activity: MainMLActivity) : DefaultLifecycleObserver, Samp
       view.setSendingActive()
     }
 
+    view.btnHeart.setOnClickListener{
+      view.setHeartActive()
+    }
+
+    Log.d(TAG, "안녕안녕")
+
+   //  tooltips
+    view.toolTipsManager = ToolTipsManager();
+    view.toolTipsManager!!.findAndDismiss(view.scanButton)
+    // create tooltip
+    val builder = ToolTip.Builder(activity, view.scanButton, view.linearlayout, "카메라를 식물에 대고 눌러보세요!", ToolTip.POSITION_BELOW)
+    Log.d(TAG, "안녕안녕1")
+
+    // set align
+    builder.setAlign(ToolTip.ALIGN_LEFT)
+    // set background color
+    builder.setBackgroundColor(parseColor("#55FAFF"))
+
+    builder.setOffsetX(210) // 동적 view (refactoring plan)
+    builder.setOffsetY(90)
+
+    // show tooltip
+    view.toolTipsManager!!.show(builder.build())
 
     view.scanButton.setOnClickListener {
       // frame.acquireCameraImage is dependent on an ARCore Frame, which is only available in onDrawFrame.
@@ -101,6 +128,7 @@ class AppRenderer(val activity: MainMLActivity) : DefaultLifecycleObserver, Samp
       scanButtonWasPressed = true
       view.setScanningActive(true)
       hideSnackbar()
+      view.toolTipsManager!!.dismissAll();
     }
 
     view.useCloudMlSwitch.setOnCheckedChangeListener { _, isChecked ->

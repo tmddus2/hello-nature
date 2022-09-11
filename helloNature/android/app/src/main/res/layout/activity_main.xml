@@ -45,9 +45,10 @@
         android:id="@+id/scanButton"
         android:layout_width="wrap_content"
         android:layout_height="34dp"
+        android:backgroundTint="@color/app_color_green"
         android:padding="5dp"
-        android:text="@string/scan_available"
-        android:backgroundTint="@color/app_color_green" />
+        android:text="@string/scan_available" />
+
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/clearButton"
@@ -143,9 +144,19 @@
           android:backgroundTint="#6E8B3D"
           android:text="SEND" />
 
-    </LinearLayout>
+      <Button
+          android:id="@+id/Button_heart"
+          android:layout_width="60dp"
+          android:layout_height="match_parent"
+          android:backgroundTint="#55FFFFFF"
+          android:textColor="@color/white"
+          android:text="♡"
+          android:textSize="30dp"
+          android:textStyle="bold"/>
 
-<!--    <LinearLayout 추천 메시지 목록-->
+<!--      android:tooltipText="Send an email"-->
+    </LinearLayout>
+<!--    <LinearLayout 추천 메시지 목록 -->
 <!--        android:id="@+id/recommmendMessage"-->
 <!--        android:layout_width="match_parent"-->
 <!--        android:layout_height="40dp"-->
