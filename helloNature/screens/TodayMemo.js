@@ -144,7 +144,6 @@ export default function TodayMemo({ route, navigation }) {
                 pointerEvents="none"
                 style={styles.textInput}
                 placeholder={placeholder}
-                placeholderTextColor="#000000"
                 underlineColorAndroid="transparent"
                 editable={false}
                 value={text} />

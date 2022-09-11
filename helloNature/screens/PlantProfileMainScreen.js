@@ -49,7 +49,7 @@ function DiaryScreen({route, navigation }) {
       }
   }).then(
       res => {
-        //setPlants([JSON.stringify(res?.data), ...plants])
+        
         setPlants(res.data)
           return JSON.stringify(res?.data)
       }
