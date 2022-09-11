@@ -23,6 +23,10 @@ public class Schedule {
 
     private String memo;
 
+    private Long water;
+
+    private Long nutrient;
+
     private String theme;
 
     @JsonBackReference

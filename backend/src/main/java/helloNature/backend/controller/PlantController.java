@@ -2,14 +2,13 @@ package helloNature.backend.controller;
 
 import helloNature.backend.Entity.Plant;
 import helloNature.backend.Entity.User;
+import helloNature.backend.Entity.Water;
 import helloNature.backend.dto.PlantDto;
 import helloNature.backend.dto.PlantRegistrationDto;
+import helloNature.backend.dto.WaterDto;
 import helloNature.backend.service.MyPlantService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -20,6 +19,13 @@ import java.util.List;
 public class PlantController {
     private final MyPlantService myPlantService;
 
+    @GetMapping("/user/aplant")
+    public PlantDto getPlant(@RequestParam Long id) {
+        PlantDto plantInfo = myPlantService.getMyPlantInfo(id);
+
+        return plantInfo;
+    }
+
     @GetMapping("/user/plant")
     public List<PlantDto> getMyPlant(Principal principal) {
         List<PlantDto> plantList = myPlantService.getMyPlantList(principal.getName());
@@ -27,8 +33,13 @@ public class PlantController {
     }
 
     @PostMapping("/user/plant")
-    public PlantDto registerPlant(Principal principal, PlantRegistrationDto plantRegistrationDto) {
+    public PlantDto registerPlant(Principal principal, @RequestBody PlantRegistrationDto plantRegistrationDto) {
         return myPlantService.saveMyPlant(principal.getName(), plantRegistrationDto);
 
+    }
+
+    @PostMapping("/user/plant/water")
+    public Water registerWaterCondition(@RequestBody WaterDto waterDto) {
+        return myPlantService.saveWaterCondition(waterDto);
     }
 }
