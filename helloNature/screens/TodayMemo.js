@@ -1,26 +1,139 @@
 //import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Image, Switch, TextInput, TouchableOpacity } from 'react-native'
+import { StyleSheet, Button, Platform, Text, View, Image, Switch, TextInput, TouchableOpacity } from 'react-native'
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
-export default function TodayMemo({ navigation }) {
+export default function TodayMemo({ route, navigation }) {
     const [isEnabledW, setIsEnabledW] = useState(false);
     const [isEnabledN, setIsEnabledN] = useState(false);
     const toggleSwitchW = () => setIsEnabledW(previousState => !previousState);
     const toggleSwitchN = () => setIsEnabledN(previousState => !previousState);
+    const pnId = route?.params?.nowPlantId
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+    const [date, setDate] = useState('')
+    const [memo, setMemo] = useState('')
+    const [theme, setTheme] = useState('')
 
+    Date.prototype.format = function(f) {
+        if (!this.valueOf()) return " ";
+     
+        var weekName = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
+        var d = this;
+         
+        return f.replace(/(yyyy|yy|MM|dd|E|hh|mm|ss|a\/p)/gi, function($1) {
+            switch ($1) {
+                case "yyyy": return d.getFullYear();
+                case "yy": return (d.getFullYear() % 1000).zf(2);
+                case "MM": return (d.getMonth() + 1).zf(2);
+                case "dd": return d.getDate().zf(2);
+                case "E": return weekName[d.getDay()];
+                case "HH": return d.getHours().zf(2);
+                case "hh": return ((h = d.getHours() % 12) ? h : 12).zf(2);
+                case "mm": return d.getMinutes().zf(2);
+                case "ss": return d.getSeconds().zf(2);
+                case "a/p": return d.getHours() < 12 ? "오전" : "오후";
+                default: return $1;
+            }
+        });
+    };
+     
+    String.prototype.string = function(len){var s = '', i = 0; while (i++ < len) { s += this; } return s;};
+    String.prototype.zf = function(len){return "0".string(len - this.length) + this;};
+    Number.prototype.zf = function(len){return this.toString().zf(len);};
+    const handleConfirm = (date) => {
+        hideDatePicker();
+        setDate(date.format("yyyy/MM/dd"))
+        onChangeText(date.format("yyyy/MM/dd"))
+      };
+    const placeholder = "날짜를 선택해주세요";
+    const [text, onChangeText] = useState("");
+    const showDatePicker = () => {
+        setDatePickerVisibility(true);
+    };
+
+    const hideDatePicker = () => {
+        setDatePickerVisibility(false);
+    };
+
+    const getData = async (key) => {
+        // get Data from Storage
+        try {
+            const data = await AsyncStorage.getItem(key);
+            if (data !== null) {
+                console.log(data);
+                return data;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const onSubmit = async () => {
+
+        var requestBody = {
+            "id": pnId,
+            "date": date,
+            
+            "water": 1,
+            "nutrient": 1,
+            "memo" : "dfsjoei",
+            "theme": "dkjafo",
+        }
+
+
+        await getData('accessToken')
+            .then(data => data)
+            .then(value => {
+                axios.post("http://10.0.2.2:8080/api/user/schedule", requestBody, {
+                    headers: {
+                        Authorization: value
+                    }
+                })
+                    .then(res => {
+                        if (res.data) {
+                            navigation.navigate('PlantProfile',{nowPlantId: pnId})
+                        } else {
+                            console.log("fail " + res.data.message)
+                        }
+                    }).catch(error => console.log(error));
+            })
+            .catch(err => console.log(value))
+
+
+    };
+
+    
   return (
     <View>
         <View style = {styles.topContainer}>
-                <Text style={styles.topText}>오늘의 기록</Text>
-                <TouchableOpacity>
-                    <Image source = {{uri: 'https://cdn-icons-png.flaticon.com/512/1828/1828778.png'}} style = {styles.image}/>
-                </TouchableOpacity>
+            <Text style={styles.topText}>기록하기</Text>
+            <TouchableOpacity>
+                <Image source = {{uri: 'https://cdn-icons-png.flaticon.com/512/1828/1828778.png'}} style = {styles.image}/>
+            </TouchableOpacity>
         </View>
+        <View style={styles.container}>
+            <TouchableOpacity onPress={showDatePicker}>
+                <TextInput
+                pointerEvents="none"
+                style={styles.textInput}
+                placeholder={placeholder}
+                placeholderTextColor="#000000"
+                underlineColorAndroid="transparent"
+                editable={false}
+                value={text} />
+                <DateTimePickerModal
+                headerTextIOS={placeholder}
+                isVisible={isDatePickerVisible}
+                mode="date"
+                onConfirm={handleConfirm}
+                onCancel={hideDatePicker} />
+            </TouchableOpacity>	
+        </View>	
         <View style = {{flexDirection: 'row', marginTop : 10}}>
             <View style={styles.toggleCheckBox}>
-                <Text style = {styles.toggleCheckBoxText}>오늘 물을 주셨나요 ? </Text>
+                <Text style = {styles.toggleCheckBoxText}>물을 주셨나요 ? </Text>
                 <Switch
                     trackColor={{false: '#767577', true: '#81b0ff'}}
                     thumbColor={isEnabledW ? '#f5dd4b' : '#f4f3f4'}
@@ -30,7 +143,7 @@ export default function TodayMemo({ navigation }) {
                 />
             </View>
             <View style={styles.toggleCheckBox}>
-                <Text style = {styles.toggleCheckBoxText}>오늘 영양제를 주셨나요 ? </Text>
+                <Text style = {styles.toggleCheckBoxText}>영양제를 주셨나요 ? </Text>
                 <Switch
                     trackColor={{false: '#767577', true: '#BD4228'}}
                     thumbColor={isEnabledN ? '#f5dd4b' : '#f4f3f4'}
@@ -40,9 +153,9 @@ export default function TodayMemo({ navigation }) {
             </View>
         </View>
         <View style = {{alignItems :'center'}}>
-            <TextInput onChangeText={(value) => setType(value)} placeholder="  오늘의 특이사항을 입력하세요" style={styles.inputText}/>
-            <TouchableOpacity style = {styles.buttonStyle}>
-                <Text style={styles.buttonTextStyle}>오늘의 기록 저장하기</Text>
+            <TextInput onChangeText={(value) => setMemo(value)} placeholder="  오늘의 특이사항을 입력하세요" style={styles.inputText}/>
+            <TouchableOpacity style = {styles.buttonStyle} onPress={onSubmit}>
+                <Text style={styles.buttonTextStyle}>기록 저장하기</Text>
             </TouchableOpacity>
         </View>
         
@@ -53,6 +166,19 @@ export default function TodayMemo({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+    container: {
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    textInput: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        height: 50, 
+        width: 300, 
+        borderWidth: 1, 
+        borderRadius: 12,
+        padding: 10
+    },
     buttonTextStyle:{
         color:'white',
         fontWeight:'bold',
@@ -75,7 +201,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     toggleCheckBox :{
-        marginLeft : '10%',
+        marginLeft : '15%',
         alignItems: 'center',
     },
     topContainer:{ 

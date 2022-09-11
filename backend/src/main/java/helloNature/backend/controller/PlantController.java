@@ -19,11 +19,16 @@ import java.util.List;
 public class PlantController {
     private final MyPlantService myPlantService;
 
+    @GetMapping("/user/aplant")
+    public PlantDto getPlant(@RequestParam Long id) {
+        PlantDto plantInfo = myPlantService.getMyPlantInfo(id);
+
+        return plantInfo;
+    }
+
     @GetMapping("/user/plant")
     public List<PlantDto> getMyPlant(Principal principal) {
-
         List<PlantDto> plantList = myPlantService.getMyPlantList(principal.getName());
-        System.out.println(plantList);
         return plantList;
     }
 

@@ -23,9 +23,48 @@ function DiaryScreen({route, navigation }) {
       }),      {},    );    
       console.log(obj);    
       setMarkedDates(obj);  
+  }
 
+  const [plants, setPlants] = useState([])
+  const getData = async (key) => {
+    try {
+        const data = await AsyncStorage.getItem(key);
+        if (data !== null) {
+            console.log(data);
+            return data;
+        }
+    } catch (error) {
+        console.log(error);
     }
+  };
 
+  const getPlant = async () => {
+    let list = await getData('accessToken')
+        .then(data => data)
+        .then(value => {
+            console.log("yourKey Value:  " + value)
+            axios.get("http://10.0.2.2:8080/api/user/aplant?id=" +  pnId , {
+      headers: {
+          Authorization: value
+      }
+  }).then(
+      res => {
+        //setPlants([JSON.stringify(res?.data), ...plants])
+        setPlants(res.data)
+          return JSON.stringify(res?.data)
+      }
+    )
+
+  });}
+  
+
+  useEffect(() => {
+    
+    getPlant();
+    
+  }, [])
+
+  
   return (
     <View>
       <Calendar style={styles.calendar} 
@@ -47,10 +86,10 @@ function DiaryScreen({route, navigation }) {
 
         <View style={{position:'absolute' , alignItems :'center',marginTop:500, width:'100%'}}>
           <TouchableOpacity style = {styles.buttonStyle}>
-            <Text style={styles.buttonTextStyle} onPress={() => navigation.navigate('TodayMemo')}> 글쓰기 </Text>
+            <Text style={styles.buttonTextStyle} onPress={() => navigation.navigate('TodayMemo', {nowPlantId: pnId} )}> 글쓰기 </Text>
           </TouchableOpacity>
           <TouchableOpacity style = {styles.buttonStyle}>
-            <Text style={styles.buttonTextStyle} onPress={() => navigation.navigate('ArScreen')}>{pnId}와 AR로 대화</Text>
+            <Text style={styles.buttonTextStyle} onPress={() => navigation.navigate('ArScreen')}>{plants.name}와 AR로 대화</Text>
           </TouchableOpacity>
         </View>
     </View>
@@ -78,7 +117,7 @@ function PlantInfoScreen({route, navigation }) {
         .then(data => data)
         .then(value => {
             console.log("yourKey Value:  " + value)
-            axios.get("http://10.0.2.2:8080/api/user/plant?" +id + '='+  pnId , {
+            axios.get("http://10.0.2.2:8080/api/user/aplant?id=" +  pnId , {
       headers: {
           Authorization: value
       }
@@ -106,33 +145,31 @@ function PlantInfoScreen({route, navigation }) {
     <View>
         <ScrollView style = {styles.scrollView}>
             <View style={{alignItems:'center'}}>
-              <Image source = {{uri:'https://cdn-icons-png.flaticon.com/512/892/892926.png' }} style = {styles.image}/>
+              <Image source = {{uri: plants.picture }} style = {styles.image}/>
             </View>
             <View style={{marginLeft:'5%', marginTop:'5%'}}>
               <Text style={styles.titleText}>식물 종류</Text>
             </View>
             <View style={{alignItems:'center'}}>
-              <Text style={styles.inputText}>몬스테라</Text>           
+              <Text style={styles.inputText}>{plants.scientific_name}</Text>           
             </View> 
             <View style={{marginLeft:'5%', marginTop:'5%'}}>
               <Text style={styles.titleText}>내가 부르는 이름</Text>
             </View>
             <View style={{alignItems:'center'}}>
-              <Text style={styles.inputText}>Fejka</Text>           
+              <Text style={styles.inputText}>{plants.name}</Text>           
             </View>
             <View style={{marginLeft:'5%', marginTop:'5%'}}>
               <Text style={styles.titleText}>데려온 날</Text>
             </View>
             <View style={{alignItems:'center'}}>
-              <Text style={styles.inputText}>2022 - 08 - 01</Text>           
+              <Text style={styles.inputText}>{plants.bring_date}</Text>           
             </View>
             <View style={{marginLeft:'5%', marginTop:'5%'}}>
               <Text style={styles.titleText}>특이 사항</Text>
             </View>
             <View style={{alignItems:'center'}}>
-              <Text style={styles.inputText}>이 아이는 엄마에게 선물로 받은 아이이다 물을 자주 주지 않아도 되니까 게으른 나와 오래 함께 할 수 있지 않을까 하는 생각을 가져본다
-              이파리가 푸릇 푸릇 한게 아주 맘에 든다
-              얼른 더 많이 자라서 우리 집의 공기를 맑게 해줬으면 하는게 나의 바램이다.</Text>           
+              <Text style={styles.inputText}>{plants.memo}</Text>           
             </View>
         </ScrollView>
         

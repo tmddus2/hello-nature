@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 public class ScheduleDto {
     private Long id;
     private String date;
+    private Long water;
+    private Long nutrient;
     private String memo;
     private String theme;
 }
