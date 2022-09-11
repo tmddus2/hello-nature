@@ -15,6 +15,7 @@ export default function TodayMemo({ route, navigation }) {
     const [date, setDate] = useState('')
     const [memo, setMemo] = useState('')
     const [theme, setTheme] = useState('')
+    const [plants, setPlants] = useState([])
 
     Date.prototype.format = function(f) {
         if (!this.valueOf()) return " ";
@@ -42,11 +43,13 @@ export default function TodayMemo({ route, navigation }) {
     String.prototype.string = function(len){var s = '', i = 0; while (i++ < len) { s += this; } return s;};
     String.prototype.zf = function(len){return "0".string(len - this.length) + this;};
     Number.prototype.zf = function(len){return this.toString().zf(len);};
+
     const handleConfirm = (date) => {
         hideDatePicker();
-        setDate(date.format("yyyy/MM/dd"))
-        onChangeText(date.format("yyyy/MM/dd"))
-      };
+        setDate(date.format("yyyy-MM-dd"))
+        onChangeText(date.format("yyyy-MM-dd"))
+    };
+
     const placeholder = "날짜를 선택해주세요";
     const [text, onChangeText] = useState("");
     const showDatePicker = () => {
@@ -71,15 +74,13 @@ export default function TodayMemo({ route, navigation }) {
     };
 
     const onSubmit = async () => {
-
         var requestBody = {
             "id": pnId,
             "date": date,
-            
-            "water": 1,
-            "nutrient": 1,
-            "memo" : "dfsjoei",
-            "theme": "dkjafo",
+            "water": isEnabledW ? 1 : 0,
+            "nutrient": isEnabledN ? 1 : 0,
+            "memo" : memo,
+            "theme": plants.name,
         }
 
 
@@ -93,16 +94,40 @@ export default function TodayMemo({ route, navigation }) {
                 })
                     .then(res => {
                         if (res.data) {
-                            navigation.navigate('PlantProfile',{nowPlantId: pnId})
+                            navigation.navigate('PlantProfile',{nowPlant: plants.name, nowPlantId : plants.id})
                         } else {
                             console.log("fail " + res.data.message)
                         }
                     }).catch(error => console.log(error));
             })
             .catch(err => console.log(value))
-
-
     };
+
+    const getPlant = async () => {
+        let list = await getData('accessToken')
+            .then(data => data)
+            .then(value => {
+                console.log("yourKey Value:  " + value)
+                axios.get("http://10.0.2.2:8080/api/user/aplant?id=" +  pnId , {
+          headers: {
+              Authorization: value
+          }
+      }).then(
+          res => {
+            //setPlants([JSON.stringify(res?.data), ...plants])
+            setPlants(res.data)
+              return JSON.stringify(res?.data)
+          }
+        )
+    
+      });}
+      
+    
+      useEffect(() => {
+        
+        getPlant();
+        
+    }, [])
 
     
   return (
