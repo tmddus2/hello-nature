@@ -12,6 +12,7 @@ import Home from './screens/Home'
 import Login from './screens/Login'
 import RegisterPlant from './screens/RegisterPlant';
 import TodayMemo from './screens/TodayMemo';
+import SearchPlant from './screens/SearchPlant'
 
 const Stack = createStackNavigator();
 
@@ -21,6 +22,7 @@ export default function App() {
       <Stack.Navigator initialRouteName="FirstScreen" screenOptions={{
         headerShown: false
       }}>
+        <Stack.Screen name = "SearchPlant" component= {SearchPlant}/>
         <Stack.Screen name ="ArScreen" component={ArScreen}/>
         <Stack.Screen name ="PlantProfile" component ={PlantProfile}/>
         <Stack.Screen name ="RegisterPlant" component={RegisterPlant}/>

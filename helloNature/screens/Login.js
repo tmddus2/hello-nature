@@ -78,8 +78,8 @@ const styles = StyleSheet.create({
     color:'white',
     fontWeight:'bold',
     fontSize:15,
-},
-buttonStyle:{
+  },
+  buttonStyle:{
     borderWidth:2,
     borderColor:'#6E8B3D',
     width:290,
@@ -89,5 +89,5 @@ buttonStyle:{
     alignItems: "center",
     justifyContent :'center',
     marginBottom:10,
-},
+  },
 });

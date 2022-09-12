@@ -210,7 +210,7 @@ export default function RegisterPlant({ navigation }) {
                     </TouchableOpacity>
                 </View>
                 <View style={{ alignItems: 'center' }}>
-                    <TouchableOpacity style={styles.buttonStyle}>
+                    <TouchableOpacity style={styles.buttonStyle} onPress={() => navigation.navigate('SearchPlant')}>
                         <Text style={styles.buttonTextStyle}>식물 이름으로 정보 검색</Text>
                     </TouchableOpacity>
                 </View>
