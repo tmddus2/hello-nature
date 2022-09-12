@@ -14,60 +14,189 @@
  limitations under the License.
 -->
 
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
   <android.opengl.GLSurfaceView
       android:id="@+id/surfaceview"
-      android:layout_width="fill_parent"
-      android:layout_height="fill_parent" />
+      android:layout_width="match_parent"
+      android:layout_height="match_parent" />
 
+<!--  <include layout="@layout/content_main" />-->
 
   <LinearLayout
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginBottom="80dp"
-      android:layout_gravity="bottom|center_horizontal"
-      app:layout_dodgeInsetEdges="bottom">
+      android:id="@+id/linearLayout"
+      android:layout_width="match_parent"
+      android:layout_height="40dp"
+      android:orientation="horizontal"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintTop_toTopOf="@+id/surfaceview"
+      app:layout_constraintVertical_bias="0.0"
+      tools:layout_editor_absoluteX="0dp">
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/scanButton"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="60dp"
+        android:layout_height="34dp"
+        android:backgroundTint="@color/app_color_green"
+        android:padding="5dp"
         android:text="@string/scan_available" />
+
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/clearButton"
         android:layout_width="wrap_content"
+        android:layout_height="34dp"
+        android:padding="5dp"
+        android:text="@string/clear"
+        android:backgroundTint="@color/pink_100" />
+
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/useCloudMlSwitch"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="60dp"
-        android:text="@string/clear" />
+        android:background="#55FFFFFF"
+        android:padding="5dp"
+        android:text="@string/use_cloud_ml" />
+  </LinearLayout>
+
+  <LinearLayout
+      android:id="@+id/linearLayout2"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="bottom|center_horizontal"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+      app:layout_constraintVertical_bias="0.02"
+      app:layout_dodgeInsetEdges="bottom">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="@+id/surfaceview"
+        app:layout_constraintTop_toTopOf="@+id/surfaceview"
+        app:layout_constraintVertical_bias="0.0"
+        android:textSize="20sp"
+        android:text="식물과 대화해보세요."
+        android:textColor="#FFFFFF"
+        android:gravity="center"
+        tools:layout_editor_absoluteX="19dp"
+        android:textStyle="bold"/>
 
   </LinearLayout>
 
-  <androidx.appcompat.widget.SwitchCompat
-      android:id="@+id/useCloudMlSwitch"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="top|end"
-      android:padding="16dp"
-      android:background="#55FFFFFF"
-      android:text="@string/use_cloud_ml" />
+  <LinearLayout
+      android:id="@+id/linearLayout3"
+      android:layout_width="match_parent"
+      android:layout_height="200dp"
+      android:orientation="vertical"
+      android:paddingBottom="7dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+      app:layout_constraintVertical_bias="1">
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <com.hellonature.google.ar.core.examples.java.common.CustomRecyclerView
+        android:id="@+id/recyclerView"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="left"
+        android:fadingEdge="horizontal"
+        android:fadingEdgeLength="50dp"
+        android:requiresFadingEdge="vertical"
+        android:layout_weight="1" />
 
-<!--
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_margin="10dp"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        app:layout_constraintBottom_toBottomOf="@+id/surfaceview"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+        tools:layout_editor_absoluteX="-16dp">
 
-<ImageButton
-android:id="@+id/settings_button"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"
-android:layout_alignParentEnd="true"
-android:layout_alignParentTop="true"
-android:layout_margin="25dp"
-android:src="@drawable/ic_settings"
-android:background="@android:color/transparent"/>-->
+      <EditText
+          android:id="@+id/editMessage"
+          android:layout_width="80dp"
+          android:layout_height="match_parent"
+          android:layout_marginRight="10dp"
+          android:hint="식물에게 메세지를 보내보세요."
+          android:textColorHint="@color/white"
+          android:textColor="@color/white"
+          android:textSize="15sp"
+          android:paddingBottom="5dp"
+          android:layout_weight="1" />
+
+      <Button
+          android:id="@+id/Button_send"
+          android:layout_width="80dp"
+          android:layout_height="match_parent"
+          android:backgroundTint="#6E8B3D"
+          android:text="SEND" />
+
+      <Button
+          android:id="@+id/Button_heart"
+          android:layout_width="60dp"
+          android:layout_height="match_parent"
+          android:backgroundTint="#55FFFFFF"
+          android:textColor="@color/white"
+          android:text="♡"
+          android:textSize="30dp"
+          android:textStyle="bold"/>
+
+<!--      android:tooltipText="Send an email"-->
+    </LinearLayout>
+<!--    <LinearLayout 추천 메시지 목록 -->
+<!--        android:id="@+id/recommmendMessage"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="40dp"-->
+<!--        android:orientation="horizontal"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/surfaceview"-->
+<!--        app:layout_constraintVertical_bias="0.0"-->
+<!--        tools:layout_editor_absoluteX="0dp">-->
+
+<!--      <androidx.recyclerview.widget.RecyclerView-->
+<!--          android:id="@+id/Messages"-->
+<!--          app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
+<!--          android:layout_width="match_parent"-->
+<!--          android:layout_height="match_parent"-->
+<!--          android:layout_weight="1" />-->
+<!--      -->
+<!--      <androidx.appcompat.widget.AppCompatButton-->
+<!--          android:id="@+id/recommendMessage1"-->
+<!--          android:layout_width="wrap_content"-->
+<!--          android:layout_height="34dp"-->
+<!--          android:padding="5dp"-->
+<!--          android:text="@string/clear"-->
+<!--          android:textColor="@color/white"-->
+<!--          android:backgroundTint="#55FFFFFF" />-->
+
+<!--      <androidx.appcompat.widget.AppCompatButton-->
+<!--          android:id="@+id/recommendMessage2"-->
+<!--          android:layout_width="wrap_content"-->
+<!--          android:layout_height="34dp"-->
+<!--          android:padding="5dp"-->
+<!--          android:text="@string/clear"-->
+<!--          android:textColor="@color/white"-->
+<!--          android:backgroundTint="#55FFFFFF" />-->
+
+<!--    </LinearLayout>-->
+  </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
