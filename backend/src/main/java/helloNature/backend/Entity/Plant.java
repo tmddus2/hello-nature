@@ -43,10 +43,5 @@ public class Plant {
 
 
 
-    /*
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "plant")//(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "plant")
-    private Water water;
-     */
-
 
 }

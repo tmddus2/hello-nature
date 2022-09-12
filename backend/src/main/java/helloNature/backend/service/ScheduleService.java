@@ -59,6 +59,26 @@ public class ScheduleService {
         return scheduleDtoList;
     }
 
+
+    public List<ScheduleDto> getScheduleByDay(Long id, String year, String month, String day) {
+        List<Schedule> scheduleList = scheduleRepository.findScheduleByPlantIdAndYearAndMonthAndDate(id, year, month, day);
+        List<ScheduleDto> scheduleDtoList = new ArrayList<>();
+
+        for(Schedule schedule: scheduleList) {
+            ScheduleDto scheduleDto = new ScheduleDto();
+            scheduleDto.setId(schedule.getId());
+            scheduleDto.setDate(schedule.getDate());
+            scheduleDto.setWater(schedule.getWater());
+            scheduleDto.setNutrient(schedule.getNutrient());
+            scheduleDto.setMemo(schedule.getMemo());
+            scheduleDto.setTheme(schedule.getTheme());
+
+            scheduleDtoList.add(scheduleDto);
+        }
+
+        return scheduleDtoList;
+    }
+
     public ScheduleDto addSchedule(ScheduleDto scheduleDto) {
         Plant plant = plantRepository.findPlantById(scheduleDto.getId());
 
