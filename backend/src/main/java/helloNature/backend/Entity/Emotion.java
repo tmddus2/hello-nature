@@ -19,9 +19,9 @@ public class Emotion {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private Long plant_id;
+    private Long plant;
 
-    private Timestamp time;
+    private String date;
 
 
 

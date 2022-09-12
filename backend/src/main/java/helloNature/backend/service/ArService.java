@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -28,10 +29,11 @@ public class ArService {
         }
 
 
+
         emotionRepository.save(
                 Emotion.builder()
-                        .plant_id(id)
-                        .time(new Timestamp(System.currentTimeMillis()))
+                        .plant(id)
+                        .date(new Timestamp(System.currentTimeMillis()).toString().split(" ")[0])
                         .build()
         );
 
@@ -41,4 +43,11 @@ public class ArService {
     }
 
 
+    public Long getCountNum(Long id) {
+        //List<Emotion> emotions = emotionRepository.findByPlantAndDate(id, new Timestamp(System.currentTimeMillis()).toString().split(" ")[0]);
+        //return emotions.size();
+
+        return emotionRepository.countEmotionsByPlantEqualsAndDateEquals(id, new Timestamp(System.currentTimeMillis()).toString().split(" ")[0]);
+
+    }
 }

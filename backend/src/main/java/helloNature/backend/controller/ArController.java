@@ -18,4 +18,9 @@ public class ArController {
     public Boolean clickHeart(@RequestParam Long id){
         return arService.clickHeart(id);
     }
+
+    @GetMapping("/user/count")
+    public Long clickCount(@RequestParam Long id) {
+        return arService.getCountNum(id);
+    }
 }
