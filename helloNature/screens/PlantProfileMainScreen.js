@@ -1,10 +1,11 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Calendar } from "react-native-calendars";
 import { format } from "date-fns";
+import { FlatList } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import axios from 'axios';
-import {Text, View, StyleSheet,Dimensions,Animated, TouchableOpacity, ScrollView, Image, TextInput} from 'react-native';
+import {Text, View, StyleSheet,Dimensions,SafeAreaView, TouchableOpacity, ScrollView, Image, TextInput} from 'react-native';
 
 const window = Dimensions.get("window");
 // 머티리얼 상단 탭 내비게이터
@@ -25,6 +26,7 @@ function DiaryScreen({route, navigation }) {
       setMarkedDates(obj);  
   }
 
+  const [plantScheduleList, setPlantScheduleList] = useState([])
   const [plants, setPlants] = useState([])
   const getData = async (key) => {
     try {
@@ -57,9 +59,42 @@ function DiaryScreen({route, navigation }) {
 
   });}
   
+  const getPlantSchedule = async () => {
+    let list = await getData('accessToken')
+        .then(data => data)
+        .then(value => {
+            console.log("yourKey Value:  " + value)
+            axios.get("http://10.0.2.2:8080/api/user/schedule/month?id="+pnId+"&year=2022&month=09 ", {
+      headers: {
+          Authorization: value
+      }
+  }).then(
+      res => {
+        //setPlants([JSON.stringify(res?.data), ...plants])
+        setPlantScheduleList(res.data)
+          console.log((JSON.stringify(res.data)))
+          return JSON.stringify(res?.data)
+      }
+    )
+
+  });}
+  
+  const renderItem = ({item}) => {
+    console.log(item)
+    return (
+      <View>
+        <View style={{borderRadius:10, borderWidth:1, bordercolor:'gray', padding :10, margin :'2%'}}>
+          <Text>2022-08-{item.date}</Text>
+          <Text>{item.theme}</Text>
+        </View>
+          
+      </View>
+    )
+  }
+  
 
   useEffect(() => {
-    
+    getPlantSchedule();
     getPlant();
     
   }, [])
@@ -68,30 +103,35 @@ function DiaryScreen({route, navigation }) {
   return (
     <View>
       <Calendar style={styles.calendar} 
-            markingType={'multi-dot'}
-            markedDates={{
-              '2022-09-25': {dots: [water,nutrients]},
-              '2022-09-01': {dots: [water], disabled: true}
-            }}
-            selectedDates={{selectedDates}}
-            theme={{
-              selectedDayBackgroundColor: '#009688',
-              arrowColor: '#009688',
-              dotColor: '#009688',
-              todayTextColor: '#009688',
-            }} 
-            onDayPress={(day) => {
-              addDates(day.dateString)
-            }} />
+        markingType={'multi-dot'}
+        markedDates={{
+          '2022-09-25': {dots: [water,nutrients]},
+          '2022-09-01': {dots: [water], disabled: true}}}
+        selectedDates={{selectedDates}}
+        theme={{
+          selectedDayBackgroundColor: '#009688',
+          arrowColor: '#009688',
+          dotColor: '#009688',
+          todayTextColor: '#009688',}} 
+        onDayPress={(day) => {addDates(day.dateString)}}>
+      </Calendar>
+      <SafeAreaView>
+        <FlatList
+          
+          data={plantScheduleList}
+          renderItem={renderItem}>
+        </FlatList>
+      </SafeAreaView>
+      
 
-        <View style={{position:'absolute' , alignItems :'center',marginTop:500, width:'100%'}}>
-          <TouchableOpacity style = {styles.buttonStyle}>
+      <View style={{position:'absolute' , alignItems :'center',marginTop:500, width:'100%'}}>
+        <TouchableOpacity style = {styles.buttonStyle}>
             <Text style={styles.buttonTextStyle} onPress={() => navigation.navigate('TodayMemo', {nowPlantId: pnId} )}> 글쓰기 </Text>
-          </TouchableOpacity>
-          <TouchableOpacity style = {styles.buttonStyle}>
-            <Text style={styles.buttonTextStyle} onPress={() => navigation.navigate('ArScreen')}>{plants.name}와 AR로 대화</Text>
-          </TouchableOpacity>
-        </View>
+        </TouchableOpacity>
+        <TouchableOpacity style = {styles.buttonStyle}>
+          <Text style={styles.buttonTextStyle} onPress={() => navigation.navigate('ArScreen')}>{plants.name}와 AR로 대화</Text>
+        </TouchableOpacity>
+      </View>
     </View>
     
   );
@@ -133,7 +173,6 @@ function PlantInfoScreen({route, navigation }) {
     )
 
   });}
-  
 
   useEffect(() => {
     

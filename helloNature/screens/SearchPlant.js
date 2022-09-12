@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, TextInput,Text, TouchableOpacity} from 'react-native'
+import { StyleSheet, View, TextInput,Text, TouchableOpacity, ScrollView} from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import convert from 'xml-js';
@@ -67,7 +67,21 @@ export default function SearchPlant({navigation }) {
                             else if(item.nodeName == 'managelevelCodeNm'){
                                 setWtkPlantManage(item.childNodes[0].nodeValue)
                             }
-                            console.log(item.nodeName + " : " +item.childNodes[0].nodeValue)
+                            else if(item.nodeName == 'smellCodeNm'){
+                                setWtkPlantSmell(item.childNodes[0].nodeValue)
+                            }
+                            else if(item.nodeName == 'watercycleSprngCodeNm'){
+                                setWtkPlantSpring(item.childNodes[0].nodeValue)
+                            }
+                            else if(item.nodeName == 'watercycleSummerCodeNm'){
+                                setWtkPlantSummer(item.childNodes[0].nodeValue)
+                            }
+                            else if(item.nodeName == 'watercycleAutumnCodeNm'){
+                                setWtkPlantAutumn(item.childNodes[0].nodeValue)
+                            }
+                            else if(item.nodeName == 'watercycleWinterCodeNm'){
+                                setWtkPlantWinter(item.childNodes[0].nodeValue)
+                            }
                         }
                     }
                 }
@@ -111,42 +125,71 @@ export default function SearchPlant({navigation }) {
 
   return (
     <View style={{alignItems :'center'}}>
-        <TextInput onChangeText={(value) => setWtkPlant(value)} style={styles.textInput} placeholder="검색어를 입력하세요"/>
-        <TouchableOpacity onPress = {getTodo} style = {styles.buttonStyle}>
-            <Text style={styles.buttonTextStyle}>검색</Text>
-        </TouchableOpacity>
-        <Text>이름 : {wtkplantname}</Text>
-        <Text>학명 : {wtkplantscientificname}</Text>
-        <Text>영양 정보 : {wtkplantnutrient}</Text>
-        <Text>관리 난이도 : {wtkplantmanage}도 가능</Text>
-        <Text>향 : {wtkplantsmell}</Text>
-        <Text>봄 물주기 : {wtkplantspring}</Text>
-        <Text>여름 물 주기 : {wtkplantsummer}</Text>
-        <Text>가을 물주기 : {wtkplantautumn}</Text>
-        <Text>겨울 물 주기 : {wtkplantwinter}</Text>
+         <ScrollView style = {styles.scrollView}>
+            <View style={{marginBottom : '5%',flexDirection: 'row'}}>
+                <TextInput onChangeText={(value) => setWtkPlant(value)} style={styles.textInput} placeholder="  식물 이름으로 검색하세요"/>
+                <TouchableOpacity onPress = {getTodo} style = {styles.buttonStyle}>
+                    <Text style={styles.buttonTextStyle}>검색</Text>
+                </TouchableOpacity>
+            </View>
+        
+       
+            <Text style={styles.titleText}>이름</Text>
+            <Text style={styles.inputText}>{wtkplantname}</Text> 
+            <Text style={styles.titleText}>학명</Text>
+            <Text style={styles.inputText}>{wtkplantscientificname}</Text>   
+            <Text style={styles.titleText}>영양 정보</Text>
+            <Text style={styles.inputText}>{wtkplantnutrient}</Text>
+            <Text style={styles.titleText}>관리 난이도</Text>
+            <Text style={styles.inputText}>{wtkplantmanage}도 가능</Text>
+            <Text style={styles.titleText}>향</Text>
+            <Text style={styles.inputText}>{wtkplantsmell}</Text>  
+            <Text style={styles.titleText}>봄 물주기</Text>
+            <Text style={styles.inputText}>{wtkplantspring}</Text> 
+            <Text style={styles.titleText}>여름 물주기</Text>
+            <Text style={styles.inputText}>{wtkplantsummer}</Text>  
+            <Text style={styles.titleText}>가을 물주기</Text>
+            <Text style={styles.inputText}>{wtkplantautumn}</Text> 
+            <Text style={styles.titleText}>겨울 물주기</Text>
+            <Text style={styles.inputText}>{wtkplantwinter}</Text>
+        </ScrollView>
+        
     </View>
 
   );
 }
 
 const styles = StyleSheet.create({
+    scrollView: {
+        marginTop:30,
+        
+    },
+    inputText:{
+        width:'80%',
+        marginLeft:'12%',
+        marginTop:'5%',
+        marginBottom : '5%',
+        fontSize:20,
+    },
     textInput: {
         fontSize: 16,
-        marginTop : '7%',
+        
         fontWeight: 'bold',
         height: 50, 
-        width: 350, 
+        width: 250, 
         borderWidth: 1, 
         borderRadius: 12,
-        padding: 10
+        
     },
     buttonTextStyle:{
         color:'white',
+        
         fontWeight:'bold',
         fontSize:15,
     },
     buttonStyle:{
         borderWidth:2,
+        
         borderColor:'#6E8B3D',
         width:100,
         height:45,
@@ -154,6 +197,14 @@ const styles = StyleSheet.create({
         backgroundColor: '#6E8B3D',
         alignItems: "center",
         justifyContent :'center',
-        marginTop:10,
+        marginLeft :'5%',
+        
+    },
+    titleText:{
+        width:'85%',
+        marginLeft:'10%',
+        color: '#6E8B3D',
+        fontWeight :'bold',
+        fontSize:20,
     },
 });
