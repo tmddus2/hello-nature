@@ -17,17 +17,33 @@
 package com.hellonature.google.ar.core.examples.java.ml
 
 import android.annotation.SuppressLint
+import android.graphics.Color
+import android.graphics.Point
+import android.net.Uri
 import android.opengl.GLSurfaceView
+import android.os.Build
 import android.util.Log
 import android.view.View
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.SwitchCompat
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.google.api.gax.core.FixedCredentialsProvider
+import com.google.ar.core.Anchor
+import com.google.ar.core.Plane
+import com.google.ar.sceneform.AnchorNode
+import com.google.ar.sceneform.rendering.ModelRenderable
+import com.google.ar.sceneform.ux.ArFragment
+import com.google.ar.sceneform.ux.TransformableNode
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.auth.oauth2.ServiceAccountCredentials
 import com.google.cloud.dialogflow.v2.*
@@ -38,11 +54,11 @@ import com.hellonature.google.ar.core.examples.java.common.samplerender.SampleRe
 import com.hellonature.google.ar.core.examples.java.helloar.BotReply
 import com.hellonature.google.ar.core.examples.java.helloar.ChatAdapter
 import com.hellonature.google.ar.core.examples.java.helloar.SendMessageInBg
-import java.util.*
+import com.tomergoldst.tooltips.ToolTip
+import com.tomergoldst.tooltips.ToolTipsManager
 import java.io.InputStream
-import java.lang.Exception
-import com.tomergoldst.tooltips.ToolTip;
-import com.tomergoldst.tooltips.ToolTipsManager;
+import java.util.*
+
 
 /**
  * Wraps [R.layout.activity_main] and controls lifecycle operations for [GLSurfaceView].
@@ -80,8 +96,38 @@ class MainMLActivityView(val activity: MainMLActivity, renderer: AppRenderer) : 
 
   var toolTipsManager: ToolTipsManager? = null
   var count = 0
+  // lateinit var fragment: ArFragment
+  var xCord = 0
+  var yCord = 0
+  var Heartanchor: Anchor? = null
+  lateinit var toast:Toast
 
+  fun showTooltip_init() {
+    val builder = ToolTip.Builder(activity, scanButton, linearlayout, "카메라를 식물에 대고 눌러보세요!", ToolTip.POSITION_BELOW)
 
+    // set align
+    builder.setAlign(ToolTip.ALIGN_LEFT)
+    // set background color
+    builder.setBackgroundColor(Color.parseColor("#55FAFF"))
+
+    builder.setOffsetX(210) // 동적 view (refactoring plan)
+    builder.setOffsetY(90)
+
+    // show tooltip
+    toolTipsManager!!.show(builder.build())
+  }
+
+  fun showTooltip() {
+    val builder = ToolTip.Builder(activity, scanButton, linearlayout, "카메라를 식물에 대고 눌러보세요!", ToolTip.POSITION_BELOW)
+
+    // set align
+    builder.setAlign(ToolTip.ALIGN_LEFT)
+    // set background color
+    builder.setBackgroundColor(Color.parseColor("#55FAFF"))
+
+    // show tooltip
+    toolTipsManager!!.show(builder.build())
+  }
   override fun onResume(owner: LifecycleOwner) {
     surfaceView.onResume()
   }
@@ -123,9 +169,13 @@ class MainMLActivityView(val activity: MainMLActivity, renderer: AppRenderer) : 
       }
   }
 
+  @RequiresApi(Build.VERSION_CODES.N)
   fun setHeartActive(){ // plant heart reaction for a seconds
     count++
     Log.d(TAG, "pressed count: $count")
+    //addObject(Uri.parse("Heart.sfb"))
+    // heart label
+    // send to backend server - API
   }
 
   fun setUpBot() {
@@ -175,4 +225,52 @@ class MainMLActivityView(val activity: MainMLActivity, renderer: AppRenderer) : 
       Toast.makeText(activity, "failed to connect!", Toast.LENGTH_SHORT).show()
     }
   }
+//  @RequiresApi(Build.VERSION_CODES.N)
+//  private fun placeObject(fragment: ArFragment, createAnchor: Anchor, model: Uri) {
+//    ModelRenderable.builder()
+//      .setSource(activity, model)
+//      .build()
+//      .thenAccept {
+//        addNodeToScene(fragment, createAnchor, it)
+//      }
+//      .exceptionally {
+//        val builder = AlertDialog.Builder(activity)
+//        builder.setMessage(it.message)
+//          .setTitle("error!")
+//        val dialog = builder.create()
+//        dialog.show()
+//        return@exceptionally null
+//      }
+//  }
+//
+//  private fun addNodeToScene(fragment: ArFragment, createAnchor: Anchor, renderable: ModelRenderable) {
+//    val anchorNode = AnchorNode(createAnchor)
+//    val transformableNode = TransformableNode(fragment.transformationSystem)
+//    transformableNode.renderable = renderable
+//    transformableNode.setParent(anchorNode)
+//    fragment.arSceneView.scene.addChild(anchorNode)
+//    transformableNode.select()
+//  }
+//
+//  // virtual content
+//  @RequiresApi(Build.VERSION_CODES.N)
+//  private fun addObject(parse: Uri) {
+//    val frame = fragment.arSceneView.arFrame
+//    val point = getScreenCenter()
+//    if (frame != null) {
+//      val hits = frame.hitTest(point.x.toFloat(), point.y.toFloat()) // if 식물 디텍트 -> 식물 위치 저장  -> 누르기 가능
+//      for (hit in hits) {
+//        val trackable = hit.trackable
+//        if (trackable is Plane && trackable.isPoseInPolygon(hit.hitPose)) {
+//          placeObject(fragment, hit.createAnchor(), parse)
+//          break
+//        }
+//      }
+//    }
+//  }
+//
+//  private fun getScreenCenter(): android.graphics.Point {
+//    val vw = root.findViewById<View>(R.id.coordinatorLayout)
+//    return Point(xCord.toInt(), yCord.toInt())
+//  }
 }

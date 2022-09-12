@@ -15,10 +15,12 @@
  */
 package com.hellonature.google.ar.core.examples.java.ml
 
-import android.graphics.Color.parseColor
 import android.opengl.Matrix
-import android.util.DisplayMetrics
+import android.os.Build
 import android.util.Log
+import android.view.Gravity
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.google.ar.core.Anchor
@@ -27,6 +29,8 @@ import com.google.ar.core.Frame
 import com.google.ar.core.TrackingState
 import com.google.ar.core.exceptions.CameraNotAvailableException
 import com.google.ar.core.exceptions.NotYetAvailableException
+import com.google.ar.sceneform.ux.ArFragment
+import com.hellonature.R
 import com.hellonature.google.ar.core.examples.java.common.helpers.DisplayRotationHelper
 import com.hellonature.google.ar.core.examples.java.common.samplerender.SampleRender
 import com.hellonature.google.ar.core.examples.java.common.samplerender.arcore.BackgroundRenderer
@@ -37,7 +41,6 @@ import com.hellonature.google.ar.core.examples.java.ml.classification.MLKitObjec
 import com.hellonature.google.ar.core.examples.java.ml.classification.ObjectDetector
 import com.hellonature.google.ar.core.examples.java.ml.render.LabelRender
 import com.hellonature.google.ar.core.examples.java.ml.render.PointCloudRender
-import com.tomergoldst.tooltips.ToolTip
 import com.tomergoldst.tooltips.ToolTipsManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -67,6 +70,8 @@ class AppRenderer(val activity: MainMLActivity) : DefaultLifecycleObserver, Samp
 
   val arLabeledAnchors = Collections.synchronizedList(mutableListOf<ARLabeledAnchor>())
   var scanButtonWasPressed = false
+  var plantWasDetected = false
+
 
   val mlKitAnalyzer = MLKitObjectDetector(activity)
   val gcpAnalyzer = GoogleCloudVisionDetector(activity)
@@ -81,6 +86,7 @@ class AppRenderer(val activity: MainMLActivity) : DefaultLifecycleObserver, Samp
     displayRotationHelper.onPause()
   }
 
+  @RequiresApi(Build.VERSION_CODES.N)
   fun bindView(view: MainMLActivityView) {
     this.view = view
 
@@ -99,28 +105,25 @@ class AppRenderer(val activity: MainMLActivity) : DefaultLifecycleObserver, Samp
     }
 
     view.btnHeart.setOnClickListener{
-      view.setHeartActive()
+      if(plantWasDetected) {
+        view.setHeartActive()
+        view.toast = Toast.makeText(activity, "반려식물의 ❤ 지수가 올라갔어요.", Toast.LENGTH_SHORT)
+        view.toast.setGravity(Gravity.CENTER, 0, 0)
+        view.toast.show()
+      }
     }
 
     Log.d(TAG, "안녕안녕")
 
-   //  tooltips
+    // AR
+    // view.fragment = activity.supportFragmentManager.findFragmentById(R.id.sceneform_fragment) as ArFragment
+
+    //  tooltips
     view.toolTipsManager = ToolTipsManager();
     view.toolTipsManager!!.findAndDismiss(view.scanButton)
     // create tooltip
-    val builder = ToolTip.Builder(activity, view.scanButton, view.linearlayout, "카메라를 식물에 대고 눌러보세요!", ToolTip.POSITION_BELOW)
-    Log.d(TAG, "안녕안녕1")
+    view.showTooltip_init()
 
-    // set align
-    builder.setAlign(ToolTip.ALIGN_LEFT)
-    // set background color
-    builder.setBackgroundColor(parseColor("#55FAFF"))
-
-    builder.setOffsetX(210) // 동적 view (refactoring plan)
-    builder.setOffsetY(90)
-
-    // show tooltip
-    view.toolTipsManager!!.show(builder.build())
 
     view.scanButton.setOnClickListener {
       // frame.acquireCameraImage is dependent on an ARCore Frame, which is only available in onDrawFrame.
@@ -148,6 +151,7 @@ class AppRenderer(val activity: MainMLActivity) : DefaultLifecycleObserver, Samp
       arLabeledAnchors.clear()
       view.resetButton.isEnabled = false
       hideSnackbar()
+      plantWasDetected=false
     }
   }
 
@@ -164,6 +168,40 @@ class AppRenderer(val activity: MainMLActivity) : DefaultLifecycleObserver, Samp
   }
 
   var objectResults: List<DetectedObjectResult>? = null
+
+  fun onDrawHeart(render: SampleRender){
+//
+//    if(view.Heartanchor==null) return
+//
+//    val session = activity.arCoreSessionHelper.sessionCache ?: return
+//    session.setCameraTextureNames(intArrayOf(backgroundRenderer.cameraColorTexture.textureId))
+//
+//    val frame = try {
+//      session.update()
+//    } catch (e: CameraNotAvailableException) {
+//      Log.e(TAG, "Camera not available during onDrawFrame", e)
+//      showSnackbar("Camera not available. Try restarting the app.")
+//      return
+//    }
+//
+//    val camera = frame.camera
+//    camera.getViewMatrix(viewMatrix, 0)
+//    camera.getProjectionMatrix(projectionMatrix, 0, 0.01f, 100.0f)
+//
+//    // Handle tracking failures.
+//    if (camera.trackingState != TrackingState.TRACKING) {
+//      return
+//    }
+
+
+//    labelRenderer.draw(
+//      render,
+//      viewProjectionMatrix,
+//      view.Heartanchor!!.pose,
+//      camera.pose,
+//      "❤️"
+//    )
+  }
 
   override fun onDrawFrame(render: SampleRender) {
     val session = activity.arCoreSessionHelper.sessionCache ?: return
@@ -223,8 +261,15 @@ class AppRenderer(val activity: MainMLActivity) : DefaultLifecycleObserver, Samp
       Log.i(TAG, "$currentAnalyzer got objects: $objects")
       val anchors = objects.mapNotNull { obj ->
         val (atX, atY) = obj.centerCoordinate
+        Log.i(TAG, "디텍트"+ obj.label)
+        if(obj.label != "Houseplant" && obj.label != "Flowerpot") return@mapNotNull null
+        Log.i(TAG, "저장")
+        if(obj.label == "Houseplant") {
+          view.xCord = atX
+          view.yCord = atY
+        }
         val anchor = createAnchor(atX.toFloat(), atY.toFloat(), frame) ?: return@mapNotNull null
-        Log.i(TAG, "Created anchor ${anchor.pose} from hit test")
+        Log.i(TAG, "->Created anchor ${anchor.pose} from hit test")
         ARLabeledAnchor(anchor, obj.label)
       }
       arLabeledAnchors.addAll(anchors)
@@ -232,31 +277,45 @@ class AppRenderer(val activity: MainMLActivity) : DefaultLifecycleObserver, Samp
         view.resetButton.isEnabled = arLabeledAnchors.isNotEmpty()
         view.setScanningActive(false)
         when {
-          objects.isEmpty() && currentAnalyzer == mlKitAnalyzer && !mlKitAnalyzer.hasCustomModel() ->
-            showSnackbar("Default ML Kit classification model returned no results. " +
-              "For better classification performance, see the README to configure a custom model.")
-          objects.isEmpty() ->
-            showSnackbar("Classification model returned no results.")
-          anchors.size != objects.size ->
-            showSnackbar("Objects were classified, but could not be attached to an anchor. " +
-              "Try moving your device around to obtain a better understanding of the environment.")
+          objects.isEmpty() && currentAnalyzer == mlKitAnalyzer && !mlKitAnalyzer.hasCustomModel() -> {
+            showSnackbar("AR이 주변 환경을 잘 인식할 수 있게 기기를 움직여 식물을 찾아보세요.") /*"Default ML Kit classification model returned no results. " +
+              "For better classification performance, see the README to configure a custom model."*/
+            view.showTooltip()
+          }
+          objects.isEmpty() -> {
+            showSnackbar("AR이 주변 환경을 잘 인식할 수 있게 기기를 움직여 식물을 찾아보세요.") // Classification model returned no results.
+            view.showTooltip()
+          }
+          anchors.size != objects.size -> {
+            showSnackbar("AR이 주변 환경을 잘 인식할 수 있게 기기를 움직여 식물을 찾아보세요.") /*"Objects were classified, but could not be attached to an anchor. " +
+              "Try moving your device around to obtain a better understanding of the environment."*/
+            view.showTooltip()
+          }
         }
       }
     }
-    var count = 0;
+    //var count = 0;
     // Draw labels at their anchor position.
     for (arDetectedObject in arLabeledAnchors) {
+      var label = ""
       val anchor = arDetectedObject.anchor
       if (anchor.trackingState != TrackingState.TRACKING) continue
-      if (arDetectedObject.label!="Flowerpot" && arDetectedObject.label!="Houseplant") continue
-      Log.d("-->", arDetectedObject.label)
-      count++
+      //if (arDetectedObject.label!="Flowerpot" && arDetectedObject.label!="Houseplant") continue
+      Log.d("-라벨->", arDetectedObject.label)
+      if(arDetectedObject.label == "Houseplant") {
+        label = "\uD83D\uDC40"
+        view.Heartanchor = arDetectedObject.anchor
+        plantWasDetected=true}
+      if(arDetectedObject.label == "Flowerpot") {
+        label = "fejka" // 식물 이름
+        plantWasDetected=true}
+      //count++
       labelRenderer.draw(
         render,
         viewProjectionMatrix,
         anchor.pose,
         camera.pose,
-        arDetectedObject.label
+        label
       )
     }
     //if(count==0) showSnackbar("반려식물을 찾지 못했어요. AR이 식물을 더 잘 찾을 수 있게 움직여보세요.")
@@ -275,7 +334,7 @@ class AppRenderer(val activity: MainMLActivity) : DefaultLifecycleObserver, Samp
   }
 
   private fun showSnackbar(message: String): Unit =
-    activity.view.snackbarHelper.showError(activity, message)
+    activity.view.snackbarHelper.showMessage(activity, message)
 
   private fun hideSnackbar() = activity.view.snackbarHelper.hide(activity)
 

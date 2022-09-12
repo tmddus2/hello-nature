@@ -7,9 +7,9 @@ import axios from 'axios';
 
 const { RNNativeToastLibrary } = NativeModules;
 
-export default function ARScreen({ navigation }) {
+export default function ARScreen({ navigation }) { // 식물 ID 넘겨주기 
 
-   RNNativeToastLibrary.show('HELLO');
+   RNNativeToastLibrary.show('HELLO'); // 식물 ID 넘겨주기 
 
   return (
     <Text>AR screen</Text>

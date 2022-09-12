@@ -57,7 +57,7 @@ public class RNNativeToastLibraryModule extends ReactContextBaseJavaModule {
     // Intent set from packageName
     Intent intent = new Intent(context, MainMLActivity.class); // HelloArActivity
 
-    activity.startActivity(intent);
+    activity.startActivity(intent); // plant ID 넘겨주기 
 
   }
 }
