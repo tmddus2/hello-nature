@@ -80,7 +80,7 @@ export default function TodayMemo({ route, navigation }) {
             "water": isEnabledW ? 1 : 0,
             "nutrient": isEnabledN ? 1 : 0,
             "memo" : memo,
-            "theme": plants.name,
+            "theme": memo,
         }
 
 
@@ -94,6 +94,7 @@ export default function TodayMemo({ route, navigation }) {
                 })
                     .then(res => {
                         if (res.data) {
+                            console.log("memo" +memo)
                             navigation.navigate('PlantProfile',{nowPlant: plants.name, nowPlantId : plants.id})
                         } else {
                             console.log("fail " + res.data.message)
@@ -101,6 +102,7 @@ export default function TodayMemo({ route, navigation }) {
                     }).catch(error => console.log(error));
             })
             .catch(err => console.log(value))
+        
     };
 
     const getPlant = async () => {
@@ -177,7 +179,7 @@ export default function TodayMemo({ route, navigation }) {
             </View>
         </View>
         <View style = {{alignItems :'center'}}>
-            <TextInput onChangeText={(value) => setMemo(value)} placeholder="  오늘의 특이사항을 입력하세요" style={styles.inputText}/>
+            <TextInput multiline={true} onChangeText={(value) => setMemo(value)} placeholder="  오늘의 특이사항을 입력하세요" style={styles.inputText}/>
             <TouchableOpacity style = {styles.buttonStyle} onPress={onSubmit}>
                 <Text style={styles.buttonTextStyle}>기록 저장하기</Text>
             </TouchableOpacity>

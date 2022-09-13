@@ -60,8 +60,6 @@ export default function Home({ navigation }) {
   };
 
   const getPlant = async () => {
-
-
     let list = await getData('accessToken')
         .then(data => data)
         .then(value => {
@@ -132,10 +130,9 @@ export default function Home({ navigation }) {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={styles.topContainer}>
-        <Image source={{ uri: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/elon.png' }} style={styles.topImage} />
-        <View style={styles.rightContainer}>
-          {/* <Text style={styles.topName}>{username}</Text> */}
+      <View>
+        <View style={styles.topContainer}>
+          <Image source={{ uri: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/elon.png' }} style={styles.topImage} />
           <Text style={styles.topName}>{username} 농부님</Text>
         </View>
       </View>
@@ -191,7 +188,6 @@ const styles = StyleSheet.create({
     color: 'gray'
   },
   rootContainer: {
-    width: '100%',
     height: 1.5,
     backgroundColor: '#999999',
   },
@@ -233,11 +229,10 @@ const styles = StyleSheet.create({
     padding: 10
   },
   topContainer: {
-    marginTop: 20,
-    marginBottom: 20,
-    marginLeft: 50,
+    justifyContent:'center',
+    alignItems:'center',
     flexDirection: 'row',
-    padding: 10
+    margin : '7%'
   },
   text: {
     color: 'gray',
