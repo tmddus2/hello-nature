@@ -4,7 +4,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import convert from 'xml-js';
 var DOMParser = require('xmldom').DOMParser
-var parseString = require('react-native-xml2js').parseString;
 
 
 export default function SearchPlant({navigation }) {
@@ -18,11 +17,10 @@ export default function SearchPlant({navigation }) {
     const [wtkplantsummer, setWtkPlantSummer] = useState('')
     const [wtkplantautumn, setWtkPlantAutumn] = useState('')
     const [wtkplantwinter, setWtkPlantWinter] = useState('')
-
+    const [wtkplanttp, setWtkPlantTp] = useState('')
     const [wtkplant, setWtkPlant] = useState('')
+    const [wtkplantmanagetip, setWtkPlantManageTip] = useState('')
     const [wtkplantcntntsNo, setWtkPlantCntntsNo] = useState('')
-    const converter = require("xml-js")
-    var parseString = require('react-native-xml2js').parseString
 
     const getPlantInfo = () => {
         axios.get("http://api.nongsaro.go.kr/service/garden/gardenDtl?apiKey=20220816QZULAZXDLRRFRNZZXG2CQA&cntntsNo=" + wtkplantcntntsNo).then(
@@ -32,31 +30,17 @@ export default function SearchPlant({navigation }) {
                 
                 for(var i = 0;i<x.length;i++){
                     var nodeList = x[i].childNodes
-                    
-                    // const item = nodeList[1]
-                    // setWtkPlantName(item.childNodes[0].nodeValue)
-                    // item = nodeList[28]
-                    // setWtkPlantScientificName(item.childNodes[0].nodeValue)
-                    // console.log(item.childNodes[0].nodeValue)
-                    // item = nodeList[9]
-                    // setWtkPlantNutrient(item.childNodes[0].nodeValue)
-                    // item = nodeList[26]
-                    // setWtkPlantManage(item.childNodes[0].nodeValue)
-                    // item = nodeList[32]
-                    // setWtkPlantSmell(item.childNodes[0].nodeValue)
-                    // item = nodeList[39]
-                    // setWtkPlantSpring(item.childNodes[0].nodeValue)
-                    // item = nodeList[41]
-                    // setWtkPlantSummer(item.childNodes[0].nodeValue)
-                    // item = nodeList[37]
-                    // setWtkPlantAutumn(item.childNodes[0].nodeValue)
-                    // item = nodeList[43]
-                    // setWtkPlantWinter(item.childNodes[0].nodeValue)
+                  
                     for(var j = 0; j < nodeList.length;j++){
                         var item = nodeList[j]
+                      
                         if(item.firstChild){
+                            console.log(item.nodeName + " : " +item.childNodes[0].nodeValue)
                             if(item.nodeName == 'distbNm'){
                                 setWtkPlantName(item.childNodes[0].nodeValue)
+                            }
+                            else if(item.nodeName == 'grwhTpCodeNm'){
+                                setWtkPlantTp(item.childNodes[0].nodeValue)
                             }
                             else if(item.nodeName == 'plntbneNm'){
                                 setWtkPlantScientificName(item.childNodes[0].nodeValue)
@@ -82,11 +66,12 @@ export default function SearchPlant({navigation }) {
                             else if(item.nodeName == 'watercycleWinterCodeNm'){
                                 setWtkPlantWinter(item.childNodes[0].nodeValue)
                             }
+                            else if(item.nodeName == 'fncltyInfo'){
+                                setWtkPlantManageTip(item.childNodes[0].nodeValue)
+                            }
                         }
                     }
                 }
-                            
-                
                 return JSON.stringify(res?.data)
             }
         )
@@ -104,12 +89,6 @@ export default function SearchPlant({navigation }) {
                     var item = nodeList[0]
                     setWtkPlantCntntsNo(item.childNodes[0].nodeValue)
                     console.log(wtkplantcntntsNo)
-                    // for(var j = 0; j < nodeList.length;j++){
-                    //     var item = nodeList[j]
-                    //     if(item.firstChild){
-                    //         console.log(item.nodeName + " : " +item.childNodes[0].nodeValue)
-                    //     }
-                    // }
                 }
                 
                 return JSON.stringify(res?.data)
@@ -125,44 +104,46 @@ export default function SearchPlant({navigation }) {
 
   return (
     <View style={{alignItems :'center'}}>
-         <ScrollView style = {styles.scrollView}>
-            <View style={{marginBottom : '5%',flexDirection: 'row'}}>
-                <TextInput onChangeText={(value) => setWtkPlant(value)} style={styles.textInput} placeholder="  식물 이름으로 검색하세요"/>
-                <TouchableOpacity onPress = {getTodo} style = {styles.buttonStyle}>
-                    <Text style={styles.buttonTextStyle}>검색</Text>
-                </TouchableOpacity>
-            </View>
-        
-       
-            <Text style={styles.titleText}>이름</Text>
-            <Text style={styles.inputText}>{wtkplantname}</Text> 
-            <Text style={styles.titleText}>학명</Text>
-            <Text style={styles.inputText}>{wtkplantscientificname}</Text>   
-            <Text style={styles.titleText}>영양 정보</Text>
-            <Text style={styles.inputText}>{wtkplantnutrient}</Text>
-            <Text style={styles.titleText}>관리 난이도</Text>
-            <Text style={styles.inputText}>{wtkplantmanage}도 가능</Text>
-            <Text style={styles.titleText}>향</Text>
-            <Text style={styles.inputText}>{wtkplantsmell}</Text>  
-            <Text style={styles.titleText}>봄 물주기</Text>
-            <Text style={styles.inputText}>{wtkplantspring}</Text> 
-            <Text style={styles.titleText}>여름 물주기</Text>
-            <Text style={styles.inputText}>{wtkplantsummer}</Text>  
-            <Text style={styles.titleText}>가을 물주기</Text>
-            <Text style={styles.inputText}>{wtkplantautumn}</Text> 
-            <Text style={styles.titleText}>겨울 물주기</Text>
-            <Text style={styles.inputText}>{wtkplantwinter}</Text>
-        </ScrollView>
-        
+        <View style={{marginBottom : '5%',flexDirection: 'row', marginTop:'5%'}}>
+            <TextInput onChangeText={(value) => setWtkPlant(value)} style={styles.textInput} placeholder="  식물 이름으로 검색하세요"/>
+            <TouchableOpacity onPress = {getTodo} style = {styles.buttonStyle}>
+                <Text style={styles.buttonTextStyle}>검색</Text>
+            </TouchableOpacity>
+        </View>
+        <View style = {{height : '85%'}}>
+            <ScrollView style = {styles.scrollView}>
+                <Text style={styles.titleText}>이름</Text>
+                <Text style={styles.inputText}>{wtkplantname}</Text> 
+                <Text style={styles.titleText}>학명</Text>
+                <Text style={styles.inputText}>{wtkplantscientificname}</Text>   
+                <Text style={styles.titleText}>영양 정보</Text>
+                <Text style={styles.inputText}>{wtkplantnutrient}</Text>
+                <Text style={styles.titleText}>생육 적정 온도</Text>
+                <Text style={styles.inputText}>{wtkplanttp}</Text>
+                <Text style={styles.titleText}>관리 난이도</Text>
+                <Text style={styles.inputText}>{wtkplantmanage}</Text>
+                <Text style={styles.titleText}>향</Text>
+                <Text style={styles.inputText}>{wtkplantsmell}</Text>  
+                <Text style={styles.titleText}>봄 물주기</Text>
+                <Text style={styles.inputText}>{wtkplantspring}</Text> 
+                <Text style={styles.titleText}>여름 물주기</Text>
+                <Text style={styles.inputText}>{wtkplantsummer}</Text>  
+                <Text style={styles.titleText}>가을 물주기</Text>
+                <Text style={styles.inputText}>{wtkplantautumn}</Text> 
+                <Text style={styles.titleText}>겨울 물주기</Text>
+                <Text style={styles.inputText}>{wtkplantwinter}</Text>
+                <Text style={styles.titleText}>관리 Tip!</Text>
+                <Text style={styles.inputText}>{wtkplantmanagetip}</Text>
+            </ScrollView>
+        </View>        
     </View>
 
   );
 }
 
 const styles = StyleSheet.create({
-    scrollView: {
+    scrollView: {  
         marginTop:30,
-        
     },
     inputText:{
         width:'80%',
@@ -173,23 +154,19 @@ const styles = StyleSheet.create({
     },
     textInput: {
         fontSize: 16,
-        
         fontWeight: 'bold',
         height: 50, 
         width: 250, 
         borderWidth: 1, 
-        borderRadius: 12,
-        
+        borderRadius: 12,  
     },
     buttonTextStyle:{
         color:'white',
-        
         fontWeight:'bold',
         fontSize:15,
     },
     buttonStyle:{
         borderWidth:2,
-        
         borderColor:'#6E8B3D',
         width:100,
         height:45,
@@ -197,8 +174,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#6E8B3D',
         alignItems: "center",
         justifyContent :'center',
-        marginLeft :'5%',
-        
+        marginLeft :'5%',     
     },
     titleText:{
         width:'85%',

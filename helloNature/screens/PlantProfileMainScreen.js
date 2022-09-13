@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useCallback } from "react";
 import { Calendar } from "react-native-calendars";
 import { format } from "date-fns";
 import { FlatList } from 'react-native-gesture-handler';
@@ -6,6 +6,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import axios from 'axios';
 import {Text, View, StyleSheet,Dimensions,SafeAreaView, TouchableOpacity, ScrollView, Image, TextInput} from 'react-native';
+var DOMParser = require('xmldom').DOMParser
+
 
 const window = Dimensions.get("window");
 // 머티리얼 상단 탭 내비게이터
@@ -16,14 +18,37 @@ function DiaryScreen({route, navigation }) {
   const nutrients = {key: 'nutrients', color: 'green', selectedDotColor: 'blue'};
   const pnId = route?.params?.nowPlantId
   const [selectedDates, setMarkedDates] = React.useState(null);
-  function addDates() {    
-    let obj = dates.reduce(      
-      (c, v) =>        
-      Object.assign(c, {          
-        [v]: { selectedDates: true},        
-      }),      {},    );    
-      console.log(obj);    
-      setMarkedDates(obj);  
+
+  const posts = [
+    {
+      id: 1,
+      title: "제목입니다.",
+      contents: "내용입니다.",
+      date: "2022-09-26",
+    },
+    {
+      id: 2,
+      title: "제목입니다.",
+      contents: "내용입니다.",
+      date: "2022-09-27",
+    }
+  ];
+
+  const markedDates = posts.reduce((acc, current) => {
+    const formattedDate = format(new Date(current.date), 'yyyy-MM-dd');
+    acc[formattedDate] = {marked: true, dots: [water, nutrients]};
+    return acc;
+  }, {});
+
+  const [selectedDate, setSelectedDate] = useState(
+    format(new Date(), "yyyy-MM-dd"),
+  );
+  const markedSelectedDates = {
+    ...markedDates,
+    [selectedDate]: {
+      selected: true,
+      marked: markedDates[selectedDate]?.marked,
+    }
   }
 
   const [plantScheduleList, setPlantScheduleList] = useState([])
@@ -79,18 +104,18 @@ function DiaryScreen({route, navigation }) {
 
   });}
   
-  const renderItem = ({item}) => {
+  const renderItem = useCallback(({item}) => {
     console.log(item)
     return (
       <View>
         <View style={{borderRadius:10, borderWidth:1, bordercolor:'gray', padding :10, margin :'2%'}}>
-          <Text>2022-08-{item.date}</Text>
-          <Text>{item.theme}</Text>
+          <Text style = {{fontWeight:'bold'}}>2022-09-{item.date}</Text>
+          <Text numberOfLines={1} ellipsizeMode="tail">{item.theme}</Text>
         </View>
           
       </View>
     )
-  }
+  })
   
 
   useEffect(() => {
@@ -104,24 +129,24 @@ function DiaryScreen({route, navigation }) {
     <View>
       <Calendar style={styles.calendar} 
         markingType={'multi-dot'}
-        markedDates={{
-          '2022-09-25': {dots: [water,nutrients]},
-          '2022-09-01': {dots: [water], disabled: true}}}
-        selectedDates={{selectedDates}}
-        theme={{
-          selectedDayBackgroundColor: '#009688',
-          arrowColor: '#009688',
-          dotColor: '#009688',
-          todayTextColor: '#009688',}} 
-        onDayPress={(day) => {addDates(day.dateString)}}>
+        markedDates={markedSelectedDates}
+      theme={{
+        selectedDayBackgroundColor: '#009688',
+        arrowColor: '#009688',
+        dotColor: '#009688',
+        todayTextColor: '#009688',
+      }} 
+      onDayPress={(day) => {
+        setSelectedDate(day.dateString)
+      }}>
       </Calendar>
-      <SafeAreaView>
+      <View style={{height:330}}>
         <FlatList
-          
+          keyExtractor={item => item.id}
           data={plantScheduleList}
           renderItem={renderItem}>
         </FlatList>
-      </SafeAreaView>
+      </View>
       
 
       <View style={{position:'absolute' , alignItems :'center',marginTop:500, width:'100%'}}>
@@ -139,6 +164,17 @@ function DiaryScreen({route, navigation }) {
 
 function PlantInfoScreen({route, navigation }) {
   const pnId = route?.params?.nowPlantId
+  const [wtkplantname, setWtkPlantName] = useState('')
+    const [wtkplantscientificname, setWtkPlantScientificName] = useState('')
+    const [wtkplantnutrient, setWtkPlantNutrient] = useState('')
+    const [wtkplantmanage, setWtkPlantManage] = useState('')
+    const [wtkplantsmell, setWtkPlantSmell] = useState('')
+    const [wtkplantspring, setWtkPlantSpring] = useState('')
+    const [wtkplantsummer, setWtkPlantSummer] = useState('')
+    const [wtkplantautumn, setWtkPlantAutumn] = useState('')
+    const [wtkplantwinter, setWtkPlantWinter] = useState('')
+
+    const [wtkplantcntntsNo, setWtkPlantCntntsNo] = useState('')
   const [plants, setPlants] = useState([])
   const getData = async (key) => {
     try {
@@ -165,7 +201,6 @@ function PlantInfoScreen({route, navigation }) {
       res => {
         //setPlants([JSON.stringify(res?.data), ...plants])
         setPlants(res.data)
-
           //console.log(plants)
           console.log("왕ㄴ마러;어베ㅐㄷ"+ (JSON.stringify(res.data)))
           return JSON.stringify(res?.data)
@@ -174,50 +209,121 @@ function PlantInfoScreen({route, navigation }) {
 
   });}
 
+  const getPlantInfo = () => {
+    axios.get("http://api.nongsaro.go.kr/service/garden/gardenDtl?apiKey=20220816QZULAZXDLRRFRNZZXG2CQA&cntntsNo=" + wtkplantcntntsNo).then(
+      res => {
+        var xmlDoc = new DOMParser().parseFromString(res.data, 'text/xml')
+        var x = xmlDoc.getElementsByTagName("item");
+            
+        for(var i = 0;i<x.length;i++){
+          var nodeList = x[i].childNodes
+              
+          for(var j = 0; j < nodeList.length;j++){
+            var item = nodeList[j]
+            if(item.firstChild){
+              if(item.nodeName == 'distbNm'){
+                setWtkPlantName(item.childNodes[0].nodeValue)
+              }
+              else if(item.nodeName == 'plntbneNm'){
+                setWtkPlantScientificName(item.childNodes[0].nodeValue)
+              }
+              else if(item.nodeName == 'frtlzrInfo'){
+                setWtkPlantNutrient(item.childNodes[0].nodeValue)
+              }
+              else if(item.nodeName == 'managelevelCodeNm'){
+                setWtkPlantManage(item.childNodes[0].nodeValue + '도 가능')
+              }
+              else if(item.nodeName == 'smellCodeNm'){
+                setWtkPlantSmell(item.childNodes[0].nodeValue)
+              }
+              else if(item.nodeName == 'watercycleSprngCodeNm'){
+                setWtkPlantSpring(item.childNodes[0].nodeValue)
+              }
+              else if(item.nodeName == 'watercycleSummerCodeNm'){
+                setWtkPlantSummer(item.childNodes[0].nodeValue)
+              }
+              else if(item.nodeName == 'watercycleAutumnCodeNm'){
+                setWtkPlantAutumn(item.childNodes[0].nodeValue)
+              }
+              else if(item.nodeName == 'watercycleWinterCodeNm'){
+                setWtkPlantWinter(item.childNodes[0].nodeValue)
+              }
+            }
+          }
+        }
+          return JSON.stringify(res?.data)
+      }
+    )
+}
+
+  const getPlantInfoAtPlantAPI = () => {
+    axios.get("http://api.nongsaro.go.kr/service/garden/gardenList?apiKey=20220816QZULAZXDLRRFRNZZXG2CQA&sType=sCntntsSj&sText=" + plants.scientific_name).then(
+      res => {
+        var xmlDoc = new DOMParser().parseFromString(res.data, 'text/xml')
+        var x = xmlDoc.getElementsByTagName("item");
+            
+        for(var i = 0;i<x.length;i++){
+          var nodeList = x[i].childNodes
+          var item = nodeList[0]
+          setWtkPlantCntntsNo(item.childNodes[0].nodeValue)
+          console.log(wtkplantcntntsNo)
+        }     
+        return JSON.stringify(res?.data)
+      }
+    )
+    getPlantInfo();
+};
+
   useEffect(() => {
-    
+    getPlantInfoAtPlantAPI()
     getPlant();
-    
   }, [])
 
   return (
     <View>
+      <View style={{height:'95%'}}>
         <ScrollView style = {styles.scrollView}>
-            <View style={{alignItems:'center'}}>
-              <Image source = {{uri: plants.picture }} style = {styles.image}/>
-            </View>
-            <View style={{marginLeft:'5%', marginTop:'5%'}}>
-              <Text style={styles.titleText}>식물 종류</Text>
-            </View>
-            <View style={{alignItems:'center'}}>
-              <Text style={styles.inputText}>{plants.scientific_name}</Text>           
-            </View> 
-            <View style={{marginLeft:'5%', marginTop:'5%'}}>
-              <Text style={styles.titleText}>내가 부르는 이름</Text>
-            </View>
-            <View style={{alignItems:'center'}}>
-              <Text style={styles.inputText}>{plants.name}</Text>           
-            </View>
-            <View style={{marginLeft:'5%', marginTop:'5%'}}>
-              <Text style={styles.titleText}>데려온 날</Text>
-            </View>
-            <View style={{alignItems:'center'}}>
-              <Text style={styles.inputText}>{plants.bring_date}</Text>           
-            </View>
-            <View style={{marginLeft:'5%', marginTop:'5%'}}>
-              <Text style={styles.titleText}>특이 사항</Text>
-            </View>
-            <View style={{alignItems:'center'}}>
-              <Text style={styles.inputText}>{plants.memo}</Text>           
-            </View>
+          <View style={{alignItems:'center'}}>
+            <Image source = {{uri: plants.picture }} style = {styles.image}/>
+          </View>
+          <View style={{marginLeft:'5%', marginTop:'5%'}}>
+            <Text style={styles.titleText}>식물 종류</Text>
+          </View>
+          <View style={{alignItems:'center'}}>
+            <Text style={styles.inputText}>{plants.scientific_name}</Text>           
+          </View> 
+          <View style={{marginLeft:'5%', marginTop:'5%'}}>
+            <Text style={styles.titleText}>내가 부르는 이름</Text>
+          </View>
+          <View style={{alignItems:'center'}}>
+            <Text style={styles.inputText}>{plants.name}</Text>           
+          </View>
+          <View style={{marginLeft:'5%', marginTop:'5%'}}>
+            <Text style={styles.titleText}>데려온 날</Text>
+          </View>
+          <View style={{alignItems:'center'}}>
+            <Text style={styles.inputText}>{plants.bring_date}</Text>           
+          </View>
+          <View style={{marginLeft:'5%', marginTop:'5%'}}>
+            <Text style={styles.titleText}>특이 사항</Text>
+          </View>
+          <View style={{alignItems:'center'}}>
+            <Text style={styles.inputText}>{plants.memo}</Text>           
+          </View>
+          <View style={{marginLeft:'5%', marginTop:'5%'}}>
+            <Text style={styles.titleText}>가을 물주기</Text>
+          </View>
+          <View style={{alignItems:'center'}}>
+            <Text style={styles.inputText}>{wtkplantautumn}</Text>           
+          </View>
         </ScrollView>
-        
+      </View>
     </View>
   );
 }
 
 export default function PlantProfileMainScreen({route, navigation }) {
-  console.log(route?.params?.nowPlantId)
+  //console.log(route?.params?.nowPlantId)
   const pNId = route?.params?.nowPlantId
 
   return (
