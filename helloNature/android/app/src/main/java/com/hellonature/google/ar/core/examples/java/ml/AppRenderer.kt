@@ -121,7 +121,7 @@ class AppRenderer(val activity: MainMLActivity) : DefaultLifecycleObserver, Samp
         view.toast.setGravity(Gravity.CENTER, 0, 0)
         view.toast.show()
         // send heart button pressed to server
-        val url = "http://192.168.0.15:8080/api/user/heart?id="+view.plantID
+        val url = "http://10.0.2.2:8080/api/user/heart?id="+view.plantID
         // Request a string response from the provided URL.
         val queue = Volley.newRequestQueue(activity)
         Log.d(TAG, "야호랑이")

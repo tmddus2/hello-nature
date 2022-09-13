@@ -87,7 +87,7 @@ export default function TodayMemo({ route, navigation }) {
         await getData('accessToken')
             .then(data => data)
             .then(value => {
-                axios.post("http://192.168.0.15:8080/api/user/schedule", requestBody, {
+                axios.post("http://10.0.2.2:8080/api/user/schedule", requestBody, {
                     headers: {
                         Authorization: value
                     }
@@ -110,7 +110,7 @@ export default function TodayMemo({ route, navigation }) {
             .then(data => data)
             .then(value => {
                 console.log("yourKey Value:  " + value)
-                axios.get("http://192.168.0.15:8080/api/user/aplant?id=" +  pnId , {
+                axios.get("http://10.0.2.2:8080/api/user/aplant?id=" +  pnId , {
           headers: {
               Authorization: value
           }

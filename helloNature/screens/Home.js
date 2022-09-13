@@ -64,7 +64,7 @@ export default function Home({ navigation }) {
         .then(data => data)
         .then(value => {
             console.log("yourKey Value:  " + value)
-            axios.get("http://192.168.0.15:8080/api/user/plant", {
+            axios.get("http://10.0.2.2:8080/api/user/plant", {
       headers: {
           Authorization: value
       }
