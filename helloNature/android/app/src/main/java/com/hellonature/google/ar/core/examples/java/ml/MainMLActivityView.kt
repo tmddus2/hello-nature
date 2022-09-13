@@ -18,10 +18,9 @@ package com.hellonature.google.ar.core.examples.java.ml
 
 import android.annotation.SuppressLint
 import android.graphics.Color
-import android.graphics.Point
-import android.net.Uri
 import android.opengl.GLSurfaceView
 import android.os.Build
+import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -29,21 +28,14 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.SwitchCompat
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.google.api.gax.core.FixedCredentialsProvider
 import com.google.ar.core.Anchor
-import com.google.ar.core.Plane
-import com.google.ar.sceneform.AnchorNode
-import com.google.ar.sceneform.rendering.ModelRenderable
-import com.google.ar.sceneform.ux.ArFragment
-import com.google.ar.sceneform.ux.TransformableNode
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.auth.oauth2.ServiceAccountCredentials
 import com.google.cloud.dialogflow.v2.*
@@ -101,6 +93,10 @@ class MainMLActivityView(val activity: MainMLActivity, renderer: AppRenderer) : 
   var yCord = 0
   var Heartanchor: Anchor? = null
   lateinit var toast:Toast
+  var bundle: Bundle? = activity.intent.extras
+  var plantName = ""
+  var plantID = ""
+  var UserToken = ""
 
   fun showTooltip_init() {
     val builder = ToolTip.Builder(activity, scanButton, linearlayout, "카메라를 식물에 대고 눌러보세요!", ToolTip.POSITION_BELOW)

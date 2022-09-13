@@ -35,7 +35,7 @@ public class RNNativeToastLibraryModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void show(String text) {
+  public void show(String plantName, String plantID, String UserToken) {
     //callback.invoke("Call Me!!!!");
 /*
 
@@ -48,7 +48,7 @@ public class RNNativeToastLibraryModule extends ReactContextBaseJavaModule {
 
     context.startActivity(intent);
 */
-    Log.d("CalendarModule1", "Create event called with name: " + text);
+    Log.d("CalendarModule1", "Create event called with name: " + plantName + plantID+ UserToken);
 
     // Context from reactContext
     Context context = reactContext;
@@ -56,6 +56,9 @@ public class RNNativeToastLibraryModule extends ReactContextBaseJavaModule {
 
     // Intent set from packageName
     Intent intent = new Intent(context, MainMLActivity.class); // HelloArActivity
+    intent.putExtra("plantName", plantName);
+    intent.putExtra("plantID", plantID);
+    intent.putExtra("UserToken", UserToken);
 
     activity.startActivity(intent); // plant ID 넘겨주기 
 

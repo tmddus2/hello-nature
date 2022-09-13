@@ -165,7 +165,7 @@ export default function RegisterPlant({ navigation }) {
             .then(data => data)
             .then(value => {
                 console.log("yourKey Value:  " + value)
-                axios.post("http://10.0.2.2:8080/api/user/plant", requestBody, {
+                axios.post("http://192.168.0.15:8080/api/user/plant", requestBody, {
                     headers: {
                         Authorization: value
                     }

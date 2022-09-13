@@ -45,7 +45,7 @@ function DiaryScreen({route, navigation }) {
         .then(data => data)
         .then(value => {
             console.log("yourKey Value:  " + value)
-            axios.get("http://10.0.2.2:8080/api/user/aplant?id=" +  pnId , {
+            axios.get("http://192.168.0.15:8080/api/user/aplant?id=" +  pnId , {
       headers: {
           Authorization: value
       }
@@ -64,7 +64,7 @@ function DiaryScreen({route, navigation }) {
         .then(data => data)
         .then(value => {
             console.log("yourKey Value:  " + value)
-            axios.get("http://10.0.2.2:8080/api/user/schedule/month?id="+pnId+"&year=2022&month=09 ", {
+            axios.get("http://192.168.0.15:8080/api/user/schedule/month?id="+pnId+"&year=2022&month=09 ", {
       headers: {
           Authorization: value
       }
@@ -129,7 +129,7 @@ function DiaryScreen({route, navigation }) {
             <Text style={styles.buttonTextStyle} onPress={() => navigation.navigate('TodayMemo', {nowPlantId: pnId} )}> 글쓰기 </Text>
         </TouchableOpacity>
         <TouchableOpacity style = {styles.buttonStyle}>
-          <Text style={styles.buttonTextStyle} onPress={() => navigation.navigate('ArScreen')}>{plants.name}와 AR로 대화</Text>
+          <Text style={styles.buttonTextStyle} onPress={() => navigation.navigate('ArScreen', {PlantId: pnId, PlantName: plants.name})}>{plants.name}와 AR로 대화</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -157,7 +157,7 @@ function PlantInfoScreen({route, navigation }) {
         .then(data => data)
         .then(value => {
             console.log("yourKey Value:  " + value)
-            axios.get("http://10.0.2.2:8080/api/user/aplant?id=" +  pnId , {
+            axios.get("http://192.168.0.15:8080/api/user/aplant?id=" +  pnId , {
       headers: {
           Authorization: value
       }

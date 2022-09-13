@@ -19,7 +19,7 @@ export default function Register({ navigation }) {
       profile : 'https://cdn-icons-png.flaticon.com/512/747/747545.png',
     }
 
-    axios.post("http://10.0.2.2:8080/api/signup", requestBody)
+    axios.post("http://192.168.0.15:8080/api/signup", requestBody)
       .then(res => {
         if (res.data) {
           navigation.navigate('FirstScreen')

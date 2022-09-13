@@ -23,14 +23,17 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import com.android.volley.AuthFailureError
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import com.google.ar.core.Anchor
 import com.google.ar.core.Coordinates2d
 import com.google.ar.core.Frame
 import com.google.ar.core.TrackingState
 import com.google.ar.core.exceptions.CameraNotAvailableException
 import com.google.ar.core.exceptions.NotYetAvailableException
-import com.google.ar.sceneform.ux.ArFragment
-import com.hellonature.R
 import com.hellonature.google.ar.core.examples.java.common.helpers.DisplayRotationHelper
 import com.hellonature.google.ar.core.examples.java.common.samplerender.SampleRender
 import com.hellonature.google.ar.core.examples.java.common.samplerender.arcore.BackgroundRenderer
@@ -90,6 +93,11 @@ class AppRenderer(val activity: MainMLActivity) : DefaultLifecycleObserver, Samp
   fun bindView(view: MainMLActivityView) {
     this.view = view
 
+    view.plantName = view.bundle?.getString("plantName").toString()
+    view.plantID = view.bundle?.getString("plantID").toString()
+    view.UserToken = view.bundle?.getString("UserToken").toString()
+
+
     view.setUpBot()
 
     // initial message (for making the scroll starts from bottom)
@@ -105,11 +113,37 @@ class AppRenderer(val activity: MainMLActivity) : DefaultLifecycleObserver, Samp
     }
 
     view.btnHeart.setOnClickListener{
+
       if(plantWasDetected) {
+
         view.setHeartActive()
         view.toast = Toast.makeText(activity, "반려식물의 ❤ 지수가 올라갔어요.", Toast.LENGTH_SHORT)
         view.toast.setGravity(Gravity.CENTER, 0, 0)
         view.toast.show()
+        // send heart button pressed to server
+        val url = "http://192.168.0.15:8080/api/user/heart?id="+view.plantID
+        // Request a string response from the provided URL.
+        val queue = Volley.newRequestQueue(activity)
+        Log.d(TAG, "야호랑이")
+
+        val postRequest: StringRequest = object : StringRequest(
+          Method.GET, url,
+          Response.Listener { response -> // response
+            Log.d("Response", response!!)
+          },
+          Response.ErrorListener { error -> // TODO Auto-generated method stub
+            Log.d("ERROR", "error => $error")
+          }
+        ) {
+          @Throws(AuthFailureError::class)
+          override fun getHeaders(): Map<String, String> {
+            val params: MutableMap<String, String> = HashMap()
+            params["Authorization"] = view.UserToken
+            return params
+          }
+        }
+        queue.add(postRequest)
+
       }
     }
 
@@ -211,6 +245,7 @@ class AppRenderer(val activity: MainMLActivity) : DefaultLifecycleObserver, Samp
     // the video background can be properly adjusted.
     displayRotationHelper.updateSessionIfNeeded(session)
 
+
     val frame = try {
       session.update()
     } catch (e: CameraNotAvailableException) {
@@ -286,11 +321,11 @@ class AppRenderer(val activity: MainMLActivity) : DefaultLifecycleObserver, Samp
             showSnackbar("AR이 주변 환경을 잘 인식할 수 있게 기기를 움직여 식물을 찾아보세요.") // Classification model returned no results.
             view.showTooltip()
           }
-          anchors.size != objects.size -> {
-            showSnackbar("AR이 주변 환경을 잘 인식할 수 있게 기기를 움직여 식물을 찾아보세요.") /*"Objects were classified, but could not be attached to an anchor. " +
-              "Try moving your device around to obtain a better understanding of the environment."*/
-            view.showTooltip()
-          }
+//          anchors.size != objects.size -> {
+//            showSnackbar("AR이 주변 환경을 잘 인식할 수 있게 기기를 움직여 식물을 찾아보세요.") /*"Objects were classified, but could not be attached to an anchor. " +
+//              "Try moving your device around to obtain a better understanding of the environment."*/
+//            view.showTooltip()
+//          }
         }
       }
     }
@@ -307,7 +342,7 @@ class AppRenderer(val activity: MainMLActivity) : DefaultLifecycleObserver, Samp
         view.Heartanchor = arDetectedObject.anchor
         plantWasDetected=true}
       if(arDetectedObject.label == "Flowerpot") {
-        label = "fejka" // 식물 이름
+        label = view.plantName // 식물 이름
         plantWasDetected=true}
       //count++
       labelRenderer.draw(
