@@ -4,21 +4,23 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { FlatList } from 'react-native-gesture-handler';
 import { TestScheduler } from 'jest';
-
-
+import { useIsFocused } from '@react-navigation/native';
 
 export default function Home({ navigation }) {
+  const isFocused = useIsFocused();
+  const [username, setUsername] = useState('')
+  const [plantList, setPlantList] = useState('')
+  const [plants, setPlants] = useState([])
   
   const renderItem = ({item}) => {
-    //console.log('==>'+item.id)
+    
     return (
       <View style={styles.container}>
           <Image source={{uri : item.picture}} style={styles.image} />
           <View style={styles.rightContainer}>
             <TouchableOpacity onPress={() => navigation.navigate('PlantProfile', {nowPlant: item.name, nowPlantId : item.id})}>
-          
               <View style={styles.row}>
-                <Text style={styles.name}>   {item.name}</Text>
+                <Text style={styles.name}>   {item.name} {item.id}</Text>
                 <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/427/427112.png' }} style={styles.waterImage} />
               </View>
             </TouchableOpacity>   
@@ -26,59 +28,41 @@ export default function Home({ navigation }) {
         </View>
     )
   }
+
   const logout = async () => {
     await AsyncStorage.removeItem('token')
     navigation.navigate('Login')
   }
-  const [username, setUsername] = useState('')
-  const [plantList, setPlantList] = useState('')
-  const [plants, setPlants] = useState([])
-/**
- * 
- {{
-    id:'',
-    name:'',
-    type:'',
-    bring_date:'',
-    picture:'',
-    scientific_name:'',
-    memo:''
-  }} key 
- */
-  
+
   const getData = async (key) => {
-    // get Data from Storage
     try {
-        const data = await AsyncStorage.getItem(key);
-        if (data !== null) {
-            console.log(data);
-            return data;
-        }
+      const data = await AsyncStorage.getItem(key);
+      if (data !== null) {
+        console.log(data);
+        return data;
+      }
     } catch (error) {
-        console.log(error);
+      console.log(error);
     }
   };
 
   const getPlant = async () => {
     let list = await getData('accessToken')
-        .then(data => data)
-        .then(value => {
-            console.log("yourKey Value:  " + value)
-            axios.get("http://10.0.2.2:8080/api/user/plant", {
-      headers: {
-          Authorization: value
-      }
-  }).then(
-      res => {
-        //setPlants([JSON.stringify(res?.data), ...plants])
-        setPlants(res.data)
+      .then(data => data)
+      .then(value => {
+        console.log("yourKey Value:  " + value)
+        axios.get("http://10.0.2.2:8080/api/user/plant", {
+          headers: {Authorization: value}
+        }).then(
+          res => {
+            //setPlants([JSON.stringify(res?.data), ...plants])
+            setPlants(res.data)
 
-          console.log(plants)
-          console.log((JSON.stringify(res.data)))
-          return JSON.stringify(res?.data)
-      }
-    )
-
+            console.log(plants)
+            console.log((JSON.stringify(res.data)))
+            return JSON.stringify(res?.data)
+          }
+        )
   });}
 
   const todayTime = () =>{
@@ -91,8 +75,8 @@ export default function Home({ navigation }) {
 
     return todayYear + '-' + todayMonth +'-' +todayDate +' ' + dayOfWeek;
   }
+
   useEffect(() => {
-    //setTimeout(() => {
     AsyncStorage.getItem('isLogin', (err, result) => {
 
       console.log("getItem isLogin return: " + result)
@@ -111,11 +95,8 @@ export default function Home({ navigation }) {
       }
     })
     getPlant();
-
     
-
-    //}, 10000000);
-  }, [])
+  }, [isFocused])
 
   return (
     <View>
@@ -140,23 +121,7 @@ export default function Home({ navigation }) {
       <Text style={styles.myPlantText}>         나의 반려 식물</Text>
       <FlatList
         data={plants}
-        renderItem={renderItem}
-      />
-      {/* {
-        plants.map((plant) => {
-          (
-            <View style={styles.container}>
-              <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/892/892926.png' }} style={styles.image} />
-              <View style={styles.rightContainer}>
-                <View style={styles.row}>
-                  <Text style={styles.name}>   {plant.name}</Text>
-                  <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/427/427112.png' }} style={styles.waterImage} />
-                </View>
-              </View>
-            </View>
-          )
-        })
-      } */}
+        renderItem={renderItem}/>
     </View>
   );
 }

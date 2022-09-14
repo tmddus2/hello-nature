@@ -5,6 +5,7 @@ import { FlatList } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import axios from 'axios';
+import { useIsFocused } from '@react-navigation/native';
 import {Text, View, StyleSheet,Dimensions,SafeAreaView, TouchableOpacity, ScrollView, Image, TextInput} from 'react-native';
 var DOMParser = require('xmldom').DOMParser
 
@@ -14,6 +15,7 @@ const window = Dimensions.get("window");
 const Tab = createMaterialTopTabNavigator();
 
 function DiaryScreen({route, navigation }) {
+  const isFocused = useIsFocused();
   const water = {key: 'water', color: 'blue', selectedDotColor: 'blue'};
   const nutrients = {key: 'nutrients', color: 'green', selectedDotColor: 'blue'};
   const pnId = route?.params?.nowPlantId
@@ -122,7 +124,7 @@ function DiaryScreen({route, navigation }) {
     getPlantSchedule();
     getPlant();
     
-  }, [])
+  }, [isFocused])
 
   
   return (
@@ -163,6 +165,7 @@ function DiaryScreen({route, navigation }) {
 }
 
 function PlantInfoScreen({route, navigation }) {
+  const isFocused = useIsFocused();
   const pnId = route?.params?.nowPlantId
   const [wtkplantname, setWtkPlantName] = useState('')
     const [wtkplantscientificname, setWtkPlantScientificName] = useState('')
@@ -261,23 +264,24 @@ function PlantInfoScreen({route, navigation }) {
       res => {
         var xmlDoc = new DOMParser().parseFromString(res.data, 'text/xml')
         var x = xmlDoc.getElementsByTagName("item");
-            
+        
         for(var i = 0;i<x.length;i++){
           var nodeList = x[i].childNodes
           var item = nodeList[0]
           setWtkPlantCntntsNo(item.childNodes[0].nodeValue)
           console.log(wtkplantcntntsNo)
         }     
+        getPlantInfo();
         return JSON.stringify(res?.data)
       }
     )
-    getPlantInfo();
+    
 };
 
   useEffect(() => {
     getPlantInfoAtPlantAPI()
     getPlant();
-  }, [])
+  }, [isFocused])
 
   return (
     <View>

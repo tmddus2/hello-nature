@@ -3,10 +3,11 @@ import { StyleSheet, View, TextInput,Text, TouchableOpacity, ScrollView} from 'r
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import convert from 'xml-js';
-var DOMParser = require('xmldom').DOMParser
+
 
 
 export default function SearchPlant({navigation }) {
+    var DOMParser = require('xmldom').DOMParser
     const [searchplant, setSearchPlant] = useState([])
     const [wtkplantname, setWtkPlantName] = useState('')
     const [wtkplantscientificname, setWtkPlantScientificName] = useState('')
@@ -35,7 +36,7 @@ export default function SearchPlant({navigation }) {
                         var item = nodeList[j]
                       
                         if(item.firstChild){
-                            console.log(item.nodeName + " : " +item.childNodes[0].nodeValue)
+                            //console.log(item.nodeName + " : " +item.childNodes[0].nodeValue)
                             if(item.nodeName == 'distbNm'){
                                 setWtkPlantName(item.childNodes[0].nodeValue)
                             }
