@@ -107,7 +107,6 @@ function DiaryScreen({route, navigation }) {
   });}
   
   const renderItem = useCallback(({item}) => {
-    console.log(item)
     return (
       <View>
         <View style={{borderRadius:10, borderWidth:1, bordercolor:'gray', padding :10, margin :'2%'}}>

@@ -11,7 +11,8 @@ export default function Home({ navigation }) {
   const [username, setUsername] = useState('')
   const [plantList, setPlantList] = useState('')
   const [plants, setPlants] = useState([])
-  
+  const [tod, setToD] = useState('')
+
   const renderItem = ({item}) => {
     
     return (
@@ -20,8 +21,8 @@ export default function Home({ navigation }) {
           <View style={styles.rightContainer}>
             <TouchableOpacity onPress={() => navigation.navigate('PlantProfile', {nowPlant: item.name, nowPlantId : item.id})}>
               <View style={styles.row}>
-                <Text style={styles.name}>   {item.name} {item.id}</Text>
-                <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/427/427112.png' }} style={styles.waterImage} />
+                <Text style={styles.name}>   {item.name}</Text>
+                <Image source={{ uri: ((item.id % 3) ?  'https://cdn-icons-png.flaticon.com/512/733/733740.png' : 'https://cdn-icons-png.flaticon.com/512/427/427112.png')}} style={styles.waterImage} />
               </View>
             </TouchableOpacity>   
           </View>
@@ -57,7 +58,7 @@ export default function Home({ navigation }) {
           res => {
             //setPlants([JSON.stringify(res?.data), ...plants])
             setPlants(res.data)
-
+            
             console.log(plants)
             console.log((JSON.stringify(res.data)))
             return JSON.stringify(res?.data)
@@ -72,7 +73,7 @@ export default function Home({ navigation }) {
     let todayDate = now.getDate();
     const week = ['sun', 'mon', 'tue','wed','thu','fri', 'sat']
     let dayOfWeek =week[now.getDay()];
-
+    
     return todayYear + '-' + todayMonth +'-' +todayDate +' ' + dayOfWeek;
   }
 

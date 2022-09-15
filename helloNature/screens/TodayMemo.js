@@ -79,7 +79,7 @@ export default function TodayMemo({ route, navigation }) {
             "date": date,
             "water": isEnabledW ? 1 : 0,
             "nutrient": isEnabledN ? 1 : 0,
-            "memo" : memo,
+            "memo" : 16,
             "theme": memo,
         }
 
@@ -94,7 +94,7 @@ export default function TodayMemo({ route, navigation }) {
                 })
                     .then(res => {
                         if (res.data) {
-                            console.log("memo" +memo)
+                            
                             navigation.navigate('PlantProfile',{nowPlant: plants.name, nowPlantId : plants.id})
                         } else {
                             console.log("fail " + res.data.message)
