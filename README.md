@@ -9,8 +9,7 @@
 ### 소스 코드 다운로드
 
 git clone 혹은 Download ZIP 버튼을 눌러서 소스 코드를 다운로드 받아주세요.
-
-![스크린샷 2022-09-16 오후 8.02.22.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/229e39a0-a589-4642-8535-dfb2130638ee/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-09-16_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_8.02.22.png)
+<img width="462" alt="스크린샷 2022-09-16 오후 8 02 22" src="https://user-images.githubusercontent.com/49024958/190628602-956f0dc9-fa55-4d95-85d1-95c4c3692df1.png">
 
 ### 실행 방법
 
@@ -35,8 +34,9 @@ cd hello-nature-main/backend/src/main/java/helloNature/backend
 [BackendApplication.java](http://BackendApplication.java) 실행하기 
 
 backend 폴더 안에 있는 BackendApplication을 실행시켜주세요.
+![Untitled](https://user-images.githubusercontent.com/49024958/190628549-07fa9281-0423-4312-95ff-018e7487775b.png)
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/c11a9cc5-5170-4b6b-9f29-552d16d04948/Untitled.png)
+
 
 1. 프론트엔드 실행 
 
