@@ -70,7 +70,7 @@ npm install
 ```
 
 실행시키기 
-에뮬레이터 혹은 안드로이드 기기를 안드로이드 스튜디오와 연
+에뮬레이터 혹은 안드로이드 기기를 안드로이드 스튜디오에서 연결해주세요.
 
 ```jsx
 npm run android 또는 react-native run android
