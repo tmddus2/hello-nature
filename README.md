@@ -16,9 +16,9 @@ git clone 혹은 Download ZIP 버튼을 눌러서 소스 코드를 다운로드 
 1. (로컬 환경에서) 백엔드 서버 실행
 
 **준비 단계**
-
-키 값을 “path”에 폴더를 만들어서 넣어주세요. 
-
+'프로그램 실행을 위한 키값' 폴더에 있는 resources.zip 파일을 앱축해제하고 안에 들어 있는 application.yml 파일을 다음 경로에 복사해주세요.
+/Users/mjjwa/Downloads/hello-nature-main/backend/src/main/resources 아래
+/Users/mjjwa/Downloads/hello-nature-main/backend/src/main/resources/application.yml 처럼 넣어주세요.
 *AWS RDS 키 값입니다. 
 
 **실행 하기**
@@ -42,7 +42,9 @@ backend 폴더 안에 있는 BackendApplication을 실행시켜주세요.
 
 **준비 단계**
 
-credentials.json과 plantchatbot1.json 파일을 “path”에 폴더를 만들어서 넣어주세요. 
+'프로그램 실행을 위한 키값' 폴더에 있는 raw.zip 파일을 앱축해제하고 credentials.json과 plantchatbot1.json 파일이 들어있는 raw 폴더를 
+cd hello-nature-main/helloNature/android/app/src/main/res 위치 아래 
+cd hello-nature-main/helloNature/android/app/src/main/res/raw 처럼 넣어주세요. 
 
 *MLkit와 Dialogflow 관련  GCP 서비스 계정의 키 값입니다
 
