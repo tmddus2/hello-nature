@@ -18,9 +18,9 @@ git clone 혹은 Download ZIP 버튼을 눌러서 소스 코드를 다운로드 
 **준비 단계**
 '프로그램 실행을 위한 키값' 폴더에 있는 resources.zip 파일을 앱축해제하고 안에 들어 있는 application.yml 파일을 다음 경로에 복사해주세요.
 
-/Users/mjjwa/Downloads/hello-nature-main/backend/src/main/resources 아래
+hello-nature-main/backend/src/main/resources 아래
 
-/Users/mjjwa/Downloads/hello-nature-main/backend/src/main/resources/application.yml 처럼 넣어주세요.
+hello-nature-main/backend/src/main/resources/application.yml 처럼 넣어주세요.
 
 *AWS RDS 키 값입니다. 
 
